@@ -191,6 +191,8 @@ class CustomParkingEnv(ParkingEnv):
                 
                 probs = probs / np.sum(probs)
                 
+                self.current_task = {"labels" : labels,
+                                     "probs" : probs}
                 self.current_scenario = np.random.choice(labels, p=probs) # Normalise probabilities
                 
                 self.configure(self.config["scenarios"][self.current_scenario])
@@ -469,9 +471,9 @@ class CustomParkingEnv(ParkingEnv):
         """Reset global step counter to start cycling through parking scenarios from the begining"""
         self.global_step = 0
         
-    def get_task_label(self):
-        """Task defined by parking space angle"""
-        return self.current_scenario
+    def get_current_task(self):
+        """Task defined by array of scenario labels and corresponding probabilities"""
+        return self.current_task
 
 
 #class ParkingEnvActionRepeat(ParkingEnv):

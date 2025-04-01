@@ -6,9 +6,10 @@ scipy==1.13.0
 pygame==2.5.2
 pandas==2.2.2
 scikit-learn==1.5.0
-moviepy==1.0.3
+moviepy==2.1.2
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch==2.3.1+cu118
 torchaudio==2.3.1+cu118
 torchvision==0.18.1+cu118
 seaborn==0.13.2
+stable_baselines3==2.5.0
