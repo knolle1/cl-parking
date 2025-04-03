@@ -77,12 +77,13 @@ class EvalCallback(BaseCallback):
                 env.action_space.seed(self.seed)
                 env.observation_space.seed(self.seed)
         
+            rewards_list = []
+            success_list = []
+            crashed_list = []
+            truncated_list = [] 
+            
             for i in range(self.n_eval_episodes):
-                rewards_list = []
-                success_list = []
-                crashed_list = []
-                truncated_list = []
-    
+                
                 terminated = False
                 truncated = False
                 

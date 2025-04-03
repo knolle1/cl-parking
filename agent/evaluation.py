@@ -21,6 +21,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.ticker as mtick
+import seaborn as sns
 
 # Set font size for all plots
 plt.rcParams['font.size'] = '16'
@@ -95,8 +96,47 @@ class Logger:
 # Calculate aggregated metrics
 # -----------------------------------------------------------------------------
 
-def average_fisher_sensitivity(path):
-    pass
+def average_fisher_sensitivity(data_path):
+    for fisher_dir in [x  for x in os.listdir(data_path) if x.startswith("fisher-information")]:
+        
+        step = int(fisher_dir.split('-')[-1])
+        afs_step = [] # List of the average fisher sensitivity for the current step
+        for filename in [x for x in os.listdir(data_path+'/'+fisher_dir) if "_AFS" not in x]:
+            print(filename)
+            with open(data_path+'/'+fisher_dir+'/'+filename) as f:
+                raw_data = json.load(f)
+
+            total = 0
+            afs = {}
+            for name in raw_data.keys():
+                total += np.sum(raw_data[name])
+            print("Total Fisher information:", total)
+            for name in raw_data.keys():
+                afs[name] = raw_data[name] / total
+                
+            # Save as JSON
+            with open(data_path+'/'+fisher_dir+'/'+filename.split('.')[0]+'_AFS.json', "w") as outfile:
+                json.dump({k: afs[k].tolist() for k, v in afs.items()}, outfile)
+                
+            afs_step.append(afs)
+            
+        # Calculate average over all runs
+        total_afs = None
+        n = 0
+        for run_afs in afs_step:
+            if total_afs is None:
+                total_afs = afs
+            else:
+                for (total_n, total_v), (run_n, run_v) in zip(total_afs.items(), run_afs.items()):
+                    assert (total_n == run_n)
+                    total_afs[total_n] = np.array(total_v) + np.array(run_v)
+            n += 1
+        for name in total_afs.keys():
+            total_afs[name] = total_afs[name] / n
+            
+        # Save as JSON
+        with open(f"{data_path}/average-fisher-sensitivity_step-{step}.json", "w") as outfile:
+            json.dump({k: total_afs[k].tolist() for k, v in total_afs.items()}, outfile)
         
 # Functions for plotting
 # -----------------------------------------------------------------------------
@@ -155,6 +195,12 @@ def plot_learning_curve(plot_path, data_paths, max_steps=2_000_000, task_interva
         ymax = 0
                 
         for i in range(nrows):
+            # Check if there is more than 1 subplot
+            if nrows > 1:
+                ax_i = ax[i]
+            else:
+                ax_i = ax
+                
             # Plot metrics for each type of agent
             for agent in ["ideal", "random", "sac", "ppo", "drama"]:
                 
@@ -194,36 +240,88 @@ def plot_learning_curve(plot_path, data_paths, max_steps=2_000_000, task_interva
                     ymax = max([ymax, max(y)])
                     
                     # Plot mean and std
-                    ax[i].plot(x, y, label=agent, color=colours[agent])
-                    ax[i].fill_between(x, y-std, y+std, alpha=0.3)
+                    ax_i.plot(x, y, label=agent, color=colours[agent])
+                    ax_i.fill_between(x, y-std, y+std, alpha=0.3, color=colours[agent])
                     
-            ax[i].set_ylabel(f"{scenarios[i]}")
-            ax[i].set_xlabel("Environment steps")
+            ax_i.set_ylabel(f"{scenarios[i]}")
+            ax_i.set_xlabel("Environment steps")
             
-            # Format y axis as percentages
+            # Format y axis as percentages and set range to 0%-100%
             if m in ["success", "crashed", "truncated"]:
-                ax[i].yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+                ax_i.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+                ymin = 0
+                ymax = 1
             
             # Format x-axis numbers
-            ax[i].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+            ax_i.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
                 
             # Add legend to top plot
             if i == 0:
-                ax[i].legend(loc='upper left', bbox_to_anchor=(1, 1))
-            
+                ax_i.legend(loc='upper left', bbox_to_anchor=(1, 1))
+                
         # Use same axis ranges across all plots
         for i in range(nrows):
+            # Check if there is more than 1 subplot
+            if nrows > 1:
+                ax_i = ax[i]
+            else:
+                ax_i = ax
+                
             ybuff = 0.1*(ymax-ymin)
-            ax[i].set_xlim((xmin, xmax))
-            ax[i].set_ylim((ymin-ybuff, ymax+ybuff))
+            ax_i.set_xlim((xmin, xmax))
+            ax_i.set_ylim((ymin-ybuff, ymax+ybuff))
             
             # Add vertical lines indicating task switch
             pos = task_interval
             while pos < xmax:
-                ax[i].axvline(x=pos, color="black", linestyle='dotted')
+                ax_i.axvline(x=pos, color="black", linestyle='dotted')
                 pos += task_interval
         
         fig.suptitle(f"Average {m}")
                 
         fig.tight_layout()
         fig.savefig(f"{plot_path}/learning_curve_{m}.png")
+        
+def plot_AFS_heatmap(path):
+    data_path = path + "/data"
+    plot_path = path + "/plots"
+
+    formatter = mtick.ScalarFormatter(useMathText=True)
+    formatter.set_scientific(True)
+    formatter.set_powerlimits((-2, 2))
+
+    for fisher_file in [x for x in os.listdir(data_path) if x.startswith("average-fisher-sensitivity")]:
+        
+        step = int(fisher_file.split('-')[-1].split('.')[0])
+        
+        with open(data_path+'/'+fisher_file) as f:
+            data = json.load(f)
+
+        # Create plots for each layer
+        layer_names = [x.replace(".weight", "").replace(".bias", "") for x in data.keys()]
+        layer_names = np.unique(layer_names).tolist()
+        
+        for layer in layer_names:
+            vmax = 0
+            for name in [f"{layer}.weight", f"{layer}.bias"]:
+                data[name] = np.array(data[name])
+                vmax = max(vmax, np.max(data[name]))
+                if len(data[name].shape) == 1:
+                        data[name] = data[name].reshape((data[name].shape[0],1))
+                
+            fig, ax = plt.subplots(ncols = 3, figsize=(7, 5), 
+                                       gridspec_kw=dict(width_ratios=[10,2,1]))
+            
+            i=0
+            for suffix in ["weight", "bias"]:
+                sns.heatmap(data[f"{layer}.{suffix}"], ax=ax[i],  cbar=False, 
+                            xticklabels=False, yticklabels=False)
+                ax[i].set_title(suffix, y=-0.1)
+                i+=1
+                
+            fig.suptitle(f"Layer: {layer}\nStep: {step}")
+            fig.colorbar(ax[1].collections[0], cax=ax[-1], format="%.2E")
+            fig.tight_layout()
+            fig.subplots_adjust(wspace=0.1, hspace=0)
+            
+            fig.savefig(f"{plot_path}/AFS_{layer}_step-{step}.png")

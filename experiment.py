@@ -23,7 +23,8 @@ highway_env.register_highway_envs()
 from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
-from agent.evaluation import plot_learning_curve
+from agent.ppo import PPO
+from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
 
 def main():
     
@@ -91,7 +92,7 @@ def main():
         AgentClass = RandomAgent
     elif args.algorithm == "ppo":
         hyperparameters = config.ppo_params
-        # TODO: AgentClass = PPOAgent
+        AgentClass = PPO
     elif args.algorithm == "sac":
         hyperparameters = config.sac_params
         AgentClass = SACAgent
@@ -148,7 +149,9 @@ def main():
     # Calculate aggregated metrics
     # -------------------------------------------------------------------------
     
-    # TODO: Average Fisher Sensitivity
+    # Average Fisher Sensitivity
+    average_fisher_sensitivity(args.path + "/data")
+    
     # TODO: Matrix for forward and backward transfer metrics
     
     
@@ -169,10 +172,13 @@ def main():
     plot_learning_curve(plot_path=args.path + "/plots", 
                         data_paths=data_paths, 
                         max_steps=train_params["max_timesteps"], 
-                        task_interval=env_params["change_scenario"],
+                        task_interval=env_params["change_frequency"],
                         metrics=["reward", "success", "crashed", "truncated"],
                         scenarios = scenarios
                         )
+    
+    # Create heatmaps for Average Fisher Sensitivity
+    plot_AFS_heatmap(args.path)
     
     
     

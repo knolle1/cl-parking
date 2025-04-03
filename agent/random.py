@@ -96,13 +96,14 @@ class RandomAgent(AbstractAgent):
                     env.np_random = np.random.default_rng(eval_seed)
                     env.action_space.seed(eval_seed)
                     env.observation_space.seed(eval_seed)
-            
+                    
+                rewards_list = []
+                success_list = []
+                crashed_list = []
+                truncated_list = []
+                
                 for i in range(n_eval_episodes):
-                    rewards_list = []
-                    success_list = []
-                    crashed_list = []
-                    truncated_list = []
-        
+                    
                     terminated = False
                     truncated = False
                     

@@ -81,7 +81,23 @@ env_seq_par_perp["change_scenario"] = [[["parallel"], [1]],
                                        [["perpendicular"], [1]]]
 
 # PPO Hyperparameters
-ppo_params = {}
+ppo_params = {"gamma" : 0.99,
+              "lamb" : 0.9,
+              "eps_clip" : 0.1,
+              "K_epochs" : 20,
+              "num_cells" : 64,
+              "actor_lr" : 1e-4,
+              "critic_lr" : 3e-4,
+              "memory_size" : 2048,
+              "minibatch_size" : 64,
+              "c1" : 0.1,
+              "c2" : 0.01,
+              "kl_threshold" : 0.15,
+              "parameters_hardshare" : False,
+              "early_stop" : False,
+              "cal_total_loss" : True,
+              "max_grad_norm" : 0.5,
+              "layer_num" : 3}
 
 # SAC Hyperparameters
 sac_params = {"buffer_size" : int(1e6), 
