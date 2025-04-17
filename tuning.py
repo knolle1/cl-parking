@@ -25,9 +25,7 @@ highway_env.register_highway_envs()
 
 from agent import config
 from agent.sac import SACAgent
-from agent.random import RandomAgent
 from agent.ppo import PPO
-from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
 
 # Global run counter
 run_counter = 0
@@ -156,7 +154,7 @@ def main():
         # TODO: AgentClass = DramaAgent
         
     # Get training configuration
-    train_params = {"max_timesteps" : 30_000, # Number of timesteps to train in total
+    train_params = {"max_timesteps" : 250_000, # Number of timesteps to train in total
                     "eval_freq" : 10_000,      # Evaluate the policy every 'eval_freq' steps
                     "n_eval_episodes" : 30,    # Number of episodes to run per evaluation
                     "eval_scenarios" : eval_scenarios, 
@@ -256,6 +254,10 @@ def main():
             df = pd.read_csv(save_path, usecols=["idx", f"Run{run_counter}"])
             
             df = df.rename(columns={f"Run{run_counter}" : metric})
+            
+            # Convert all columns to int/float
+            for col in df.columns:
+                df[col] = pd.to_numeric(df[col])
             
             if df_merge is None:
                 df_merge = df
