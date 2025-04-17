@@ -81,6 +81,8 @@ def main():
         env_params = config.env_parallel
     elif args.scenario == "parallel-adj":
         env_params = config.env_parallel_adj
+    elif args.scenario == "interleave":
+        env_params = config.env_interleave
     elif args.scenario == "sequential-inc":
         env_params = config.env_seq_perp_par
     elif args.scenario == "sequential-dec":
@@ -144,6 +146,9 @@ def main():
         
         agent.train(env, log_path=args.path, run_id=f"Run{i}", 
                     train_seed=i, **train_params)
+        
+        agent.record_video(env, 5, args.path, 
+                           run_id=i, seed=i, deterministic=True)
         
         
     # Calculate aggregated metrics
