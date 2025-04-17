@@ -279,9 +279,5 @@ def main():
     sweep_id = wandb.sweep(sweep=sweep_configuration, project=args.project)
     wandb.agent(sweep_id, function=sweep_function, count=args.n_runs)
     
-     
-    
-    
-    
 if __name__ == '__main__':
     main()
