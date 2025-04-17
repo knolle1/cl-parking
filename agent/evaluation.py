@@ -302,25 +302,40 @@ def plot_AFS_heatmap(path):
         layer_names = np.unique(layer_names).tolist()
         
         for layer in layer_names:
-            vmax = 0
-            for name in [f"{layer}.weight", f"{layer}.bias"]:
-                data[name] = np.array(data[name])
-                vmax = max(vmax, np.max(data[name]))
-                if len(data[name].shape) == 1:
-                        data[name] = data[name].reshape((data[name].shape[0],1))
-                
-            fig, ax = plt.subplots(ncols = 3, figsize=(7, 5), 
-                                       gridspec_kw=dict(width_ratios=[10,2,1]))
             
-            i=0
-            for suffix in ["weight", "bias"]:
-                sns.heatmap(data[f"{layer}.{suffix}"], ax=ax[i],  cbar=False, 
-                            xticklabels=False, yticklabels=False)
-                ax[i].set_title(suffix, y=-0.1)
-                i+=1
+            if f"{layer}.weight" in data.keys() and f"{layer}.bias" in data.keys():
+                vmax = 0
+                for name in [f"{layer}.weight", f"{layer}.bias"]:
+                    data[name] = np.array(data[name])
+                    vmax = max(vmax, np.max(data[name]))
+                    if len(data[name].shape) == 1:
+                            data[name] = data[name].reshape((data[name].shape[0],1))
+                    
+                fig, ax = plt.subplots(ncols = 3, figsize=(7, 5), 
+                                           gridspec_kw=dict(width_ratios=[10,2,1]))
+                
+                i=0
+                for suffix in ["weight", "bias"]:
+                    sns.heatmap(data[f"{layer}.{suffix}"], ax=ax[i],  cbar=False, 
+                                xticklabels=False, yticklabels=False)
+                    ax[i].set_title(suffix, y=-0.1)
+                    i+=1
+            else:
+                vmax = 0
+                data[layer] = np.array(data[layer])
+                vmax = max(vmax, np.max(data[layer]))
+                if len(data[layer].shape) == 1:
+                    data[layer] = data[layer].reshape((data[layer].shape[0],1))
+                    
+                fig, ax = plt.subplots(ncols = 2, figsize=(7, 5), 
+                                           gridspec_kw=dict(width_ratios=[12,1]))
+                
+                sns.heatmap(data[f"{layer}"], ax=ax[0],  cbar=False, 
+                                xticklabels=False, yticklabels=False)
+                #ax[0].set_title(suffix, y=-0.1)
                 
             fig.suptitle(f"Layer: {layer}\nStep: {step}")
-            fig.colorbar(ax[1].collections[0], cax=ax[-1], format="%.2E")
+            fig.colorbar(ax[0].collections[0], cax=ax[-1], format="%.2E")
             fig.tight_layout()
             fig.subplots_adjust(wspace=0.1, hspace=0)
             
