@@ -22,7 +22,7 @@ import scipy
 from gymnasium.spaces import Box, Discrete
 import os
 #import random
-#from gymnasium.wrappers.record_video import RecordVideo
+from gymnasium.wrappers.record_video import RecordVideo
 #from gymnasium.wrappers import NormalizeObservation
 import copy
 import json
@@ -551,7 +551,7 @@ class PPO():
             actor_loss : policy loss
             critic_loss : value loss
             entropy_loss : mean entropy of action distribution
-        """
+        """        
         observations, actions, logp_old = data['obs'], data['act'], data['logp']
         advs, rtgs = data['adv'], data['rtg']
 
@@ -699,13 +699,23 @@ class PPO():
 
         self._last_obs, _ = self.env.reset()
         
+        # Evaluation before training
         self.evaluate()
 
+        # Run training
         for i in range(max_timesteps // self.memory_size):
-        
             self.roll_out(self.env)
-
             self.optimise()
+            
+        # Evaluate final agent
+        # max_timesteps not necessarily equal to the number of steps that were 
+        # rolled out (roll out size of replay buffer)
+        print(f"Evaluating step {self.global_step}")
+        self.evaluate()
+             
+        if self.fisher_freq is not None:
+            print(f"Calculating Fisher step {self.global_step}")
+            self.calculate_fisher(run_id)
             
         self.logger.close()
 
@@ -743,7 +753,7 @@ class PPO():
                 
                 while not terminated and not truncated:
                     with torch.no_grad():
-                        obs_tensor = torch.tensor(self._last_obs, \
+                        obs_tensor = torch.tensor(obs, \
                                                 dtype=torch.float32, device=self.device).unsqueeze(0)
                     
                         action, action_logprob, value = self.actor_critic.act(obs_tensor, deterministic=True)
@@ -752,7 +762,7 @@ class PPO():
                     else:
                         action = action.item()
                     
-                    next_obs, reward, terminated, truncated, info = env.step(action)
+                    obs, reward, terminated, truncated, info = env.step(action)
                     episode_reward += reward
                     
                 rewards_list.append(episode_reward)
@@ -770,8 +780,9 @@ class PPO():
             results[f"{label}_truncated_std"] = np.std(truncated_list)
         
         self.logger.append(self.global_step, results)
+        return results
     
-    def calculate_fisher(self):
+    def calculate_fisher(self, run_id):
         """
         Calculate Fisher information matrix when task changes
         """
@@ -790,16 +801,16 @@ class PPO():
         eval_env.configure(params)
         
         # Seeding for evaluation purpose
-        if self.seed is not None:
-            eval_env.np_random = np.random.default_rng(self.seed)
-            eval_env.action_space.seed(self.seed)
-            eval_env.observation_space.seed(self.seed)
+        if self.eval_seed is not None:
+            eval_env.np_random = np.random.default_rng(self.eval_seed)
+            eval_env.action_space.seed(self.eval_seed)
+            eval_env.observation_space.seed(self.eval_seed)
         
         
         # Init fisher information matrix. Note: this is the diagonal of the
         # matrix for each parameter
         fisher = {n: torch.zeros_like(p).to(p.device) for n, p in 
-                  self.model.actor.named_parameters()} 
+                  self.actor_critic.actor.named_parameters()} 
 
         last_obs, _ = eval_env.reset()
 
@@ -807,10 +818,10 @@ class PPO():
         # Rollout experience and for each datapoint (i.e. step) calculate gradient
         # and approximate fisher
         action_shape = self.env.action_space.shape
-        for _ in range(self.fisher_steps):            
+        for i in range(self.fisher_steps):    
             
             with torch.no_grad():
-                obs_tensor = torch.tensor(self.last_obs, \
+                obs_tensor = torch.tensor(last_obs, \
                                             dtype=torch.float32, device=self.device).unsqueeze(0)
                 
                 action, action_logprob, value = self.actor_critic.act(obs_tensor)
@@ -832,16 +843,18 @@ class PPO():
             next_obs, reward, terminated, truncated, info = eval_env.step(clipped_action)
                 
             # Same format as minibatch
-            data = dict(obs=np.array([last_obs]), 
-                        act=np.array([action]), 
-                        rtg=np.array([reward]), 
-                        adv=np.array([value]), 
-                        logp=np.array([action_logprob]))
+            data = dict(obs=torch.as_tensor(np.array([last_obs]), dtype=torch.float32, device=self.device), 
+                        act=torch.as_tensor(np.array([action]), dtype=torch.float32, device=self.device), 
+                        rtg=torch.as_tensor(np.array([reward]), dtype=torch.float32, device=self.device), 
+                        adv=torch.as_tensor(np.array([value]), dtype=torch.float32, device=self.device), 
+                        logp=torch.as_tensor(np.array([action_logprob]), dtype=torch.float32, device=self.device))
+            
+            #data = {k: torch.as_tensor(np.array([last_obs]), dtype=torch.float32, device=self.device) for k,v in data}
             
             done = int(terminated or truncated)
             
             # Reset gradients
-            self.model.actor.optimizer.zero_grad()
+            self.actor_critic_opt.zero_grad()
             
             # Calculate loss
             actor_loss, critic_loss, entropy_loss, kl_apx = self.compute_loss(data)
@@ -852,7 +865,7 @@ class PPO():
             # Calculate matrix diagonals using approximation of second derivative
             # Diagonal of fisher information matrix for parameter i:
             # F_i = E[(\partial J(theta)/ \partial theta_i)^2]
-            for n, p in self.model.actor.named_parameters():
+            for n, p in self.actor_critic.actor.named_parameters():
                 if p.grad is not None:
                     fisher[n] += p.grad.data.clone().pow(2) / self.fisher_steps
                     
@@ -864,11 +877,64 @@ class PPO():
         eval_env.close()
         
         # Get path to save diagonals
-        path = self.logger.data_path + f"/fisher-information_step-{self.n_calls}"
+        path = self.logger.data_path + f"/fisher-information_step-{self.global_step}"
         
         if not os.path.exists(path):
             os.makedirs(path)
         
         # Save as JSON
-        with open(path +  f"/fisher-diagonal_{self.run_id}.json", "w") as outfile:
+        with open(path +  f"/fisher-diagonal_{run_id}.json", "w") as outfile:
             json.dump({k: v.tolist() for k, v in fisher.items()}, outfile)
+            
+    def record_video(self, env, n_eval_episodes, log_path, run_id, 
+                     seed=None, deterministic=False):
+        
+        # Create recording environment
+        env_name = env.unwrapped.spec.id
+        params = copy.copy(env.config)
+        rec_env = gym.make(env_name, render_mode="rgb_array")
+        rec_env.configure(params)
+        
+        # Create missing folders
+        if not os.path.exists(log_path+"/video"):
+            print(f"Creating output directory {log_path}/video")
+            os.makedirs(log_path+"/video")
+        
+        rec_env = RecordVideo(rec_env, log_path+"/video", name_prefix=f"run-{run_id}",
+                              episode_trigger=lambda x: True)
+        
+        # Seeding for evaluation purpose
+        if seed is not None:
+            rec_env.np_random = np.random.default_rng(seed)
+            rec_env.action_space.seed(seed)
+            rec_env.observation_space.seed(seed)
+            
+        action_shape = rec_env.action_space.shape
+        
+        for i in range(self.n_eval_episodes):
+            
+            terminated = False
+            truncated = False
+            
+            obs, _ = rec_env.reset()
+            
+            episode_reward = 0
+            
+            while not terminated and not truncated:
+                with torch.no_grad():
+                    obs_tensor = torch.tensor(obs, \
+                                            dtype=torch.float32, device=self.device).unsqueeze(0)
+                
+                    action, action_logprob, value = self.actor_critic.act(obs_tensor, deterministic=deterministic)
+                if self.continous_action:
+                    action = action.cpu().numpy().reshape(action_shape)
+                else:
+                    action = action.item()
+                
+                obs, reward, terminated, truncated, info = rec_env.step(action)
+                episode_reward += reward
+                
+        rec_env.close()
+                
+            
+        
