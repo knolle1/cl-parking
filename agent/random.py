@@ -13,6 +13,8 @@ from .evaluation import Logger
 import numpy as np
 import copy
 import gymnasium as gym
+import os
+from gymnasium.wrappers.record_video import RecordVideo
 
 class RandomAgent(AbstractAgent):
     
@@ -136,3 +138,43 @@ class RandomAgent(AbstractAgent):
             logger.append(step, results)
             
         logger.close()
+        
+    def record_video(self, env, n_eval_episodes, log_path, run_id, 
+                     seed=None, deterministic=False):
+        
+        # Create recording environment
+        env_name = env.unwrapped.spec.id
+        params = copy.copy(env.config)
+        rec_env = gym.make(env_name, render_mode="rgb_array")
+        rec_env.configure(params)
+        
+        # Create missing folders
+        if not os.path.exists(log_path+"/video"):
+            print(f"Creating output directory {log_path}/video")
+            os.makedirs(log_path+"/video")
+        
+        rec_env = RecordVideo(rec_env, log_path+"/video", name_prefix=f"run-{run_id}",
+                              video_callable=lambda episode_id: True, force=True)
+        
+        # Seeding for evaluation purpose
+        if seed is not None:
+            rec_env.np_random = np.random.default_rng(seed)
+            rec_env.action_space.seed(seed)
+            rec_env.observation_space.seed(seed)
+        
+        for i in range(n_eval_episodes):
+            
+            terminated = False
+            truncated = False
+            
+            obs, _ = rec_env.reset()
+            
+            episode_reward = 0
+            
+            while not terminated and not truncated:
+                action = np.random.uniform(self.low, self.high, self.shape)
+                
+                next_obs, reward, terminated, truncated, info = rec_env.step(action)
+                episode_reward += reward
+                
+        rec_env.close()
