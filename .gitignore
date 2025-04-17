@@ -1,2 +1,6 @@
 *.pyc
 .venv
+**/testing
+**/old
+**/wandb
+wandb_key.txt

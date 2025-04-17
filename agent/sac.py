@@ -13,6 +13,8 @@ from .evaluation import Logger
 from stable_baselines3 import SAC
 from stable_baselines3.common.callbacks import BaseCallback
 
+from gymnasium.wrappers.record_video import RecordVideo
+
 import copy
 import gymnasium as gym
 import json
@@ -77,23 +79,23 @@ class EvalCallback(BaseCallback):
                 env.action_space.seed(self.seed)
                 env.observation_space.seed(self.seed)
         
+            rewards_list = []
+            success_list = []
+            crashed_list = []
+            truncated_list = [] 
+            
             for i in range(self.n_eval_episodes):
-                rewards_list = []
-                success_list = []
-                crashed_list = []
-                truncated_list = []
-    
+                
                 terminated = False
                 truncated = False
                 
                 obs, _ = env.reset()
                 
                 episode_reward = 0
-                
                 while not terminated and not truncated:
                     action, _ = self.model.predict(obs, deterministic=True)
                     
-                    next_obs, reward, terminated, truncated, info = env.step(action)
+                    obs, reward, terminated, truncated, info = env.step(action)
                     episode_reward += reward
                     
                 rewards_list.append(episode_reward)
@@ -111,6 +113,7 @@ class EvalCallback(BaseCallback):
             results[f"{label}_truncated_std"] = np.std(truncated_list)
         
         self.my_logger.append(self.n_calls, results)
+        return results
         
         
     def calculate_fisher(self):
@@ -257,6 +260,14 @@ class EvalCallback(BaseCallback):
         pass
 
     def _on_training_end(self) -> None:
+        # Evaluate final agent
+        print(f"Evaluating step {self.n_calls}")
+        self.evaluate()
+            
+        if self.fisher_freq is not None:
+            print(f"Calculating Fisher step {self.n_calls}")
+            self.calculate_fisher()
+        
         print("Closing logger")
         for label, env in self.eval_envs.items():
             env.close()
@@ -351,3 +362,42 @@ class SACAgent(AbstractAgent):
                                 fisher_steps=fisher_steps)
         
         self.model.learn(max_timesteps,callback=callback)
+        
+    def record_video(self, env, n_eval_episodes, log_path, run_id, 
+                     seed=None, deterministic=False):
+        
+        # Create recording environment
+        env_name = env.unwrapped.spec.id
+        params = copy.copy(env.config)
+        rec_env = gym.make(env_name, render_mode="rgb_array")
+        rec_env.configure(params)
+        
+        # Create missing folders
+        if not os.path.exists(log_path+"/video"):
+            print(f"Creating output directory {log_path}/video")
+            os.makedirs(log_path+"/video")
+        
+        rec_env = RecordVideo(rec_env, log_path+"/video", name_prefix=f"run-{run_id}",
+                              episode_trigger=lambda x: True)
+        
+        # Seeding for evaluation purpose
+        if seed is not None:
+            rec_env.np_random = np.random.default_rng(seed)
+            rec_env.action_space.seed(seed)
+            rec_env.observation_space.seed(seed)
+        
+        for i in range(n_eval_episodes):
+            
+            terminated = False
+            truncated = False
+            
+            obs, _ = rec_env.reset()
+            
+            episode_reward = 0
+            while not terminated and not truncated:
+                action, _ = self.model.predict(obs, deterministic=True)
+                
+                obs, reward, terminated, truncated, info = rec_env.step(action)
+                episode_reward += reward
+                
+        rec_env.close()

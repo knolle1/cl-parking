@@ -13,3 +13,4 @@ torchaudio==2.3.1+cu118
 torchvision==0.18.1+cu118
 seaborn==0.13.2
 stable_baselines3==2.5.0
+wandb==0.19.9
