@@ -1,5 +1,5 @@
 #!/bin/bash
-#python experiment.py -a ppo -s perpendicular -p results/ppo/perpendicular -n 5
+python experiment.py -a ppo -s perpendicular -p results/ppo/perpendicular -n 5
 python experiment.py -a ppo -s diagonal-25 -p results/ppo/diagonal-25 -n 5
 python experiment.py -a ppo -s diagonal-50 -p results/ppo/diagonal-50 -n 5
 python experiment.py -a ppo -s parallel -p results/ppo/parallel -n 5
