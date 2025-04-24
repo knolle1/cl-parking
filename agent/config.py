@@ -100,13 +100,13 @@ ppo_params = {"gamma" : 0.99,
               "layer_num" : 3}
 
 # SAC Hyperparameters
-sac_params = {"buffer_size" : int(1e6), 
-              "learning_rate" : 1e-3, 
-              "gamma" : 0.95,
-              "batch_size" : 1024, 
-              "tau" : 0.05,
-              "num_layers" : 3, 
-              "layer_size" : 512, 
+sac_params = {"buffer_size" : 1_000_000, 
+              "learning_rate" : 9e-4, 
+              "gamma" : 0.995,
+              "batch_size" : 32, 
+              "tau" : 0.6,
+              "num_layers" : 6, 
+              "layer_size" : 1024, 
               "verbose" : 0,
               }
 

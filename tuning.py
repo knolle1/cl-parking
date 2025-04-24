@@ -31,6 +31,7 @@ from agent.ppo import PPO
 run_counter = 0
 
 def main():
+    global run_counter
     
     # Command line arguments
     # -------------------------------------------------------------------------
@@ -78,6 +79,16 @@ def main():
                         default=50,
                         type=int)
     
+    parser.add_argument('--sweep', 
+                        help='Weights & Bias sweep ID. Use this to continue existing sweeps', 
+                        default=None,
+                        type=str)
+    
+    parser.add_argument('--run-counter', 
+                        help='Init value for run counter. Set this when passing sweep ID to avoid run number conflicts', 
+                        default=0,
+                        type=int)
+    
     args, unknown = parser.parse_known_args()
     
     if args.login is None:
@@ -90,6 +101,8 @@ def main():
             api_key = args.login
             
         wandb.login(key=api_key)
+        
+    run_counter = args.run_counter
     
     
     # Get all parameters needed for experiments
@@ -204,11 +217,12 @@ def main():
     with open(args.path +  f"/experiment-metadata_{round(timestamp.timestamp())}.json", "w") as outfile:
         json.dump(metadata, outfile, indent=2)
         
-    # Create file for logging hyperparams
-    hyperparam_names = [x for x in hp_bounds.keys()]
-    hyperparam_names.sort()
-    with open(args.path +  f"/hyperparameters.csv", "w") as outfile:
-        outfile.write(",".join(["RunID"] + hyperparam_names) + "\n")
+    # Create file for logging hyperparams if file does not yet exist
+    if not os.path.isfile(args.path +  f"/hyperparameters.csv"):
+        hyperparam_names = [x for x in hp_bounds.keys()]
+        hyperparam_names.sort()
+        with open(args.path +  f"/hyperparameters.csv", "w") as outfile:
+            outfile.write(",".join(["RunID"] + hyperparam_names) + "\n")
     
     
     # Function to optimise
@@ -276,7 +290,10 @@ def main():
         run_counter += 1
         
     # Run the sweep
-    sweep_id = wandb.sweep(sweep=sweep_configuration, project=args.project)
+    if args.sweep is not None:
+        sweep_id = args.sweep
+    else:
+        sweep_id = wandb.sweep(sweep=sweep_configuration, project=args.project)
     wandb.agent(sweep_id, function=sweep_function, count=args.n_runs)
     
 if __name__ == '__main__':

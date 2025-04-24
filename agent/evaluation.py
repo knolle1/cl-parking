@@ -64,13 +64,13 @@ class Logger:
             header_dict[v] = header
             
         # Write headers
-        self.append("idx", header_dict)
+        self.append("idx", header_dict, mode="w")
 
-    def append(self, idx, values):
-        with open(self.tmp_files["idx"], "a") as f:
+    def append(self, idx, values, mode="a"):
+        with open(self.tmp_files["idx"], mode) as f:
             f.write(f"{idx}\n")
         for k, v in values.items():
-            with open(self.tmp_files[k], "a") as f:
+            with open(self.tmp_files[k], mode) as f:
                 f.write(f"{v}\n")
 
     def close(self):
