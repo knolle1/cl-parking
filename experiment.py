@@ -106,6 +106,9 @@ def main():
     train_params = config.train
     
     train_params["max_timesteps"] = train_params["scenario_timesteps"] * len(env_params["change_scenario"])
+    
+    if args.scenario == "parallel-adj":
+        train_params["eval_scenarios"] += ["parallel-adj"]
         
     # Create output folder if missing
     if not os.path.exists(args.path):
@@ -169,7 +172,7 @@ def main():
     
     # Get scenarios to plot. If experiment is single task experiment only plot
     # that parking scenario. Otherwise plot all
-    if args.scenario in ["perpendicular", "diagonal-25", "diagonal-50", "parallel"]:
+    if args.scenario in ["perpendicular", "diagonal-25", "diagonal-50", "parallel", "parallel-adj"]:
         scenarios = [args.scenario]
     else:
         scenarios = ["perpendicular", "diagonal-25", "diagonal-50", "parallel"]
