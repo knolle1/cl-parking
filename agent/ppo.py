@@ -911,7 +911,7 @@ class PPO():
             
         action_shape = rec_env.action_space.shape
         
-        for i in range(self.n_eval_episodes):
+        for i in range(n_eval_episodes):
             
             terminated = False
             truncated = False
