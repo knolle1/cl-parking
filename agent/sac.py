@@ -276,7 +276,7 @@ class EvalCallback(BaseCallback):
 
 class SACAgent(AbstractAgent):
     
-    def __init__(self, env, buffer_size, learning_rate, gamma, batch_size, tau,
+    def __init__(self, env, device, buffer_size, learning_rate, gamma, batch_size, tau,
                  num_layers, layer_size, verbose=1):
         """
         Init hyperparameters and models
@@ -291,6 +291,7 @@ class SACAgent(AbstractAgent):
         
         self.model = SAC('MlpPolicy', 
                          env,
+                         device=device,
                          verbose=verbose, 
                          buffer_size=self.buffer_size,
                          learning_rate=self.learning_rate,
