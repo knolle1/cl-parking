@@ -18,6 +18,7 @@ from line_profiler import profile
 import yaml
 from envs.my_memory_maze import MemoryMaze
 from envs.my_atari import Atari
+from envs.my_highway import HighwayEnv
 from eval import eval_episodes
 import warnings
 import ast
@@ -33,11 +34,21 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
     epoch_representation_loss_list = []
     epoch_representation_real_kl_div_list = []
     epoch_total_loss_list = []
+    epoch_vq_loss_list = []
+    epoch_perplexity_list = []
+    epoch_avg_2nd_similarity_list = []
+    epoch_avg_last_similarity_list = []
+    epoch_avg_median_similarity_list = []
     for e in range(epoch):
         obs, action, reward, termination = replay_buffer.sample(batch_size, batch_length, imagine=False)
-        reconstruction_loss, reward_loss, termination_loss, \
-        dynamics_loss, dynamics_real_kl_div, representation_loss, \
-        representation_real_kl_div, total_loss = world_model.update(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)
+        if world_model.autoencoder_type == 'naive':
+            reconstruction_loss, reward_loss, termination_loss, \
+            dynamics_loss, dynamics_real_kl_div, representation_loss, \
+            representation_real_kl_div, total_loss, perplexity, avg_similarity = world_model.update(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)
+        else:
+            reconstruction_loss, reward_loss, termination_loss, \
+            dynamics_loss, dynamics_real_kl_div, representation_loss, \
+            representation_real_kl_div, total_loss, vq_loss, perplexity, avg_similarity = world_model.update2(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)            
 
         epoch_reconstruction_loss_list.append(reconstruction_loss)
         epoch_reward_loss_list.append(reward_loss)
@@ -47,6 +58,12 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
         epoch_representation_loss_list.append(representation_loss)
         epoch_representation_real_kl_div_list.append(representation_real_kl_div)
         epoch_total_loss_list.append(total_loss)
+        epoch_perplexity_list.append(perplexity)
+        epoch_avg_2nd_similarity_list.append(avg_similarity[1])
+        epoch_avg_last_similarity_list.append(avg_similarity[-1])
+        epoch_avg_median_similarity_list.append(avg_similarity[len(avg_similarity) // 2])
+        if world_model.autoencoder_type == 'vq':
+            epoch_vq_loss_list.append(vq_loss)            
     if logger is not None:
         logger.log("WorldModel/reconstruction_loss", np.mean(epoch_reconstruction_loss_list), global_step=global_step)
         # logger.log("WorldModel/augmented_reconstruction_loss", augmented_reconstruction_loss.item(), global_step=global_step)
@@ -56,7 +73,13 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
         logger.log("WorldModel/dynamics_real_kl_div", np.mean(epoch_dynamics_real_kl_div_list), global_step=global_step)
         logger.log("WorldModel/representation_loss", np.mean(epoch_representation_loss_list), global_step=global_step)
         logger.log("WorldModel/representation_real_kl_div", np.mean(epoch_representation_real_kl_div_list), global_step=global_step)
-        logger.log("WorldModel/total_loss", np.mean(epoch_total_loss_list), global_step=global_step)    
+        logger.log("WorldModel/total_loss", np.mean(epoch_total_loss_list), global_step=global_step)
+        logger.log("WorldModel/perplexity", np.mean(epoch_perplexity_list), global_step=global_step)
+        logger.log("WorldModel/avg_2nd_similarity", np.mean(epoch_avg_2nd_similarity_list), global_step=global_step)
+        logger.log("WorldModel/avg_last_similarity", np.mean(epoch_avg_last_similarity_list), global_step=global_step)
+        logger.log("WorldModel/avg_median_similarity", np.mean(epoch_avg_median_similarity_list), global_step=global_step)
+        if world_model.autoencoder_type == 'vq':
+            logger.log("WorldModel/vq_loss", np.mean(epoch_vq_loss_list), global_step=global_step)                
 
 @profile
 @torch.no_grad()
@@ -70,6 +93,7 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
     '''
     world_model.eval()
     agent.eval()
+    #TODO: Use the sampl_reward, termination to create a replay buffer critic loss
     sample_obs, sample_action, sample_reward, sample_termination = replay_buffer.sample(
         imagine_batch_size, imagine_context_length, imagine=True)
     if world_model.model == 'Transformer':
@@ -80,7 +104,7 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
             log_video=log_video,
             logger=logger, global_step=global_step
         )
-    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2':
+    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2' or world_model.model == 'Hybird':
          latent, action, old_logits, context_latent, reward_hat, termination_hat = world_model.imagine_data2(
             agent, sample_obs, sample_action,
             imagine_batch_size=imagine_batch_size,
@@ -102,6 +126,8 @@ def joint_train_world_model_agent(config, logdir,
         env = Atari(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
     elif config.BasicSettings.Env_name.startswith('memory'):
         env = MemoryMaze(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
+    elif config.BasicSettings.Env_name.startswith('HW'):
+        env = HighwayEnv(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
     else:
         assert ValueError(f'Unknown environment name: {config.BasicSettings.Env_name}')
     print("Current env: " + colorama.Fore.YELLOW + f"{config.BasicSettings.Env_name}" + colorama.Style.RESET_ALL)
@@ -130,7 +156,7 @@ def joint_train_world_model_agent(config, logdir,
                     model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
                     if world_model.model == 'Transformer':
                         prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
-                    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2':
+                    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2' or world_model.model == 'Hybird':
                         prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
                     action = agent.sample_as_env_action(
                         torch.cat([prior_flattened_sample, last_dist_feat], dim=-1),
@@ -143,6 +169,7 @@ def joint_train_world_model_agent(config, logdir,
             action = env.action_space.sample()
 
         ob, reward, is_last, info = env.step(action)
+        # replay_buffer.append(current_ob, action, reward, np.logical_or(terminated, info["life_loss"]))
         replay_buffer.append(current_ob, action, reward, info['is_terminal'])
 
         sum_reward += reward
@@ -220,7 +247,7 @@ def build_world_model(conf, action_dim, device):
         action_dim = action_dim,
         config = conf, 
         device = device
-    ).cuda(device)
+    ).to(device)
 
 
 def build_agent(conf, action_dim, device):
@@ -229,13 +256,13 @@ def build_agent(conf, action_dim, device):
             conf = conf,
             action_dim=action_dim,
             device = device
-        ).cuda(device)
+        ).to(device)
     elif conf.Models.Agent.Policy == 'PPO':
         return agents.PPOAgent(
             conf=conf,
             action_dim=action_dim,
             device = device
-        ).cuda(device)        
+        ).to(device)       
 
 
 class DotDict(dict):
@@ -357,6 +384,8 @@ if __name__ == "__main__":
         dummy_env = Atari(config.BasicSettings.Env_name)
     elif config.BasicSettings.Env_name.startswith('memory'):
         dummy_env = MemoryMaze(config.BasicSettings.Env_name)
+    elif config.BasicSettings.Env_name.startswith('HW'):
+        dummy_env = HighwayEnv(config.BasicSettings.Env_name)
     else:
         assert ValueError(f'Unknown environment name: {config.BasicSettings.Env_name}')
 
@@ -364,6 +393,8 @@ if __name__ == "__main__":
 
     # build world model and agent
     world_model = build_world_model(config, action_dim, device=device)
+    if config.Models.WorldModel.LatentDiscreteType == 'vq':
+        config.update_or_create('Models.WorldModel.CategoricalDim', world_model.encoder.output_dim[1]*world_model.encoder.output_dim[2])
     agent = build_agent(config, action_dim, device=device)
     update_model_parameters(config, world_model, agent)
     if (config.BasicSettings.Compile and os.name != "nt"):  # compilation is not supported on windows
