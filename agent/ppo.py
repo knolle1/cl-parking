@@ -327,7 +327,7 @@ class Actor_Critic_net(nn.Module):
         return entropy, action_logp, value
     
 class PPO():
-    def __init__(self, env, gamma, lamb, eps_clip, K_epochs, \
+    def __init__(self, env, device, gamma, lamb, eps_clip, K_epochs, \
                  num_cells, layer_num,\
                  actor_lr, critic_lr, memory_size , minibatch_size,\
                  cal_total_loss, c1, c2, \
@@ -357,7 +357,7 @@ class PPO():
         
         observation_space=env.observation_space
         action_space=env.action_space
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
                      
         self.gamma = gamma
         self.lamb = lamb

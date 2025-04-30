@@ -12,7 +12,7 @@ from abc import abstractmethod
 class AbstractAgent:
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self, env, device, **hyperparameters):
         """
         Init hyperparameters and models
         """
@@ -47,4 +47,9 @@ class AbstractAgent:
         fisher_steps : int
             Number of steps to roll out for calculating Fisher information
         """
+        pass
+    
+    @abstractmethod
+    def record_video(self, env, n_eval_episodes, log_path, run_id, 
+                     seed=None, deterministic=False):
         pass

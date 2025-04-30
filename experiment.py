@@ -15,6 +15,7 @@ import os
 import datetime as dt
 import json
 import sys
+import torch
 
 import gymnasium as gym
 import highway_env
@@ -24,6 +25,7 @@ from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
+from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
 
 def main():
@@ -64,6 +66,10 @@ def main():
                         default=5,
                         type=int)
     
+    parser.add_argument("-g", "--gpu", 
+                        help="Specify the GPU to use.",
+                        type=int)
+    
     args, unknown = parser.parse_known_args()
     
     
@@ -100,7 +106,14 @@ def main():
         AgentClass = SACAgent
     elif args.algorithm == "drama":
         hyperparameters = config.drama_params
-        # TODO: AgentClass = DramaAgent
+        AgentClass = DramaAgent
+        
+    # Get device
+    if torch.cuda.is_available():
+        device = torch.device(f"cuda:{args.gpu}" if args.gpu is not None else "cuda")
+    else:
+        device = torch.device("cpu")
+    print(f"Using device: {device}")
         
     # Get training configuration
     train_params = config.train
@@ -145,7 +158,7 @@ def main():
     for i in range(args.n_runs):
         print(f"Starting run {i} ...")
         
-        agent = AgentClass(env, **hyperparameters)
+        agent = AgentClass(env, device, **hyperparameters)
         
         agent.train(env, log_path=args.path, run_id=f"Run{i}", 
                     train_seed=i, **train_params)

@@ -6,3 +6,4 @@
 wandb_key.txt
 *.meta.json
 *.ipynb_checkpoints
+.vs
