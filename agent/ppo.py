@@ -424,7 +424,7 @@ class PPO():
         #wandb.watch(self.actor_critic.critic, log='all', log_freq=1000, idx=2)
         # wandb.watch(self.actor_critic, log='all', log_freq=1000)
 
-    def roll_out(self, env):
+    def roll_out(self, env, run_id):
         """rollout for experience
 
         Args:
@@ -492,7 +492,7 @@ class PPO():
             if self.fisher_freq is not None:
                 if self.global_step % self.fisher_freq == 0:
                     print(f"Calculating Fisher step {self.global_step}")
-                    self.calculate_fisher()
+                    self.calculate_fisher(run_id)
 
         with torch.no_grad():
             input_tensor = torch.tensor(next_obs, dtype=torch.float32, device=self.device) if self.continous_observation else torch.tensor(next_obs, dtype=torch.long, device=self.device)
@@ -704,7 +704,7 @@ class PPO():
 
         # Run training
         for i in range(max_timesteps // self.memory_size):
-            self.roll_out(self.env)
+            self.roll_out(self.env, run_id)
             self.optimise()
             
         # Evaluate final agent
