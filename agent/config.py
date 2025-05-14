@@ -80,25 +80,48 @@ env_seq_par_perp["change_scenario"] = [[["parallel"], [1]],
                                        [["diagonal-25"], [1]],
                                        [["perpendicular"], [1]]]
 
+
 # PPO Hyperparameters
-ppo_params = {"gamma" : 0.99, #0.99,
-              "lamb" : 0.92, #0.9,
-              "eps_clip" : 0.25, #0.1,
-              "K_epochs" : 5, #20,
-              "num_cells" : 128, #64,
-              "actor_lr" : 0.0008, #1e-4,
-              "critic_lr" : 0.0009, #3e-4,
-              "memory_size" : 4095, #2048,
-              "minibatch_size" : 64, #64,
-              "c1" : 0.76, #0.1,
-              "c2" : 0.04, #0.01,
+ppo_params = {"gamma" : 0.99,
+              "lamb" : 0.9,
+              "eps_clip" : 0.1,
+              "K_epochs" : 20,
+              "num_cells" : 64,
+              "actor_lr" : 1e-4,
+              "critic_lr" : 3e-4,
+              "memory_size" : 2048,
+              "minibatch_size" : 64,
+              "c1" : .1,
+              "c2" : 0.01,
               "kl_threshold" : 0.15,
               "parameters_hardshare" : False,
               "early_stop" : False,
               "cal_total_loss" : True,
-              "max_grad_norm" : 1, #0.5,
-              "layer_num" : 2, #3
+              "max_grad_norm" : 0.5,
+              "layer_num" : 3
               }
+
+"""
+# PPO Hyperparameters tuned parallel-adj
+ppo_params = {"gamma" : 0.99, 
+              "lamb" : 0.95, 
+              "eps_clip" : 0.1, 
+              "K_epochs" : 20, 
+              "num_cells" : 64, 
+              "actor_lr" : 0.0001, 
+              "critic_lr" : 0.0001,
+              "memory_size" : 4096,
+              "minibatch_size" : 128, 
+              "c1" : 0.1, 
+              "c2" : 0.01, 
+              "kl_threshold" : 0.15,
+              "parameters_hardshare" : False,
+              "early_stop" : False,
+              "cal_total_loss" : True,
+              "max_grad_norm" : 1,
+              "layer_num" : 2,
+              }
+"""
 
 # SAC Hyperparameters
 sac_params = {"buffer_size" : 1_000_000, 

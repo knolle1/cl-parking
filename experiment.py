@@ -25,7 +25,7 @@ from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
-from agent.drama import DramaAgent
+#from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
 
 def main():
@@ -68,6 +68,11 @@ def main():
     
     parser.add_argument("-g", "--gpu", 
                         help="Specify the GPU to use.",
+                        type=int)
+
+    parser.add_argument("--start", 
+                        help="Specify the run to start with. Use this if experiments crashed.",
+                        default=0,
                         type=int)
     
     args, unknown = parser.parse_known_args()
@@ -155,7 +160,7 @@ def main():
     env = gym.make('custom-parking-v0')
     env.configure(env_params)
     
-    for i in range(args.n_runs):
+    for i in range(args.start, args.n_runs):
         print(f"Starting run {i} ...")
         
         agent = AgentClass(env, device, **hyperparameters)
