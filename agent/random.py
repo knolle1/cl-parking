@@ -18,7 +18,7 @@ from gymnasium.wrappers.record_video import RecordVideo
 
 class RandomAgent(AbstractAgent):
     
-    def __init__(self, env):
+    def __init__(self, env, device=None):
         """
         Init hyperparameters and models
         """
@@ -154,7 +154,7 @@ class RandomAgent(AbstractAgent):
             os.makedirs(log_path+"/video")
         
         rec_env = RecordVideo(rec_env, log_path+"/video", name_prefix=f"run-{run_id}",
-                              video_callable=lambda episode_id: True, force=True)
+                              episode_trigger=lambda x: True)
         
         # Seeding for evaluation purpose
         if seed is not None:
