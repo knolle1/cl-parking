@@ -1,0 +1,170 @@
+{
+  "timestamp": "2025-05-14 10:39:16.751060",
+  "cmd": "python experiment.py -a ppo -s parallel-adj -p results/ppo/parallel-adj-long -n 5 --gpu 0",
+  "agent_type": "ppo",
+  "scenario": "parallel-adj",
+  "output_path": "results/ppo/parallel-adj-long",
+  "n_runs": 5,
+  "random_baseline": "results/random_baseline/data",
+  "training_params": {
+    "scenario_timesteps": 2000000,
+    "eval_freq": 10000,
+    "n_eval_episodes": 30,
+    "eval_scenarios": [
+      "perpendicular",
+      "diagonal-25",
+      "diagonal-50",
+      "parallel",
+      "parallel-adj"
+    ],
+    "eval_seed": 1234,
+    "fisher_freq": 2000000,
+    "fisher_steps": 1024,
+    "max_timesteps": 2000000
+  },
+  "hyperparameters": {
+    "gamma": 0.99,
+    "lamb": 0.9,
+    "eps_clip": 0.1,
+    "K_epochs": 20,
+    "num_cells": 64,
+    "actor_lr": 0.0001,
+    "critic_lr": 0.0003,
+    "memory_size": 2048,
+    "minibatch_size": 64,
+    "c1": 0.1,
+    "c2": 0.01,
+    "kl_threshold": 0.15,
+    "parameters_hardshare": false,
+    "early_stop": false,
+    "cal_total_loss": true,
+    "max_grad_norm": 0.5,
+    "layer_num": 3
+  },
+  "environment_config": {
+    "add_width": [
+      0,
+      0
+    ],
+    "fixed_goal": [
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        -4
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        -4
+      ]
+    ],
+    "start_pos": [
+      [
+        -35,
+        0
+      ],
+      [
+        35,
+        3.141592653589793
+      ]
+    ],
+    "success_goal_reward": 0.12,
+    "collision_reward": -10,
+    "reward_p": 0.5,
+    "collision_reward_factor": 50,
+    "scenarios": {
+      "perpendicular": {
+        "parking_angles": [
+          0,
+          0
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-25": {
+        "parking_angles": [
+          25,
+          25
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-50": {
+        "parking_angles": [
+          50,
+          50
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel-adj": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": true
+      }
+    },
+    "change_scenario": [
+      [
+        [
+          "parallel-adj"
+        ],
+        [
+          1
+        ]
+      ]
+    ],
+    "change_frequency": 2000000
+  }
+}
