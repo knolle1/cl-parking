@@ -25,7 +25,7 @@ from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
-#from agent.drama import DramaAgent
+from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
 
 def main():
@@ -98,7 +98,7 @@ def main():
         env_params = config.env_seq_perp_par
     elif args.scenario == "sequential-dec":
         env_params = config.env_seq_par_perp
-        
+     
     # Get RL agent hyperparameters
     if args.algorithm == "random":
         hyperparameters = {}
@@ -112,6 +112,24 @@ def main():
     elif args.algorithm == "drama":
         hyperparameters = config.drama_params
         AgentClass = DramaAgent
+        
+           
+    # Set observation type based on RL algorithm
+    if args.algorithm in ["random", "ppo", "sac"]:
+        env_params.update({"observation": {"type": "CustomKinematicsGoal",
+                                           "features": ["x", "y", "vx", "vy", "cos_h", "sin_h"],
+                                           "scales": [100, 100, 5, 5, 1, 1],
+                                           "normalize": False,
+                                           }
+                           })
+    elif args.algorithm in ["drama"]:
+        image_size = config.drama_params["config"]["BasicSettings"]["ImageSize"]
+        env_params.update({"observation": {"type": "RGBObservation",
+                                           "observation_shape": (image_size, image_size),
+                                           "stack_size": 0, # No stacking of frames
+                                           "center_ego": True,
+                                           }
+                           })
         
     # Get device
     if torch.cuda.is_available():

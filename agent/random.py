@@ -14,7 +14,8 @@ import numpy as np
 import copy
 import gymnasium as gym
 import os
-from gymnasium.wrappers.record_video import RecordVideo
+from gymnasium.wrappers.record_video import RecordVideo  # Older version
+#from gymnasium.wrappers.rendering import RecordVideo
 
 class RandomAgent(AbstractAgent):
     

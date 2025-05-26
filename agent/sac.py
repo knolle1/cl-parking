@@ -13,7 +13,8 @@ from .evaluation import Logger
 from stable_baselines3 import SAC
 from stable_baselines3.common.callbacks import BaseCallback
 
-from gymnasium.wrappers.record_video import RecordVideo
+from gymnasium.wrappers.record_video import RecordVideo  # Older version
+#from gymnasium.wrappers.rendering import RecordVideo
 
 import copy
 import gymnasium as gym
