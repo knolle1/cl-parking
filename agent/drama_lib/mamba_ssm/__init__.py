@@ -1,7 +1,7 @@
 __version__ = "2.2.4"
 
-from mamba_ssm.ops.selective_scan_interface import selective_scan_fn, mamba_inner_fn
-from mamba_ssm.modules.mamba_simple import Mamba
-from mamba_ssm.modules.mamba2 import Mamba2
-from mamba_ssm.models.mixer_seq_simple import MambaWrapperModel, MambaConfig
-from mamba_ssm.utils.generation import InferenceParams, update_graph_cache
+from .ops.selective_scan_interface import selective_scan_fn, mamba_inner_fn
+from .modules.mamba_simple import Mamba
+from .modules.mamba2 import Mamba2
+from .models.mixer_seq_simple import MambaWrapperModel, MambaConfig
+from .utils.generation import InferenceParams, update_graph_cache
