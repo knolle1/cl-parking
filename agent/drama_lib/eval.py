@@ -10,12 +10,12 @@ from tqdm import tqdm
 import colorama
 import os
 
-from utils import seed_np_torch, WandbLogger
-import env_wrapper
-import agents
-from sub_models.world_models import WorldModel
+from .utils import seed_np_torch, WandbLogger
+from .env_wrapper import MaxLast2FrameSkipWrapper
+from .agents import ActorCriticAgent
+from .sub_models.world_models import WorldModel
 import yaml
-from utils import WandbLogger
+from .utils import WandbLogger
 import pandas as pd
 
 def process_visualize(img):
@@ -27,7 +27,7 @@ def process_visualize(img):
 
 def build_single_env(env_name, image_size):
     env = gymnasium.make(env_name, full_action_space=False, render_mode="rgb_array", frameskip=1, repeat_action_probability=0)
-    env = env_wrapper.MaxLast2FrameSkipWrapper(env, skip=4)
+    env = MaxLast2FrameSkipWrapper(env, skip=4)
     env = gymnasium.wrappers.ResizeObservation(env, shape=image_size)
     return env
 
@@ -43,7 +43,7 @@ def build_vec_env(env_name, image_size, num_envs):
 
 
 def eval_episodes(config,
-                  world_model: WorldModel, agent: agents.ActorCriticAgent, logger: WandbLogger, global_step=None):
+                  world_model: WorldModel, agent: ActorCriticAgent, logger: WandbLogger, global_step=None):
     world_model.eval()
     agent.eval()
     vec_env = build_vec_env(config.BasicSettings.Env_name, config.BasicSettings.ImageSize, num_envs=config.Evaluate.NumEnvs)

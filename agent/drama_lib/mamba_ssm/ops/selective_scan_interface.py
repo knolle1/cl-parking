@@ -2,7 +2,7 @@
 
 import torch
 import torch.nn.functional as F
-from mamba_ssm.utils.torch import custom_bwd, custom_fwd
+from ..utils.torch import custom_bwd, custom_fwd
 
 from einops import rearrange, repeat
 
@@ -13,7 +13,7 @@ except ImportError:
     causal_conv1d_fn = None
     causal_conv1d_cuda = None
 
-from mamba_ssm.ops.triton.layer_norm import _layer_norm_fwd
+from .triton.layer_norm import _layer_norm_fwd
 
 import selective_scan_cuda
 

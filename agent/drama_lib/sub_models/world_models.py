@@ -1,31 +1,32 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mamba_ssm.ops.triton.layer_norm import RMSNorm
+from ..mamba_ssm.ops.triton.layer_norm import RMSNorm
 from torch.distributions import OneHotCategorical, Normal
 # import torchvision.transforms as T
 import kornia.augmentation as K
 from einops import rearrange, repeat, reduce
 from einops.layers.torch import Rearrange
 from torch.cuda.amp import autocast
-from sub_models.laprop import LaProp
+from .laprop import LaProp
 from pytorch_warmup import LinearWarmup
 # from nfnets import AGC
 
-from sub_models.functions_losses import SymLogTwoHotLoss
-from sub_models.attention_blocks import get_subsequent_mask_with_batch_length, get_subsequent_mask
-from sub_models.transformer_model import StochasticTransformerKVCache
-from mamba_ssm import MambaWrapperModel, MambaConfig, InferenceParams, update_graph_cache
-import agents
+from .functions_losses import SymLogTwoHotLoss
+from .attention_blocks import get_subsequent_mask_with_batch_length, get_subsequent_mask
+from .transformer_model import StochasticTransformerKVCache
+from ..mamba_ssm import MambaWrapperModel, MambaConfig, InferenceParams, update_graph_cache
+from ..agents import ActorCriticAgent
 from line_profiler import profile
 from torch.distributions.independent import Independent
 import numpy as np
-from tools import weight_init
+from ..tools import weight_init
 import cv2
 
     
 class Encoder(nn.Module):
-    def __init__(self, depth=128, mults=(1, 2, 4, 2), norm='rms', act='SiLU', kernel=4, padding='same', first_stride=True, input_size=(3, 64, 64), dtype=None, device=None) -> None:
+    def __init__(self, depth=128, mults=(1, 2, 4, 2), norm='rms', act='SiLU', kernel=4, padding='same', 
+                 first_stride=True, input_size=(3, 64, 64), dtype=None, device=None) -> None:
         super().__init__()
         act = getattr(nn, act)
         self.depths = [depth * mult for mult in mults]
@@ -39,7 +40,8 @@ class Encoder(nn.Module):
         # Define convolutional layers for image inputs
         for i, depth in enumerate(self.depths):
             stride = 1 if i == 0 and first_stride else self.stride
-            conv = nn.Conv2d(in_channels=current_channels, out_channels=depth, kernel_size=kernel, stride=stride, padding=self.padding, dtype=dtype, device=device)
+            conv = nn.Conv2d(in_channels=current_channels, out_channels=depth, kernel_size=kernel, stride=stride, 
+                             padding=self.padding, dtype=dtype, device=device)
             backbone.append(conv)
             backbone.append(nn.BatchNorm2d(depth, dtype=dtype, device=device))
             backbone.append(act())
@@ -240,7 +242,7 @@ class CategoricalKLDivLossWithFreeBits(nn.Module):
 
 
 class WorldModel(nn.Module):
-    def __init__(self, action_dim, config, device):
+    def __init__(self, action_dim, config, device, is_continuous=False):
         super().__init__()
         self.hidden_state_dim = config.Models.WorldModel.HiddenStateDim
         self.final_feature_width = config.Models.WorldModel.Transformer.FinalFeatureWidth
@@ -259,6 +261,10 @@ class WorldModel(nn.Module):
         max_seq_length = max(config.JointTrainAgent.BatchLength, 
                              config.JointTrainAgent.ImagineContextLength + config.JointTrainAgent.ImagineBatchLength, 
                              config.JointTrainAgent.RealityContextLength)
+        
+        self.is_continuous = is_continuous
+        self.action_dim = action_dim
+        
         self.encoder = Encoder(
             depth=config.Models.WorldModel.Encoder.Depth,
             mults=config.Models.WorldModel.Encoder.Mults, 
@@ -299,6 +305,7 @@ class WorldModel(nn.Module):
                 n_layer=config.Models.WorldModel.Mamba.n_layer,
                 stoch_dim=self.stoch_flattened_dim,
                 action_dim=action_dim,
+                continuous_action=self.is_continuous,
                 dropout_p=config.Models.WorldModel.Dropout,
                 ssm_cfg={
                     'd_state': config.Models.WorldModel.Mamba.ssm_cfg.d_state, 
@@ -365,6 +372,7 @@ class WorldModel(nn.Module):
         self.lr_scheduler = torch.optim.lr_scheduler.LambdaLR(self.optimizer, lr_lambda=lambda step: 1.0)
         self.warmup_scheduler = LinearWarmup(self.optimizer, warmup_period=config.Models.WorldModel.Warmup_steps)
         self.scaler = torch.cuda.amp.GradScaler(enabled=self.use_amp and config.Models.WorldModel.dtype is not torch.bfloat16)
+        
     @profile
     def encode_obs(self, obs):
         with torch.autocast(device_type='cuda', dtype=torch.bfloat16, enabled=self.use_amp):
@@ -462,11 +470,20 @@ class WorldModel(nn.Module):
             scalar_size = (imagine_batch_size, imagine_batch_length)
             self.sample_buffer = torch.zeros(latent_size, dtype=dtype, device=device)
             self.dist_feat_buffer = torch.zeros(hidden_size, dtype=dtype, device=device)
-            self.action_buffer = torch.zeros(scalar_size, dtype=dtype, device=device)
+            
+            # Handle continuous action spaces (MuJoCo, parking-env)
+            if self.is_continuous:
+                action_size = (imagine_batch_size, imagine_batch_length, self.action_dim)
+                self.action_buffer = torch.zeros(action_size, dtype=dtype, device=device)
+            else:
+                # For discrete actions (Atari)
+                self.action_buffer = torch.zeros(scalar_size, dtype=dtype, device=device)
+            
             self.reward_hat_buffer = torch.zeros(scalar_size, dtype=dtype, device=device)
             self.termination_hat_buffer = torch.zeros(scalar_size, dtype=dtype, device=device)
+            
     @profile
-    def imagine_data(self, agent: agents.ActorCriticAgent, sample_obs, sample_action,
+    def imagine_data(self, agent: ActorCriticAgent, sample_obs, sample_action,
                      imagine_batch_size, imagine_batch_length, log_video, logger, global_step):
 
         self.init_imagine_buffer(imagine_batch_size, imagine_batch_length, dtype=self.tensor_dtype, device=self.device)
@@ -509,7 +526,7 @@ class WorldModel(nn.Module):
         return torch.cat([self.sample_buffer, self.dist_feat_buffer], dim=-1), self.action_buffer, None, None, self.reward_hat_buffer, self.termination_hat_buffer
 
     @profile
-    def imagine_data2(self, agent: agents.ActorCriticAgent, sample_obs, sample_action,
+    def imagine_data2(self, agent: ActorCriticAgent, sample_obs, sample_action,
                      imagine_batch_size, imagine_batch_length, log_video, logger, global_step):
         self.init_imagine_buffer(imagine_batch_size, imagine_batch_length, dtype=self.tensor_dtype, device=self.device)
         # context
@@ -598,7 +615,12 @@ class WorldModel(nn.Module):
             # sample_tensor = torch.cat(sample_list, dim=1)
             # dist_feat_tensor = torch.cat(dist_feat_list, dim=1)
             # action_tensor = torch.cat(action_list, dim=1)
-            old_logits_tensor = torch.cat(old_logits_list, dim=1)
+            if self.is_continuous:
+                means = torch.cat([ol[0] for ol in old_logits_list], dim=1)
+                logstds = torch.cat([ol[1] for ol in old_logits_list], dim=1)
+                old_logits_tensor = (means, logstds)
+            else:
+                old_logits_tensor = torch.cat(old_logits_list, dim=1)
 
             reward_hat_tensor = self.reward_decoder(self.dist_feat_buffer[:,:-1])
             self.reward_hat_buffer = self.symlog_twohot_loss_func.decode(reward_hat_tensor)

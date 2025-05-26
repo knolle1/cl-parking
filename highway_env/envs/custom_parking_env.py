@@ -122,6 +122,7 @@ class CustomParkingEnv(ParkingEnv):
                 "screen_height": 300,
                 "centering_position": [0.5, 0.5],
                 "scaling": 7,
+                "center_ego": False,
                 
                 # Parking parameters
                 "controlled_vehicles": 1,
@@ -175,7 +176,8 @@ class CustomParkingEnv(ParkingEnv):
                 "reward" : self.compute_reward(achieved, goal, {}),
                 "goal_hit" : self._is_goal_hit(),
                 #"test_success" : test_success,
-                "scenario" : self.current_scenario
+                "scenario" : self.current_scenario,
+                'episode_frame_number': self.episode_step,
                      }
         return info
 
@@ -200,6 +202,7 @@ class CustomParkingEnv(ParkingEnv):
             #print(f"global_step: {self.global_step}, env_idx: {env_idx}, parking angles: {self.config['parking_angles']}")
         self._create_road()
         self._create_vehicles()
+        self.episode_step = 0
 
     @profile
     def _create_road(self, spots: int = 10) -> None:
@@ -465,6 +468,7 @@ class CustomParkingEnv(ParkingEnv):
         """Increment global step counter when taking a step"""
         obs, reward, terminated, truncated, info = super().step(action)
         self.global_step += 1
+        self.episode_step +=1
         return obs, reward, terminated, truncated, info
 
     def reset_global_step(self):
