@@ -8,7 +8,7 @@ import copy
 
 # General training configuration
 train = {"scenario_timesteps" : 500_000, # Number of timesteps to train per scenario
-         "eval_freq" : 10_000,           # Evaluate the policy every 'eval_freq' steps
+         "eval_freq" : 1_000_000,           # Evaluate the policy every 'eval_freq' steps
          "n_eval_episodes" : 30,         # Number of episodes to run per evaluation
          "eval_scenarios" : ["perpendicular", "diagonal-25", "diagonal-50", "parallel"], 
          "eval_seed" : 1234,

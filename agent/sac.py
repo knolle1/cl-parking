@@ -156,13 +156,20 @@ class EvalCallback(BaseCallback):
             action, _ = self.model.predict(obs, deterministic=True)
             next_obs, reward, terminated, truncated, info = eval_env.step(action)
             
+            # Normalise observations and reward
+            # StableBaseline3 ReplayBuffer normalises these when sampling the buffer
+            obs = eval_env.normalize_obs(obs)
+            next_obs = eval_env.normalize_obs(next_obs)
+            reward = eval_env.normalize_reward(reward).astype(np.float32)
+            
+            # Convert to tensors
             obs_tensor = torch.tensor(obs, dtype=torch.float32, device=self.model.device).unsqueeze(0)
             next_obs_tensor = torch.tensor(next_obs, dtype=torch.float32, device=self.model.device).unsqueeze(0)
             reward_tensor = torch.tensor(reward, dtype=torch.float32, device=self.model.device).unsqueeze(0)
             action_tensor = torch.tensor(action, dtype=torch.float32, device=self.model.device).unsqueeze(0)
             
             done = int(terminated or truncated)
-                      
+            
             # Reset gradients
             self.model.actor.optimizer.zero_grad()
             
