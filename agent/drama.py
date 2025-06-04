@@ -22,6 +22,7 @@ from .drama_lib.train import (
     )
 from .drama_lib.utils import seed_np_torch, WandbLogger
 from .drama_lib.replay_buffer import ReplayBuffer
+from .drama_lib.env_wrapper import MaxLast2FrameSkipWrapper
 
 from gymnasium.spaces import Box, Discrete
 
@@ -38,6 +39,7 @@ import pandas as pd
 from line_profiler import profile
 import warnings
 import ast
+import copy
 
 
 class DramaAgent(AbstractAgent):
@@ -95,9 +97,6 @@ class DramaAgent(AbstractAgent):
             print('Loading models')
             self.world_model.load_state_dict(torch.load(f"{self.config.BasicSettings.SavePath}/world_model.pth"))
             self.agent.load_state_dict(torch.load(f"{self.config.BasicSettings.SavePath}/agent.pth"))
-    
-        self.logger = WandbLogger(config=self.config, project=self.config.Wandb.Init.Project, mode=self.config.Wandb.Init.Mode)
-        self.logdir = f"./saved_models/{self.config.n}/{self.config.BasicSettings.Env_name}/{self.logger.run.id}"
 
         # build replay buffer
         self.replay_buffer = ReplayBuffer(
@@ -135,10 +134,70 @@ class DramaAgent(AbstractAgent):
             Number of steps to roll out for calculating Fisher information
         """
         
+        self.config.update_or_create("BasicSettings.Seed", train_seed)
+        self.config.update_or_create("JointTrainAgent.SampleMaxSteps", max_timesteps + 5000)
+        self.config.update_or_create("JointTrainAgent.FreezeWorldModelAfterSteps", max_timesteps)
+        self.config.update_or_create("JointTrainAgent.FreezeBehaviourAfterSteps", max_timesteps)
+        self.config.update_or_create("Evaluate.EverySteps", eval_freq)
+        self.config.update_or_create("Evaluate.EpisodeNum", n_eval_episodes)
+        
+        """
+        self.config.BasicSettings.Seed = train_seed
+        self.config.JointTrainAgent.SampleMaxSteps = max_timesteps + 5000
+        self.config.JointTrainAgent.FreezeWorldModelAfterSteps = max_timesteps
+        self.config.JointTrainAgent.FreezeBehaviourAfterSteps = max_timesteps
+        self.config.Evaluate.EverySteps = eval_freq
+        self.config.Evaluate.EpisodeNum = n_eval_episodes
+        """
+        
+        # Weights & Biases logging
+        logger_wandb = WandbLogger(config=self.config, project=self.config.Wandb.Init.Project, mode=self.config.Wandb.Init.Mode)
+        logdir_wandb = f"./saved_models/{self.config.n}/{self.config.BasicSettings.Env_name}/{logger_wandb.run.id}"
+        
+        # CSV logging
+        metrics = []
+        for label in eval_scenarios:
+            for m in ["reward_mean", "reward_std", 
+                      "success_mean", "success_std",
+                      "crashed_mean", "crashed_std",
+                      "truncated_mean", "truncated_std",]:
+                metrics.append(f"{label}_{m}")   
+
+        logger_csv = Logger(log_path, metrics)
+        logger_csv.open(run_id)
+        
+        # Set up evaluation environments
+        eval_envs = {}
+        for label in eval_scenarios:
+            
+            # Get evaluation environment configuration
+            params = copy.copy(env.config)
+            params.update(env.config["scenarios"][label])
+            params["scenarios"] = {}       # Reset scenarios to just include current scenario
+            params["change_scenario"] = []
+            
+            # Create evaluation environment
+            env_name = env.unwrapped.spec.id
+            #eval_env = gymnasium.make(env_name, full_action_space=False, render_mode="rgb_array", frameskip=1, repeat_action_probability=0)
+            eval_env = gymnasium.make(env_name, render_mode="rgb_array")
+            eval_env.configure(params)
+            #eval_env = MaxLast2FrameSkipWrapper(eval_env, skip=4)
+            #eval_env = gymnasium.wrappers.ResizeObservation(eval_env, shape=self.config.BasicSettings.ImageSize)
+            
+            # Seeding for evaluation purpose
+            if eval_seed is not None:
+                eval_env.np_random = np.random.default_rng(eval_seed)
+                eval_env.action_space.seed(eval_seed)
+                eval_env.observation_space.seed(eval_seed)
+                
+            eval_envs[label] = eval_env
+        
         # train
-        joint_train_world_model_agent(env, self.continous_action, self.config, self.logdir, self.replay_buffer, 
-                                      self.world_model, self.agent, self.logger)
-        self.logger.close()
+        joint_train_world_model_agent(env, self.continous_action, self.config, logdir_wandb, self.replay_buffer, 
+                                      self.world_model, self.agent, logger_wandb, logger_csv, eval_envs, eval_seed)
+        
+        logger_wandb.close()
+        logger_csv.close()
         
         pass
     

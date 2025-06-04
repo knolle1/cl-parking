@@ -126,6 +126,97 @@ def eval_episodes(config,
                                     logger.log(key, np.mean(value), global_step=global_step)
                             return score_table
 
+def evaluate(config, 
+             world_model: WorldModel, agent: ActorCriticAgent, logger, global_step,
+             eval_envs, is_continuous, eval_seed):
+    """
+    Evaluate agent using same metrics and format as PPO and SAC
+    """
+    world_model.eval()
+    agent.eval()
+    
+    results = {}
+    for label, env in eval_envs.items():
+        # Seeding for evaluation purpose
+        if eval_seed is not None:
+            env.np_random = np.random.default_rng(eval_seed)
+            env.action_space.seed(eval_seed)
+            env.observation_space.seed(eval_seed)
+    
+        rewards_list = []
+        success_list = []
+        crashed_list = []
+        truncated_list = [] 
+        
+        action_shape = env.action_space.shape
+        
+        for i in range(config.Evaluate.EpisodeNum):
+            
+            terminated = False
+            truncated = False
+            
+            current_obs, _ = env.reset()
+            context_obs = deque(maxlen=config.JointTrainAgent.RealityContextLength)
+            context_action = deque(maxlen=config.JointTrainAgent.RealityContextLength)
+            
+            episode_reward = 0
+            
+            while not terminated and not truncated:
+                with torch.no_grad():
+                    if len(context_action) == 0:
+                        action = env.action_space.sample()
+                        # action = np.array([action], dtype=int)
+                        # inference_params = InferenceParams(max_seqlen=1, max_batch_size=1)
+                    else:
+                        context_latent = world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(world_model.device))
+                        model_context_action = np.stack(list(context_action))
+                        #model_context_action = torch.Tensor(model_context_action).to(world_model.device)
+                        # current_obs_tensor = rearrange(torch.Tensor(current_obs).to(world_model.device), "B H W C -> B 1 C H W")/255
+                        
+                        if is_continuous:
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L A-> 1 L A")
+                        else:
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
+                            
+                        #print(model_context_action.shape)
+                        if world_model.model == 'Transformer':
+                            prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                        elif world_model.model == 'Mamba' or world_model.model == 'Mamba2':
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent[:,-1:], model_context_action[:,-1:], inference_params)
+                            prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                        action = agent.sample_as_env_action(
+                            torch.cat([prior_flattened_sample, last_dist_feat], dim=-1),
+                            greedy=True
+                        )[0]
+
+                context_obs.append(rearrange(torch.Tensor(current_obs).to(world_model.device), "H W C -> 1 1 C H W")/255)
+                context_action.append(action)
+
+                obs, reward, terminated, truncated, info = env.step(action)
+                # cv2.imshow("current_obs", process_visualize(obs[0]))
+                # cv2.waitKey(10)
+                # update current_obs, current_info and sum_reward
+                episode_reward += reward
+                current_obs = obs
+                
+            rewards_list.append(episode_reward)
+            success_list.append('is_success' in info.keys() and info['is_success'])
+            crashed_list.append('is_crashed' in info.keys() and info['is_crashed'])
+            truncated_list.append(truncated)
+        
+        results[f"{label}_reward_mean"] = np.mean(rewards_list)
+        results[f"{label}_reward_std"] = np.std(rewards_list)
+        results[f"{label}_success_mean"] = np.mean(success_list)
+        results[f"{label}_success_std"] = np.std(success_list)
+        results[f"{label}_crashed_mean"] = np.mean(crashed_list)
+        results[f"{label}_crashed_std"] = np.std(crashed_list)
+        results[f"{label}_truncated_mean"] = np.mean(truncated_list)
+        results[f"{label}_truncated_std"] = np.std(truncated_list)
+    
+    logger.append(global_step, results)
+    return results
 
 
 
