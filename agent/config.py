@@ -137,10 +137,10 @@ sac_params = {"buffer_size" : 1_000_000,
 # Drama Hyperparameters
 drama_params = {"config" : {
   "BasicSettings": {
-    "ImageSize": 64,
+    "ImageSize": 64, #64,
     "ImageChannel": 3,
     "ReplayBufferOnGPU": True,
-    "Seed": 3710,
+    "Seed": 3710, # Will be overwritten by training seed of the run
     "Env_name": "HW/parking-v0", #ALE/Pong-v5
     #"Device": "cuda:0", # Pass as seperate parameter
     "Use_amp": True,
@@ -149,13 +149,14 @@ drama_params = {"config" : {
     "SavePath": "None"
   },
   "Evaluate": {
-    "EpisodeNum": 10,
+    "EpisodeNum": 10,  # Will be overwritten as n_eval_episodes to ensure consistency with SAC and PPO training params
     "NumEnvs": 10,
-    "DuringTraining": False,
-    "EverySteps": 1000
+    "DuringTraining": True,
+    "EverySteps": 1000  # Will be overwritten as eval_freq to ensure consistency with SAC and PPO training params
   },
   "JointTrainAgent": {
-    "SampleMaxSteps": 105000, # Just to make sure the last episode will finish, no training after 100k
+    "SampleMaxSteps": 105000,   # Just to make sure the last episode will finish, no training after 100k
+                                # Will be overwritten as max_timesteps + 5000 to ensure consistency with SAC and PPO training params
     "BufferMaxLength": 100000,
     "WorldModelWarmUp": 1032,
     "BehaviourWarmUp": 1032,
@@ -169,8 +170,8 @@ drama_params = {"config" : {
     "TrainDynamicsEverySteps": 1,
     "TrainDynamicsEpoch": 1,
     "TrainAgentEverySteps": 1,
-    "FreezeWorldModelAfterSteps": 100000,
-    "FreezeBehaviourAfterSteps": 100000,
+    "FreezeWorldModelAfterSteps": 100000, # Will be overwritten as max_timesteps to ensure consistency with SAC and PPO training params
+    "FreezeBehaviourAfterSteps": 100000,  # Will be overwritten as max_timesteps to ensure consistency with SAC and PPO training params
     "SaveEverySteps": 2000,
     "SaveModels": True,
     "Tau": 10,

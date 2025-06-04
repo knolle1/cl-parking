@@ -123,7 +123,7 @@ def main():
                                            }
                            })
     elif args.algorithm in ["drama"]:
-        image_size = config.drama_params["config"]["BasicSettings"]["ImageSize"]
+        image_size = config.drama_params["config"]["BasicSettings"]["ImageSize"] # Ensure env image size matches image size in config
         env_params.update({"observation": {"type": "RGBObservation",
                                            "observation_shape": (image_size, image_size),
                                            "stack_size": 0, # No stacking of frames

@@ -19,7 +19,8 @@ import yaml
 from .envs.my_memory_maze import MemoryMaze
 from .envs.my_atari import Atari
 from .envs.my_highway import HighwayEnv
-from .eval import eval_episodes
+#from .eval import eval_episodes
+from .eval import evaluate
 import warnings
 import ast
 
@@ -95,7 +96,7 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
 def joint_train_world_model_agent(env, is_continuous, config, logdir,
                                   replay_buffer: ReplayBuffer,
                                   world_model: WorldModel, agent: ActorCriticAgent,
-                                  logger):
+                                  logger_wandb, logger_csv, eval_envs, eval_seed):
     os.makedirs(f"{logdir}/ckpt", exist_ok=True)
 
 
@@ -129,6 +130,7 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
                     action = env.action_space.sample()
                 else:
                     context_latent = world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(world_model.device))
+                    
                     model_context_action = np.stack(list(context_action))
                     
                     if is_continuous:
@@ -161,8 +163,11 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
         current_ob = ob
 
         if is_last:
-            logger.log(f"episode/score", sum_reward, global_step=total_steps)
-            logger.log(f"episode/length", info["episode_frame_number"], global_step=total_steps)  # framskip=4
+            logger_wandb.log("episode/total_reward", sum_reward, global_step=total_steps)
+            logger_wandb.log("episode/length", info["episode_frame_number"], global_step=total_steps)  # framskip=4
+            logger_wandb.log("episode/success", int('is_success' in info.keys() and info['is_success']), global_step=total_steps)  
+            logger_wandb.log("episode/truncated", int(truncated), global_step=total_steps) 
+            logger_wandb.log("episode/crashed", int('is_crashed' in info.keys() and info['is_crashed']), global_step=total_steps)  
             #if config.BasicSettings.Env_name.startswith('ALE'):
             #    logger.log(f"episode/normalised score", (sum_reward - game_benchmark_df['Random'])/(game_benchmark_df['Human'] - game_benchmark_df['Random']), global_step=total_steps)
             #    for algorithm in game_benchmark_df.index[2:]:
@@ -183,7 +188,7 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
                 world_model=world_model,
                 batch_size=config.JointTrainAgent.BatchSize,
                 batch_length=config.JointTrainAgent.BatchLength,
-                logger=logger,
+                logger=logger_wandb,
                 epoch=config.JointTrainAgent.TrainDynamicsEpoch,
                 global_step=total_steps
             )
@@ -199,7 +204,7 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
                 imagine_context_length=config.JointTrainAgent.ImagineContextLength,
                 imagine_batch_length=config.JointTrainAgent.ImagineBatchLength,
                 log_video=log_video,
-                logger=logger,
+                logger=logger_wandb,
                 global_step=total_steps
             )
 
@@ -212,12 +217,18 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
                 context_termination=context_termination,
                 reward=imagine_reward,
                 termination=imagine_termination,
-                logger=logger,
+                logger=logger_wandb,
                 global_step=total_steps
             )
 
+        # Evaluate policy
         if config.Evaluate.DuringTraining and total_steps % (config.Evaluate.EverySteps // config.JointTrainAgent.NumEnvs) == 0:
-            _ = eval_episodes(config, world_model, agent, logger, total_steps)
+            print(f"Evaluating step {total_steps}")
+            _ = evaluate(config, world_model, agent, logger_csv, total_steps, eval_envs, is_continuous, eval_seed)
+            
+        #TODO: evaluate Fisher information matrix
+            
+        # Save model parameters
         if config.JointTrainAgent.SaveModels and total_steps % (config.JointTrainAgent.SaveEverySteps // config.JointTrainAgent.NumEnvs) == 0:
             print(colorama.Fore.GREEN + f"Saving model at total steps {total_steps}" + colorama.Style.RESET_ALL)
             torch.save(world_model.state_dict(), f"{logdir}/ckpt/world_model.pth")
