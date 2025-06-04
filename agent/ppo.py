@@ -707,6 +707,7 @@ class PPO():
 
         # Run training
         for i in range(max_timesteps // self.memory_size):
+            print(i)
             self.roll_out(self.env, run_id)
             self.optimise()
             
@@ -809,18 +810,15 @@ class PPO():
             eval_env.action_space.seed(self.eval_seed)
             eval_env.observation_space.seed(self.eval_seed)
         
-        
-        # Init fisher information matrix. Note: this is the diagonal of the
-        # matrix for each parameter
-        fisher = {n: torch.zeros_like(p).to(p.device) for n, p in 
-                  self.actor_critic.actor.named_parameters()} 
-
-        last_obs, _ = eval_env.reset()
-
         # Calculate diagonals of fisher information matrix
-        # Rollout experience and for each datapoint (i.e. step) calculate gradient
-        # and approximate fisher
+        # ---------------------------------------------------------------------
+        
         action_shape = self.env.action_space.shape
+        buffer = PPOBuffer(self.observation_space.shape, self.action_space.shape, self.fisher_steps, self.gamma, self.lamb)
+        
+        # Rollout experience for calculation. Use replay buffer so that the same
+        # GAE calculation and normalisation is used as in training
+        last_obs, _ = eval_env.reset()
         for i in range(self.fisher_steps):    
             
             with torch.no_grad():
@@ -844,40 +842,47 @@ class PPO():
                 clipped_action = np.clip(action, self.action_space.low, self.action_space.high)
 
             next_obs, reward, terminated, truncated, info = eval_env.step(clipped_action)
+            
+            buffer.push(last_obs, action, reward, value, action_logprob)
+            
+            if terminated or truncated:
+                if truncated:
+                    with torch.no_grad():
+                        input_tensor = torch.tensor(next_obs, dtype=torch.float32, device=self.device) if self.continous_observation else torch.tensor(next_obs, dtype=torch.long, device=self.device)
+                        last_value = self.actor_critic.get_value(input_tensor)
+                else:
+                    last_value = 0
                 
-            # Same format as minibatch
-            data = dict(obs=torch.as_tensor(np.array([last_obs]), dtype=torch.float32, device=self.device), 
-                        act=torch.as_tensor(np.array([action]), dtype=torch.float32, device=self.device), 
-                        rtg=torch.as_tensor(np.array([reward]), dtype=torch.float32, device=self.device), 
-                        adv=torch.as_tensor(np.array([value]), dtype=torch.float32, device=self.device), 
-                        logp=torch.as_tensor(np.array([action_logprob]), dtype=torch.float32, device=self.device))
-            
-            #data = {k: torch.as_tensor(np.array([last_obs]), dtype=torch.float32, device=self.device) for k,v in data}
-            
-            done = int(terminated or truncated)
-            
+                buffer.GAE_cal(last_value)
+
+                last_obs, _ = eval_env.reset()
+
+        # Init fisher information matrix. Note: this is the diagonal of the
+        # matrix for each parameter
+        fisher = {n: torch.zeros_like(p).to(p.device) for n, p in 
+                  self.actor_critic.actor.named_parameters()} 
+                
+        # For each datapoint (i.e. step) calculate gradient and approximate fisher
+        data = buffer.sample(1, self.device)
+        for d in data:
             # Reset gradients
             self.actor_critic_opt.zero_grad()
             
             # Calculate loss
-            actor_loss, critic_loss, entropy_loss, kl_apx = self.compute_loss(data)
-                     
+            actor_loss, _, _, _ = self.compute_loss(d)
+            
             # Calculate gradients
             actor_loss.backward()
-                        
+                     
             # Calculate matrix diagonals using approximation of second derivative
             # Diagonal of fisher information matrix for parameter i:
             # F_i = E[(\partial J(theta)/ \partial theta_i)^2]
             for n, p in self.actor_critic.actor.named_parameters():
                 if p.grad is not None:
-                    fisher[n] += p.grad.data.clone().pow(2) / self.fisher_steps
-                    
-            if done:
-                last_obs,_ = eval_env.reset()
-            else:
-                last_obs = next_obs
+                    fisher[n] += p.grad.data.clone().pow(2) / len(data)
                 
         eval_env.close()
+        del buffer
         
         # Get path to save diagonals
         path = self.logger.data_path + f"/fisher-information_step-{self.global_step}"
