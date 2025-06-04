@@ -3,20 +3,20 @@ import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
 import torch.distributions as distributions
-from mamba_ssm.ops.triton.layer_norm import RMSNorm
+from .mamba_ssm.ops.triton.layer_norm import RMSNorm
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 import copy
 from torch.cuda.amp import autocast
 import numpy as np
-from sub_models.laprop import LaProp
+from .sub_models.laprop import LaProp
 from pytorch_warmup import LinearWarmup
 # from nfnets import AGC
 
-from sub_models.functions_losses import SymLogTwoHotLoss
-from utils import EMAScalar
+from .sub_models.functions_losses import SymLogTwoHotLoss
+from .utils import EMAScalar
 from line_profiler import profile
-from tools import layer_init
+from .tools import layer_init
 
 def percentile(x, percentage):
     flat_x = torch.flatten(x)
@@ -95,7 +95,7 @@ class VecNormalize(nn.Module):
             return x_normalized.view(B, L, D)
     
 class ActorCriticAgent(nn.Module):
-    def __init__(self, conf, action_dim, device) -> None:
+    def __init__(self, conf, action_dim, device, is_continuous=False) -> None:
         super().__init__()
         feat_dim=conf.Models.WorldModel.CategoricalDim*conf.Models.WorldModel.ClassDim+conf.Models.WorldModel.HiddenStateDim
         num_layers=conf.Models.Agent.AC.NumLayers
@@ -274,12 +274,13 @@ class ActorCriticAgent(nn.Module):
 
 
 class PPOAgent(nn.Module):
-    def __init__(self, conf, action_dim, device):
+    def __init__(self, conf, action_dim, device, is_continuous=False):
         super().__init__()
         feat_dim=conf.Models.WorldModel.CategoricalDim*conf.Models.WorldModel.ClassDim+conf.Models.WorldModel.HiddenStateDim
         num_layers=conf.Models.Agent.PPO.NumLayers
         actor_hidden_dim=conf.Models.Agent.PPO.Actor.HiddenUnits
-        critic_hidden_dim=conf.Models.Agent.PPO.Critic.HiddenUnits      
+        critic_hidden_dim=conf.Models.Agent.PPO.Critic.HiddenUnits   
+        
         self.gamma = conf.Models.Agent.PPO.Gamma
         self.lambd = conf.Models.Agent.PPO.Lambda
         self.entropy_coef = conf.Models.Agent.PPO.EntropyCoef
@@ -296,46 +297,89 @@ class PPOAgent(nn.Module):
         self.action_dim = action_dim
         self.unimix_ratio = conf.Models.Agent.Unimix_ratio
         self.device = device
+        self.is_continuous = is_continuous
+        
+        if self.is_continuous:
+            self.log_std_min = -1.0
+            self.log_std_max = 1.0
 
         self.symlog_twohot_loss = SymLogTwoHotLoss(255, -20, 20)
         act = getattr(nn, conf.Models.Agent.PPO.Act)
 
-        actor = [
+        # Init actor network
+        # ---------------------------------------------------------------------
+        
+        # Input layer
+        actor_layers = [
             VecNormalize(feat_dim, device=device),
             layer_init(nn.Linear(feat_dim, actor_hidden_dim, bias=True)),
             RMSNorm(actor_hidden_dim),
             act()
         ]
+        
+        # Hidden layers
         for i in range(num_layers - 1):
-            actor.extend([
+            actor_layers.extend([
                 layer_init(nn.Linear(actor_hidden_dim, actor_hidden_dim, bias=True)),
                 RMSNorm(actor_hidden_dim),
                 act()
             ])
-        self.actor = nn.Sequential(
-            *actor,
-            layer_init(nn.Linear(actor_hidden_dim, action_dim), std=0.001)
-        ).to(device)
+            
+        #self.actor = nn.Sequential(
+        #    *actor,
+        #    layer_init(nn.Linear(actor_hidden_dim, action_dim), std=0.001)
+        #).to(device)
+        
+        self.actor_features = nn.Sequential(*actor_layers).to(device)
 
-        critic = [
+        # Output layer
+        if self.is_continuous:
+            self.actor_mean = layer_init(nn.Linear(actor_hidden_dim, action_dim), std=0.01)
+            self.log_std = nn.Parameter(torch.ones(action_dim))
+            self.actor = nn.ModuleList([self.actor_features, self.actor_mean])
+        else:
+            self.actor_head = layer_init(nn.Linear(actor_hidden_dim, action_dim), std=0.001).to(device)
+            self.actor = nn.Sequential(self.actor_features, self.actor_head).to(device)
+
+        # Init critic network
+        # ---------------------------------------------------------------------
+        critic_layers = [
             layer_init(nn.Linear(feat_dim, critic_hidden_dim, bias=True)),
             RMSNorm(critic_hidden_dim),
             act()
         ]
         for i in range(num_layers - 1):
-            critic.extend([
+            critic_layers.extend([
                 layer_init(nn.Linear(critic_hidden_dim, critic_hidden_dim, bias=True)),
                 RMSNorm(critic_hidden_dim),
                 act()
             ])
 
-        self.critic = nn.Sequential(
-            *critic,
-            layer_init(nn.Linear(critic_hidden_dim, 255), std=0.001)
-        ).to(device)
+        #self.critic = nn.Sequential(
+        #    *critic,
+        #    layer_init(nn.Linear(critic_hidden_dim, 255), std=0.001)
+        #).to(device)
+        
+        self.critic_features = nn.Sequential(*critic_layers).to(device)
+        
+        # Output layer
+        if self.is_continuous:
+            # More careful initialization for continuous environments
+            self.critic_head = layer_init(nn.Linear(critic_hidden_dim, 255), std=0.01).to(device)
+            # Initialize bias to create a reasonable initial distribution
+            with torch.no_grad():
+                # Initialize central bins with higher values
+                central_bias = torch.zeros(255)
+                central_bias[127:129] = 0.1  # Slight bias toward center bins
+                self.critic_head.bias.copy_(central_bias)
+        else:
+            self.critic_head = layer_init(nn.Linear(critic_hidden_dim, 255), std=0.001).to(device)
+        self.critic = nn.Sequential(self.critic_features, self.critic_head).to(device)
 
         self.slow_critic = copy.deepcopy(self.critic)
 
+        # Init optimisation
+        # ---------------------------------------------------------------------
         self.lowerbound_ema = EMAScalar(decay=0.99)
         self.upperbound_ema = EMAScalar(decay=0.99)
 
@@ -352,15 +396,32 @@ class PPOAgent(nn.Module):
         self.lr_scheduler = torch.optim.lr_scheduler.LambdaLR(self.optimizer, lr_lambda=lambda step: 1.0) # No lr schedule but neccessary for the warm up
         self.warmup_scheduler = LinearWarmup(self.optimizer, warmup_period=conf.Models.Agent.PPO.Warmup_steps)
         self.scaler = torch.cuda.amp.GradScaler(enabled=self.use_amp)
-    @profile
-    def get_logp_val_entr(self, latent, action, longer_value=True):
-        if longer_value:
-            logits = self.actor(latent[:, :-1])
+        
+        
+    def get_distribution(self, latent):
+        """Get action distribution from concatenated input"""
+
+        if self.is_continuous:
+            features = self.actor_features(latent)
+            mean = self.actor_mean(features)
+            log_std = torch.clamp(self.log_std, self.log_std_min, self.log_std_max)
+            return distributions.Normal(mean, torch.exp(log_std))
         else:
             logits = self.actor(latent)
-        value = self.critic(latent)
-        dist = distributions.Categorical(logits=logits)
+            if self.unimix_ratio > 0:
+                logits = self.unimix(logits)
+            return distributions.Categorical(logits=logits)
+        
+    @profile
+    def get_logp_val_entr(self, latent, action, longer_value=True):
+        # Get distribution
+        dist = self.get_distribution(latent)
+        
         logp_prob = dist.log_prob(action)
+        if self.is_continuous and logp_prob.dim() > action.dim() - 1:
+            logp_prob = logp_prob.sum(-1)  # Sum across dimensions
+        
+        value = self.critic(latent)
         entropy = dist.entropy()
 
         return logp_prob, value, entropy
@@ -377,7 +438,9 @@ class PPOAgent(nn.Module):
 
     def sample_as_env_action(self, latent, greedy=False):
             action, _ = self.sample(latent, greedy)
-            return action.detach().cpu().squeeze(-1).numpy()    
+            action = action.detach().cpu()
+            return action.squeeze(0).float().numpy() if self.is_continuous else action.squeeze(-1).numpy()
+        
     @profile
     def comput_loss(self, latent, action, logp_old, advs, rtgs, slow_return):
 
@@ -455,11 +518,25 @@ class PPOAgent(nn.Module):
         self.train()
         with torch.autocast(device_type='cuda', dtype=torch.bfloat16, enabled=self.use_amp):
             feat_dim = latent.shape[-1]
-            dist = distributions.Categorical(logits=old_logits)
-            old_logp = dist.log_prob(action)
+            
+            # Handle continuous vs discrete actions
+            if self.is_continuous:
+                mean, log_std = old_logits
+                old_dist = distributions.Normal(mean, torch.exp(log_std))
+                old_logp = old_dist.log_prob(action)
+                if old_logp.dim() > action.dim() - 1:
+                    old_logp = old_logp.sum(-1)  # Sum across dimensions for multivariate actions
+                flatten_action = action.reshape(-1, self.action_dim) if action.dim() > 2 else action
+            else:
+                old_dist = distributions.Categorical(logits=old_logits)
+                old_logp = old_dist.log_prob(action)
+                flatten_action = action.view(-1)
+                
+            #dist = distributions.Categorical(logits=old_logits)
+            #old_logp = dist.log_prob(action)
 
             flatten_latent = latent[:, :-1].reshape(-1, feat_dim)
-            flatten_action = action.view(-1)
+            #flatten_action = action.view(-1)
             flatten_old_logp = old_logp.view(-1).detach()
 
             batch_size = flatten_latent.shape[0]
@@ -543,12 +620,21 @@ class PPOAgent(nn.Module):
     def sample(self, latent, greedy=False):
         self.eval()
         with torch.autocast(device_type='cuda', dtype=torch.bfloat16, enabled=self.use_amp):
-            logits = self.actor(latent)
-            logits = self.unimix(logits)
-            dist = distributions.Categorical(logits=logits)
+            dist = self.get_distribution(latent)
+
             if greedy:
-                action = dist.probs.argmax(dim=-1)
+                if self.is_continuous:
+                    action = dist.mean
+                else:
+                    action = dist.probs.argmax(dim=-1)
             else:
                 action = dist.sample()
-        return action, logits
+
+            # Return distribution parameters for later log prob
+            if self.is_continuous:
+                dist_params = (dist.loc, dist.scale.log())
+            else:
+                dist_params = dist.logits
+
+        return action, dist_params
 

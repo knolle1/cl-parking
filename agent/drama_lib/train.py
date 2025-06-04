@@ -9,17 +9,17 @@ import colorama
 import os
 import pandas as pd
 
-from utils import seed_np_torch, WandbLogger
-from replay_buffer import ReplayBuffer
-import agents
-from sub_models.world_models import WorldModel
-from mamba_ssm import InferenceParams
+from .utils import seed_np_torch, WandbLogger
+from .replay_buffer import ReplayBuffer
+from .agents import ActorCriticAgent, PPOAgent
+from .sub_models.world_models import WorldModel
+from .mamba_ssm import InferenceParams
 from line_profiler import profile
 import yaml
-from envs.my_memory_maze import MemoryMaze
-from envs.my_atari import Atari
-from envs.my_highway import HighwayEnv
-from eval import eval_episodes
+from .envs.my_memory_maze import MemoryMaze
+from .envs.my_atari import Atari
+from .envs.my_highway import HighwayEnv
+from .eval import eval_episodes
 import warnings
 import ast
 
@@ -34,21 +34,11 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
     epoch_representation_loss_list = []
     epoch_representation_real_kl_div_list = []
     epoch_total_loss_list = []
-    epoch_vq_loss_list = []
-    epoch_perplexity_list = []
-    epoch_avg_2nd_similarity_list = []
-    epoch_avg_last_similarity_list = []
-    epoch_avg_median_similarity_list = []
     for e in range(epoch):
         obs, action, reward, termination = replay_buffer.sample(batch_size, batch_length, imagine=False)
-        if world_model.autoencoder_type == 'naive':
-            reconstruction_loss, reward_loss, termination_loss, \
-            dynamics_loss, dynamics_real_kl_div, representation_loss, \
-            representation_real_kl_div, total_loss, perplexity, avg_similarity = world_model.update(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)
-        else:
-            reconstruction_loss, reward_loss, termination_loss, \
-            dynamics_loss, dynamics_real_kl_div, representation_loss, \
-            representation_real_kl_div, total_loss, vq_loss, perplexity, avg_similarity = world_model.update2(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)            
+        reconstruction_loss, reward_loss, termination_loss, \
+        dynamics_loss, dynamics_real_kl_div, representation_loss, \
+        representation_real_kl_div, total_loss = world_model.update(obs, action, reward, termination, global_step=global_step, epoch_step=e, logger=logger)
 
         epoch_reconstruction_loss_list.append(reconstruction_loss)
         epoch_reward_loss_list.append(reward_loss)
@@ -58,12 +48,6 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
         epoch_representation_loss_list.append(representation_loss)
         epoch_representation_real_kl_div_list.append(representation_real_kl_div)
         epoch_total_loss_list.append(total_loss)
-        epoch_perplexity_list.append(perplexity)
-        epoch_avg_2nd_similarity_list.append(avg_similarity[1])
-        epoch_avg_last_similarity_list.append(avg_similarity[-1])
-        epoch_avg_median_similarity_list.append(avg_similarity[len(avg_similarity) // 2])
-        if world_model.autoencoder_type == 'vq':
-            epoch_vq_loss_list.append(vq_loss)            
     if logger is not None:
         logger.log("WorldModel/reconstruction_loss", np.mean(epoch_reconstruction_loss_list), global_step=global_step)
         # logger.log("WorldModel/augmented_reconstruction_loss", augmented_reconstruction_loss.item(), global_step=global_step)
@@ -73,18 +57,12 @@ def train_world_model_step(replay_buffer: ReplayBuffer, world_model: WorldModel,
         logger.log("WorldModel/dynamics_real_kl_div", np.mean(epoch_dynamics_real_kl_div_list), global_step=global_step)
         logger.log("WorldModel/representation_loss", np.mean(epoch_representation_loss_list), global_step=global_step)
         logger.log("WorldModel/representation_real_kl_div", np.mean(epoch_representation_real_kl_div_list), global_step=global_step)
-        logger.log("WorldModel/total_loss", np.mean(epoch_total_loss_list), global_step=global_step)
-        logger.log("WorldModel/perplexity", np.mean(epoch_perplexity_list), global_step=global_step)
-        logger.log("WorldModel/avg_2nd_similarity", np.mean(epoch_avg_2nd_similarity_list), global_step=global_step)
-        logger.log("WorldModel/avg_last_similarity", np.mean(epoch_avg_last_similarity_list), global_step=global_step)
-        logger.log("WorldModel/avg_median_similarity", np.mean(epoch_avg_median_similarity_list), global_step=global_step)
-        if world_model.autoencoder_type == 'vq':
-            logger.log("WorldModel/vq_loss", np.mean(epoch_vq_loss_list), global_step=global_step)                
+        logger.log("WorldModel/total_loss", np.mean(epoch_total_loss_list), global_step=global_step)    
 
 @profile
 @torch.no_grad()
 def world_model_imagine_data(replay_buffer: ReplayBuffer,
-                             world_model: WorldModel, agent: agents.ActorCriticAgent,
+                             world_model: WorldModel, agent: ActorCriticAgent,
                              imagine_batch_size,
                              imagine_context_length, imagine_batch_length,
                              log_video, logger, global_step):
@@ -93,7 +71,6 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
     '''
     world_model.eval()
     agent.eval()
-    #TODO: Use the sampl_reward, termination to create a replay buffer critic loss
     sample_obs, sample_action, sample_reward, sample_termination = replay_buffer.sample(
         imagine_batch_size, imagine_context_length, imagine=True)
     if world_model.model == 'Transformer':
@@ -104,7 +81,7 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
             log_video=log_video,
             logger=logger, global_step=global_step
         )
-    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2' or world_model.model == 'Hybird':
+    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2':
          latent, action, old_logits, context_latent, reward_hat, termination_hat = world_model.imagine_data2(
             agent, sample_obs, sample_action,
             imagine_batch_size=imagine_batch_size,
@@ -115,26 +92,26 @@ def world_model_imagine_data(replay_buffer: ReplayBuffer,
     return latent, action, old_logits, context_latent, sample_reward, sample_termination, reward_hat, termination_hat
 
 @profile
-def joint_train_world_model_agent(config, logdir,
+def joint_train_world_model_agent(env, is_continuous, config, logdir,
                                   replay_buffer: ReplayBuffer,
-                                  world_model: WorldModel, agent: agents.ActorCriticAgent,
+                                  world_model: WorldModel, agent: ActorCriticAgent,
                                   logger):
     os.makedirs(f"{logdir}/ckpt", exist_ok=True)
 
 
-    if config.BasicSettings.Env_name.startswith('ALE'):
-        env = Atari(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
-    elif config.BasicSettings.Env_name.startswith('memory'):
-        env = MemoryMaze(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
-    elif config.BasicSettings.Env_name.startswith('HW'):
-        env = HighwayEnv(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
-    else:
-        assert ValueError(f'Unknown environment name: {config.BasicSettings.Env_name}')
-    print("Current env: " + colorama.Fore.YELLOW + f"{config.BasicSettings.Env_name}" + colorama.Style.RESET_ALL)
+    #if config.BasicSettings.Env_name.startswith('ALE'):
+    #    env = Atari(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
+    #elif config.BasicSettings.Env_name.startswith('memory'):
+    #    env = MemoryMaze(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
+    #elif config.BasicSettings.Env_name.startswith('HW'):
+    #    env = HighwayEnv(config.BasicSettings.Env_name, size=(config.BasicSettings.ImageSize,config.BasicSettings.ImageSize), seed=config.BasicSettings.Seed)
+    #else:
+    #    assert ValueError(f'Unknown environment name: {config.BasicSettings.Env_name}')
+    print("Current env: " + colorama.Fore.YELLOW + f"{env.unwrapped.spec.id}" + colorama.Style.RESET_ALL)
 
-    atari_benchmark_df = pd.read_csv("atari_performance.csv", index_col='Task', usecols=lambda column: column in ['Task', 'Alien', 'Amidar', 'Assault', 'Asterix', 'BankHeist', 'BattleZone', 'Boxing', 'Breakout', 'ChopperCommand', 'CrazyClimber', 'DemonAttack', 'Freeway', 'Frostbite', 'Gopher', 'Hero', 'Jamesbond', 'Kangaroo', 'Krull', 'KungFuMaster', 'MsPacman', 'Pong', 'PrivateEye', 'Qbert', 'RoadRunner', 'Seaquest', 'UpNDown'])
-    atari_pure_name = config.BasicSettings.Env_name.split('/')[-1].split('-')[0]
-    game_benchmark_df = atari_benchmark_df.get(atari_pure_name)
+    #atari_benchmark_df = pd.read_csv("atari_performance.csv", index_col='Task', usecols=lambda column: column in ['Task', 'Alien', 'Amidar', 'Assault', 'Asterix', 'BankHeist', 'BattleZone', 'Boxing', 'Breakout', 'ChopperCommand', 'CrazyClimber', 'DemonAttack', 'Freeway', 'Frostbite', 'Gopher', 'Hero', 'Jamesbond', 'Kangaroo', 'Krull', 'KungFuMaster', 'MsPacman', 'Pong', 'PrivateEye', 'Qbert', 'RoadRunner', 'Seaquest', 'UpNDown'])
+    #atari_pure_name = config.BasicSettings.Env_name.split('/')[-1].split('-')[0]
+    #game_benchmark_df = atari_benchmark_df.get(atari_pure_name)
     
     sum_reward = 0
     current_ob, info = env.reset()
@@ -153,24 +130,32 @@ def joint_train_world_model_agent(config, logdir,
                 else:
                     context_latent = world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(world_model.device))
                     model_context_action = np.stack(list(context_action))
-                    model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
+                    
+                    if is_continuous:
+                        model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L A-> 1 L A")
+                    else:
+                        model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
+                    
                     if world_model.model == 'Transformer':
                         prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
-                    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2' or world_model.model == 'Hybird':
+                    elif world_model.model == 'Mamba' or world_model.model == 'Mamba2':
                         prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
                     action = agent.sample_as_env_action(
                         torch.cat([prior_flattened_sample, last_dist_feat], dim=-1),
                         greedy=False
                     )[0]
 
+            #print(current_ob)
             context_obs.append(rearrange(torch.Tensor(current_ob).to(world_model.device), "H W C -> 1 1 C H W")/255)
             context_action.append(action)
         else:
             action = env.action_space.sample()
 
-        ob, reward, is_last, info = env.step(action)
-        # replay_buffer.append(current_ob, action, reward, np.logical_or(terminated, info["life_loss"]))
-        replay_buffer.append(current_ob, action, reward, info['is_terminal'])
+        #ob, reward, is_last, info = env.step(action)
+        ob, reward, terminated, truncated, info = env.step(action)
+        is_last = terminated or truncated
+        
+        replay_buffer.append(current_ob, action, reward, terminated)
 
         sum_reward += reward
         current_ob = ob
@@ -178,20 +163,19 @@ def joint_train_world_model_agent(config, logdir,
         if is_last:
             logger.log(f"episode/score", sum_reward, global_step=total_steps)
             logger.log(f"episode/length", info["episode_frame_number"], global_step=total_steps)  # framskip=4
-            if config.BasicSettings.Env_name.startswith('ALE'):
-                logger.log(f"episode/normalised score", (sum_reward - game_benchmark_df['Random'])/(game_benchmark_df['Human'] - game_benchmark_df['Random']), global_step=total_steps)
-                for algorithm in game_benchmark_df.index[2:]:
-                    denominator = game_benchmark_df[algorithm] - game_benchmark_df['Random']
-                    if denominator != 0:
-                        normalized_score = (sum_reward - game_benchmark_df['Random']) / denominator
-                        logger.log(f"benchmark/normalised {algorithm} score", normalized_score, global_step=total_steps)
+            #if config.BasicSettings.Env_name.startswith('ALE'):
+            #    logger.log(f"episode/normalised score", (sum_reward - game_benchmark_df['Random'])/(game_benchmark_df['Human'] - game_benchmark_df['Random']), global_step=total_steps)
+            #    for algorithm in game_benchmark_df.index[2:]:
+            #        denominator = game_benchmark_df[algorithm] - game_benchmark_df['Random']
+            #        if denominator != 0:
+            #            normalized_score = (sum_reward - game_benchmark_df['Random']) / denominator
+            #            logger.log(f"benchmark/normalised {algorithm} score", normalized_score, global_step=total_steps)
             
+            # Reset for next episode
             sum_reward = 0
             ob, info = env.reset()
             context_obs.clear()
             context_action.clear()
-
-
 
         if replay_buffer.ready('world_model') and total_steps % (config.JointTrainAgent.TrainDynamicsEverySteps // config.JointTrainAgent.NumEnvs) == 0 and total_steps <= config.JointTrainAgent.FreezeWorldModelAfterSteps:
             train_world_model_step(
@@ -203,7 +187,6 @@ def joint_train_world_model_agent(config, logdir,
                 epoch=config.JointTrainAgent.TrainDynamicsEpoch,
                 global_step=total_steps
             )
-
 
         if replay_buffer.ready('behaviour') and total_steps % (config.JointTrainAgent.TrainAgentEverySteps // config.JointTrainAgent.NumEnvs) == 0 and total_steps <= config.JointTrainAgent.FreezeBehaviourAfterSteps:
             log_video = total_steps % (config.JointTrainAgent.SaveEverySteps // config.JointTrainAgent.NumEnvs) == 0
@@ -242,27 +225,30 @@ def joint_train_world_model_agent(config, logdir,
 
 
 
-def build_world_model(conf, action_dim, device):
+def build_world_model(conf, action_dim, device, is_continuous=False):
     return WorldModel(
         action_dim = action_dim,
         config = conf, 
-        device = device
-    ).to(device)
+        device = device,
+        is_continuous=is_continuous
+    ).cuda(device)
 
 
-def build_agent(conf, action_dim, device):
+def build_agent(conf, action_dim, device, is_continuous=False):
     if conf.Models.Agent.Policy == 'AC':
-        return agents.ActorCriticAgent(
+        return ActorCriticAgent(
             conf = conf,
             action_dim=action_dim,
-            device = device
-        ).to(device)
+            device = device,
+            is_continuous=is_continuous
+        ).cuda(device)
     elif conf.Models.Agent.Policy == 'PPO':
-        return agents.PPOAgent(
+        return PPOAgent(
             conf=conf,
             action_dim=action_dim,
-            device = device
-        ).to(device)       
+            device = device,
+            is_continuous=is_continuous
+        ).cuda(device)        
 
 
 class DotDict(dict):
@@ -393,8 +379,6 @@ if __name__ == "__main__":
 
     # build world model and agent
     world_model = build_world_model(config, action_dim, device=device)
-    if config.Models.WorldModel.LatentDiscreteType == 'vq':
-        config.update_or_create('Models.WorldModel.CategoricalDim', world_model.encoder.output_dim[1]*world_model.encoder.output_dim[2])
     agent = build_agent(config, action_dim, device=device)
     update_model_parameters(config, world_model, agent)
     if (config.BasicSettings.Compile and os.name != "nt"):  # compilation is not supported on windows

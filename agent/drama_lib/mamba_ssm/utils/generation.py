@@ -683,10 +683,18 @@ def capture_graph(
 ):
     device = next(iter(model.parameters())).device
     samples = torch.full((batch_size, decoding_seqlen, embedding_dim), 0, dtype=torch.long, device=device)
-    action = torch.full((batch_size, decoding_seqlen), 0, dtype=torch.long, device=device)
+    #action = torch.full((batch_size, decoding_seqlen), 0, dtype=torch.long, device=device)
+    if model.continuous_action:
+        action = torch.full((batch_size, decoding_seqlen, model.action_dim), 0, dtype=torch.long, device=device)
+    else:
+        action = torch.full((batch_size, decoding_seqlen), 0, dtype=torch.long, device=device)
+        
     seqlen_offset_og = inference_params.seqlen_offset
     inference_params.seqlen_offset = max_seqlen - decoding_seqlen
     inference_params.lengths_per_sample[:] = inference_params.seqlen_offset
+    
+    #print(samples.dtype)
+    #print(action.dtype)
 
     with torch.cuda.device(device):
         # Warmup before capture

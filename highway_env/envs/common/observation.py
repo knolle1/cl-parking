@@ -107,6 +107,85 @@ class GrayscaleObservation(ObservationType):
         raw_rgb = self.viewer.get_image()  # H x W x C
         raw_rgb = np.moveaxis(raw_rgb, 0, 1)
         return np.dot(raw_rgb[..., :3], self.weights).clip(0, 255).astype(np.uint8)
+    
+    
+class RGBObservation(ObservationType):
+
+    """
+    An observation class that collects directly what the simulator renders.
+
+    Also stacks the collected frames as in the nature DQN.
+    The observation shape is C x W x H.
+
+    Specific keys are expected in the configuration dictionary passed.
+    Example of observation dictionary in the environment config:
+        observation": {
+            "type": "GrayscaleObservation",
+            "observation_shape": (84, 84)
+            "stack_size": 4,
+            "weights": [0.2989, 0.5870, 0.1140],  # weights for RGB conversion,
+        }
+    
+    If stack_size = 0, only return the current frame without stacking
+    """
+
+    def __init__(
+        self,
+        env: "AbstractEnv",
+        observation_shape: Tuple[int, int],
+        stack_size: int,
+       # weights: List[float],
+        scaling: Optional[float] = None,
+        centering_position: Optional[List[float]] = None,
+        center_ego: Optional[bool] = True,
+        **kwargs
+    ) -> None:
+        super().__init__(env)
+        self.observation_shape = observation_shape
+        self.stack_size = stack_size
+        
+        if stack_size == 0:
+            self.shape = self.observation_shape + (3,)
+        else:
+            self.shape = (stack_size,) + self.observation_shape + (3,)
+       # self.weights = weights
+        self.obs = np.zeros(self.shape, dtype=np.uint8)
+
+        # The viewer configuration can be different between this observation and env.render() (typically smaller)
+        viewer_config = env.config.copy()
+        viewer_config.update(
+            {
+                "offscreen_rendering": True,
+                "screen_width": self.observation_shape[0],
+                "screen_height": self.observation_shape[1],
+                "scaling": scaling or viewer_config["scaling"],
+                "centering_position": centering_position
+                or viewer_config["centering_position"],
+                "center_ego": center_ego,
+            }
+        )
+        self.viewer = EnvViewer(env, config=viewer_config)
+
+    def space(self) -> spaces.Space:
+        return spaces.Box(shape=self.shape, low=0, high=255, dtype=np.uint8)
+
+    def observe(self) -> np.ndarray:
+        new_obs = self._render_to_grayscale()
+        if self.stack_size == 0:
+            self.obs = new_obs
+        else:
+            # Shift stacked frames and add new frame to stack
+            self.obs = np.roll(self.obs, -1, axis=0)
+            self.obs[-1, :, :] = new_obs
+        return self.obs
+
+    def _render_to_grayscale(self) -> np.ndarray:
+        self.viewer.observer_vehicle = self.observer_vehicle
+        self.viewer.display()
+        raw_rgb = self.viewer.get_image()  # H x W x C
+        #raw_rgb = np.moveaxis(raw_rgb, 0, 1)
+        #return np.dot(raw_rgb[..., :3], self.weights).clip(0, 255).astype(np.uint8)
+        return raw_rgb.astype(np.uint8)
 
 
 class TimeToCollisionObservation(ObservationType):
@@ -818,6 +897,8 @@ def observation_factory(env: "AbstractEnv", config: dict) -> ObservationType:
         return CustomKinematicsGoalObservation(env, **config)
     elif config["type"] == "GrayscaleObservation":
         return GrayscaleObservation(env, **config)
+    elif config["type"] == "RGBObservation":
+        return RGBObservation(env, **config)
     elif config["type"] == "AttributesObservation":
         return AttributesObservation(env, **config)
     elif config["type"] == "MultiAgentObservation":

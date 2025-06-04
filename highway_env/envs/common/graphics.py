@@ -187,7 +187,15 @@ class EnvViewer(object):
         #else:
         #    return np.array([0, 0])
         
-        return np.array([0, 0])
+        if self.config["center_ego"]:
+            if self.observer_vehicle:
+                return self.observer_vehicle.position
+            elif self.env.vehicle:
+                return self.env.vehicle.position
+            else:
+                return np.array([0, 0])
+        else:
+            return np.array([0, 0])
 
     def close(self) -> None:
         """Close the pygame window."""

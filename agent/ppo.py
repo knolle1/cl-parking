@@ -22,7 +22,10 @@ import scipy
 from gymnasium.spaces import Box, Discrete
 import os
 #import random
-from gymnasium.wrappers.record_video import RecordVideo
+
+from gymnasium.wrappers.record_video import RecordVideo  # Older version
+#from gymnasium.wrappers.rendering import RecordVideo
+
 #from gymnasium.wrappers import NormalizeObservation
 import copy
 import json

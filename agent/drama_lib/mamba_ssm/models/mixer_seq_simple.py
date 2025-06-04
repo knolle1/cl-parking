@@ -14,17 +14,17 @@ import torch.nn.functional as F
 from torchtune.modules import RMSNorm as _RMSNorm
 from einops import repeat
 
-from mamba_ssm.models.config_mamba import MambaConfig
-from mamba_ssm.modules.mamba_simple import Mamba
-from mamba_ssm.modules.mamba2 import Mamba2
-from mamba_ssm.modules.mha import MHA
-from mamba_ssm.modules.mlp import MLP
-from mamba_ssm.modules.block import Block
-from mamba_ssm.utils.generation import GenerationMixin
-from mamba_ssm.utils.hf import load_config_hf, load_state_dict_hf
+from .config_mamba import MambaConfig
+from ..modules.mamba_simple import Mamba
+from ..modules.mamba2 import Mamba2
+from ..modules.mha import MHA
+from ..modules.mlp import MLP
+from ..modules.block import Block
+from ..utils.generation import GenerationMixin
+from ..utils.hf import load_config_hf, load_state_dict_hf
 
 try:
-    from mamba_ssm.ops.triton.layer_norm import RMSNorm, layer_norm_fn, rms_norm_fn
+    from ..ops.triton.layer_norm import RMSNorm, layer_norm_fn, rms_norm_fn
 except ImportError:
     RMSNorm, layer_norm_fn, rms_norm_fn = None, None, None
 
@@ -161,6 +161,7 @@ class MixerModel(nn.Module):
         d_intermediate: int,
         stoch_dim: int,
         action_dim: int,
+        continuous_action: bool,
         ssm_cfg=None,
         attn_layer_idx=None,
         attn_cfg=None,
@@ -180,6 +181,7 @@ class MixerModel(nn.Module):
 
         self.action_dim = action_dim
         self.feat_dim = d_model
+        self.is_continuous = continuous_action
 
         # self.embedding = nn.Embedding(vocab_size, d_model, **factory_kwargs)
 
@@ -244,8 +246,18 @@ class MixerModel(nn.Module):
             for i, layer in enumerate(self.layers)
         }
 
+
     def forward(self, samples, action, inference_params=None, **mixer_kwargs):
-        action = F.one_hot(action.long(), self.action_dim).float()
+        #print("mamba input samples shape:", samples.shape)
+        #print("mamba input action shape:", action.shape)
+        #print("mamba input samples dtype:", samples.dtype)
+        #print("mamba input action dtype:", action.dtype)
+        
+        if self.is_continuous:
+            action = action.float()
+        else:
+            action = F.one_hot(action.long(), self.action_dim).float()
+            
         hidden_states = self.stem(torch.cat([samples, action], dim=-1))
             
         residual = None
@@ -287,7 +299,8 @@ class MambaWrapperModel(nn.Module, GenerationMixin):
         n_layer = config.n_layer
         d_intermediate = config.d_intermediate
         stoch_dim = config.stoch_dim
-        action_dim = config.action_dim
+        self.action_dim = config.action_dim
+        self.continuous_action = config.continuous_action
         ssm_cfg = config.ssm_cfg
         attn_layer_idx = config.attn_layer_idx
         attn_cfg = config.attn_cfg
@@ -304,7 +317,8 @@ class MambaWrapperModel(nn.Module, GenerationMixin):
             n_layer=n_layer,
             d_intermediate=d_intermediate,
             stoch_dim=stoch_dim,
-            action_dim=action_dim,
+            action_dim=self.action_dim,
+            continuous_action=self.continuous_action,
             ssm_cfg=ssm_cfg,
             pff_cfg = pff_cfg,         
             attn_layer_idx=attn_layer_idx,

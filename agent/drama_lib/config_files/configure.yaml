@@ -3,7 +3,7 @@ BasicSettings:
   ImageChannel: 3
   ReplayBufferOnGPU: True
   Seed: 3710
-  Env_name: HW/parking-v0
+  Env_name: HW/parking-v0 #ALE/Pong-v5
   Device: cuda:0
   Use_amp: True
   Use_cg: True
@@ -13,7 +13,7 @@ BasicSettings:
 Evaluate:
    EpisodeNum: 10
    NumEnvs: 10
-   DuringTraining: True
+   DuringTraining: False
    EverySteps: 1000
 
 JointTrainAgent:

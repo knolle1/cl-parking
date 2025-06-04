@@ -8,7 +8,7 @@ import pickle
 
 
 class ReplayBuffer():
-    def __init__(self, config, device="cuda") -> None:
+    def __init__(self, config, action_shape, device="cuda") -> None:
         self.store_on_gpu = config.BasicSettings.ReplayBufferOnGPU
         max_length = config.JointTrainAgent.BufferMaxLength
         obs_shape = (config.BasicSettings.ImageSize, config.BasicSettings.ImageSize, config.BasicSettings.ImageChannel)
@@ -16,14 +16,14 @@ class ReplayBuffer():
 
         if self.store_on_gpu:
             self.obs_buffer = torch.empty((max_length, *obs_shape), dtype=torch.uint8, device=device, requires_grad=False)
-            self.action_buffer = torch.empty((max_length), dtype=torch.float32, device=device, requires_grad=False)
+            self.action_buffer = torch.empty((max_length, *action_shape), dtype=torch.float32, device=device, requires_grad=False)
             self.reward_buffer = torch.empty((max_length), dtype=torch.float32, device=device, requires_grad=False)
             self.termination_buffer = torch.empty((max_length), dtype=torch.float32, device=device, requires_grad=False)
             self.sampled_counter = torch.zeros((max_length), dtype=torch.int32, device=device, requires_grad=False)
             self.imagined_counter = torch.zeros((max_length), dtype=torch.int32, device=device, requires_grad=False)
         else:
             self.obs_buffer = np.empty((max_length, *obs_shape), dtype=np.uint8)
-            self.action_buffer = np.empty((max_length), dtype=np.float32)
+            self.action_buffer = np.empty((max_length, *action_shape), dtype=np.float32)
             self.reward_buffer = np.empty((max_length), dtype=np.float32)
             self.termination_buffer = np.empty((max_length), dtype=np.float32)
             self.sampled_counter = np.zeros((max_length), dtype=np.int32)
