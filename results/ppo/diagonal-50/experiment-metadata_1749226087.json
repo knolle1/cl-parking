@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-04-23 05:33:37.737747",
-  "cmd": "python experiment.py -a ppo -s diagonal-50 -p results/ppo/diagonal-50 -n 5",
+  "timestamp": "2025-06-06 16:08:06.541182",
+  "cmd": "python experiment.py -a ppo -s diagonal-50 -p results/ppo/diagonal-50 -n 5 --gpu 1",
   "agent_type": "ppo",
   "scenario": "diagonal-50",
   "output_path": "results/ppo/diagonal-50",
@@ -164,6 +164,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
