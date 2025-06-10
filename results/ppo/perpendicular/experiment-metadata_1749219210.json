@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-04-22 09:41:57.723579",
-  "cmd": "python experiment.py -a ppo -s perpendicular -p results/ppo/perpendicular -n 5",
+  "timestamp": "2025-06-06 14:13:30.398789",
+  "cmd": "python experiment.py -a ppo -s perpendicular -p results/ppo/perpendicular -n 5 --gpu 1",
   "agent_type": "ppo",
   "scenario": "perpendicular",
   "output_path": "results/ppo/perpendicular",
@@ -164,6 +164,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
