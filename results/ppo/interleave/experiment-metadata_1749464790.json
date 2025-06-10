@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-04-25 06:45:37.579139",
-  "cmd": "python experiment.py -a ppo -s interleave -p results/ppo/interleave -n 5",
+  "timestamp": "2025-06-09 10:26:30.450285",
+  "cmd": "python experiment.py -a ppo -s interleave -p results/ppo/interleave -n 5 --gpu 0",
   "agent_type": "ppo",
   "scenario": "interleave",
   "output_path": "results/ppo/interleave",
@@ -170,6 +170,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
