@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-05-11 06:52:06.235480",
-  "cmd": "python experiment.py -a sac -s parallel -p results/sac/parallel -n 5 --gpu 1",
+  "timestamp": "2025-06-09 13:00:36.644060",
+  "cmd": "python experiment.py -a sac -s parallel -p results/sac/parallel -n 5 --gpu 0",
   "agent_type": "sac",
   "scenario": "parallel",
   "output_path": "results/sac/parallel",
@@ -155,6 +155,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
