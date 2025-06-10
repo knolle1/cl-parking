@@ -707,7 +707,7 @@ class PPO():
 
         # Run training
         for i in range(max_timesteps // self.memory_size):
-            print(i)
+            #print(i)
             self.roll_out(self.env, run_id)
             self.optimise()
             
