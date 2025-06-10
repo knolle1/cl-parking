@@ -157,11 +157,18 @@ class EvalCallback(BaseCallback):
             action, _ = self.model.predict(obs, deterministic=True)
             next_obs, reward, terminated, truncated, info = eval_env.step(action)
             
-            # Normalise observations and reward
-            # StableBaseline3 ReplayBuffer normalises these when sampling the buffer
-            obs = eval_env.normalize_obs(obs)
-            next_obs = eval_env.normalize_obs(next_obs)
-            reward = eval_env.normalize_reward(reward).astype(np.float32)
+            # Normalise observations and reward because StableBaseline3 ReplayBuffer normalises these when sampling the buffer
+            # Stablebaseline3 SAC uses VecNormalize wrapper around training env - maintains running mean and std for normalization
+            # Use same normalization as training environment to calculate same loss gradients as during training
+            vec_norm_env = self.model.get_vec_normalize_env()
+            if vec_norm_env is not None:
+                obs = vec_norm_env.normalize_obs(obs)
+                next_obs = vec_norm_env.normalize_obs(next_obs)
+                reward = vec_norm_env.normalize_reward(reward).astype(np.float32)
+            
+            #obs = eval_env.normalize_obs(obs)
+            #next_obs = eval_env.normalize_obs(next_obs)
+            #reward = eval_env.normalize_reward(reward).astype(np.float32)
             
             # Convert to tensors
             obs_tensor = torch.tensor(obs, dtype=torch.float32, device=self.model.device).unsqueeze(0)
