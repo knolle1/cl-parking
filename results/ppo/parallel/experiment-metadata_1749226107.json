@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-04-23 21:23:46.575529",
-  "cmd": "python experiment.py -a ppo -s parallel -p results/ppo/parallel -n 5",
+  "timestamp": "2025-06-06 16:08:26.870093",
+  "cmd": "python experiment.py -a ppo -s parallel -p results/ppo/parallel -n 5 --gpu 1",
   "agent_type": "ppo",
   "scenario": "parallel",
   "output_path": "results/ppo/parallel",
@@ -164,6 +164,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
