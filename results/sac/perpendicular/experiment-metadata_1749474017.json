@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-04-25 13:11:06.188558",
-  "cmd": "python experiment.py -a sac -s perpendicular -p results/sac/perpendicular -n 5",
+  "timestamp": "2025-06-09 13:00:16.982255",
+  "cmd": "python experiment.py -a sac -s perpendicular -p results/sac/perpendicular -n 5 --gpu 1",
   "agent_type": "sac",
   "scenario": "perpendicular",
   "output_path": "results/sac/perpendicular",
@@ -155,6 +155,26 @@
         ]
       ]
     ],
-    "change_frequency": 500000
+    "change_frequency": 500000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
