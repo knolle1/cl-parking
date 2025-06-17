@@ -101,7 +101,7 @@ def average_fisher_sensitivity(data_path):
         
         step = int(fisher_dir.split('-')[-1])
         afs_step = [] # List of the average fisher sensitivity for the current step
-        for filename in [x for x in os.listdir(data_path+'/'+fisher_dir) if "_AFS" not in x]:
+        for filename in [x for x in os.listdir(data_path+'/'+fisher_dir) if "_AFS" not in x and x.endswith(".json")]:
             print(filename)
             with open(data_path+'/'+fisher_dir+'/'+filename) as f:
                 raw_data = json.load(f)
@@ -112,7 +112,10 @@ def average_fisher_sensitivity(data_path):
                 total += np.sum(raw_data[name])
             print("Total Fisher information:", total)
             for name in raw_data.keys():
-                afs[name] = raw_data[name] / total
+                if total > 0:
+                    afs[name] = raw_data[name] / total
+                else:
+                    afs[name] = np.array(raw_data[name])
                 
             # Save as JSON
             with open(data_path+'/'+fisher_dir+'/'+filename.split('.')[0]+'_AFS.json', "w") as outfile:
