@@ -1,16 +1,20 @@
 {
-  "timestamp": "2025-05-19 08:48:57.894789",
-  "cmd": "python experiment.py -a ppo -s parallel-adj -p results/ppo/parallel-adj-tuned -n 0",
+  "timestamp": "2025-06-14 10:19:47.519181",
+  "cmd": "python experiment.py -a ppo -s parallel-adj -p results/ppo/parallel-adj-tuned -n 5 --gpu 0",
   "agent_type": "ppo",
   "scenario": "parallel-adj",
   "output_path": "results/ppo/parallel-adj-tuned",
-  "n_runs": 0,
+  "n_runs": 5,
   "random_baseline": "results/random_baseline/data",
   "training_params": {
     "scenario_timesteps": 2000000,
     "eval_freq": 10000,
     "n_eval_episodes": 30,
     "eval_scenarios": [
+      "perpendicular",
+      "diagonal-25",
+      "diagonal-50",
+      "parallel",
       "parallel-adj"
     ],
     "eval_seed": 1234,
@@ -20,22 +24,22 @@
   },
   "hyperparameters": {
     "gamma": 0.99,
-    "lamb": 0.9,
+    "lamb": 0.95,
     "eps_clip": 0.1,
     "K_epochs": 20,
     "num_cells": 64,
     "actor_lr": 0.0001,
-    "critic_lr": 0.0003,
-    "memory_size": 2048,
-    "minibatch_size": 64,
+    "critic_lr": 0.0001,
+    "memory_size": 4096,
+    "minibatch_size": 128,
     "c1": 0.1,
     "c2": 0.01,
     "kl_threshold": 0.15,
     "parameters_hardshare": false,
     "early_stop": false,
     "cal_total_loss": true,
-    "max_grad_norm": 0.5,
-    "layer_num": 3
+    "max_grad_norm": 1,
+    "layer_num": 2
   },
   "environment_config": {
     "add_width": [
@@ -161,6 +165,26 @@
         ]
       ]
     ],
-    "change_frequency": 2000000
+    "change_frequency": 2000000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
   }
 }
