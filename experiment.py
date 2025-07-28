@@ -136,6 +136,7 @@ def main():
         device = torch.device(f"cuda:{args.gpu}" if args.gpu is not None else "cuda")
     else:
         device = torch.device("cpu")
+    torch.cuda.set_device(device)
     print(f"Using device: {device}")
         
     # Get training configuration
