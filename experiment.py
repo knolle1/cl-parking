@@ -182,7 +182,7 @@ def main():
     for i in range(args.start, args.n_runs):
         print(f"Starting run {i} ...")
         
-        agent = AgentClass(env, device, **hyperparameters)
+        agent = AgentClass(env, device, seed=i, **hyperparameters)
         
         agent.train(env, log_path=args.path, run_id=f"Run{i}", 
                     train_seed=i, **train_params)

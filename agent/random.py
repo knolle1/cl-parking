@@ -19,10 +19,14 @@ from gymnasium.wrappers.record_video import RecordVideo  # Older version
 
 class RandomAgent(AbstractAgent):
     
-    def __init__(self, env, device=None):
+    def __init__(self, env, device=None, seed=123):
         """
         Init hyperparameters and models
         """
+        random.seed(seed)
+        os.environ['PYTHONHASHSEED'] = str(seed)
+        np.random.seed(seed)
+    
         # Get action space
         self.low = env.action_space.low
         self.high = env.action_space.high

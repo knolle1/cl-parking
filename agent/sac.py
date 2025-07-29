@@ -291,7 +291,7 @@ class EvalCallback(BaseCallback):
 
 class SACAgent(AbstractAgent):
     
-    def __init__(self, env, device, buffer_size, learning_rate, gamma, batch_size, tau,
+    def __init__(self, env, device, seed, buffer_size, learning_rate, gamma, batch_size, tau,
                  num_layers, layer_size, verbose=1):
         """
         Init hyperparameters and models
@@ -313,7 +313,8 @@ class SACAgent(AbstractAgent):
                          gamma=self.gamma, 
                          batch_size=self.batch_size, 
                          tau=self.tau,
-                         policy_kwargs=self.policy_kwargs)
+                         policy_kwargs=self.policy_kwargs,
+                         seed=seed)
         
 
 

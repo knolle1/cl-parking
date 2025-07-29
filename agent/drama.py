@@ -44,10 +44,11 @@ import copy
 
 class DramaAgent(AbstractAgent):
 
-    def __init__(self, env, device, config):
+    def __init__(self, env, device, seed, config):
         """
         Init hyperparameters and models
         """
+    
         torch.backends.cuda.matmul.allow_tf32 = True
         torch.backends.cudnn.allow_tf32 = True
         torch.backends.cudnn.benchmark = True
@@ -82,7 +83,7 @@ class DramaAgent(AbstractAgent):
         else:
             raise AssertionError(f"action space is not valid {env.action_space}")
 
-        seed_np_torch(seed=self.config.BasicSettings.Seed)
+        seed_np_torch(seed=seed)
 
         # build world model and agent
         self.world_model = build_world_model(self.config, action_dim, device=self.device,is_continuous=self.continous_action)

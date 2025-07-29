@@ -21,7 +21,7 @@ import scipy
 #import wandb
 from gymnasium.spaces import Box, Discrete
 import os
-#import random
+import random
 
 from gymnasium.wrappers.record_video import RecordVideo  # Older version
 #from gymnasium.wrappers.rendering import RecordVideo
@@ -31,6 +31,17 @@ import copy
 import json
 
 from .evaluation import Logger
+
+def seed_np_torch(seed=20001118):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    # some cudnn methods can be random even after fixing the seed unless you tell it to be deterministic
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 def discount_cumsum(x, discount):
     """
@@ -330,7 +341,7 @@ class Actor_Critic_net(nn.Module):
         return entropy, action_logp, value
     
 class PPO():
-    def __init__(self, env, device, gamma, lamb, eps_clip, K_epochs, \
+    def __init__(self, env, device, seed, gamma, lamb, eps_clip, K_epochs, \
                  num_cells, layer_num,\
                  actor_lr, critic_lr, memory_size , minibatch_size,\
                  cal_total_loss, c1, c2, \
@@ -357,6 +368,7 @@ class PPO():
             device (_type_): tf device
 
         """
+        seed_np_torch(seed)
         
         observation_space=env.observation_space
         action_space=env.action_space

@@ -12,7 +12,7 @@ from abc import abstractmethod
 class AbstractAgent:
 
     @abstractmethod
-    def __init__(self, env, device, **hyperparameters):
+    def __init__(self, env, device, seed, **hyperparameters):
         """
         Init hyperparameters and models
         """
