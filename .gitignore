@@ -1,11 +1,10 @@
 *.pyc
 .venv
-**/testing
 **/old
 **/wandb
 wandb_key.txt
 *.meta.json
 *.ipynb_checkpoints
 .vs
-**results_old
 **/test
+**/results
