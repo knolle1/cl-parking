@@ -16,6 +16,7 @@ import gymnasium as gym
 import os
 from gymnasium.wrappers.record_video import RecordVideo  # Older version
 #from gymnasium.wrappers.rendering import RecordVideo
+import random
 
 class RandomAgent(AbstractAgent):
     

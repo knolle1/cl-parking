@@ -68,6 +68,7 @@ def main():
     
     parser.add_argument("-g", "--gpu", 
                         help="Specify the GPU to use.",
+                        default=0,
                         type=int)
 
     parser.add_argument("--start", 
@@ -134,9 +135,9 @@ def main():
     # Get device
     if torch.cuda.is_available():
         device = torch.device(f"cuda:{args.gpu}" if args.gpu is not None else "cuda")
+        torch.cuda.set_device(device)
     else:
         device = torch.device("cpu")
-    torch.cuda.set_device(device)
     print(f"Using device: {device}")
         
     # Get training configuration
