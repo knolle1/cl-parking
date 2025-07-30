@@ -7,4 +7,3 @@ wandb_key.txt
 *.ipynb_checkpoints
 .vs
 **/test
-**/results
