@@ -143,6 +143,27 @@ class RGBObservation(ObservationType):
         super().__init__(env)
         self.observation_shape = observation_shape
         self.stack_size = stack_size
+
+        # Check if image should be resized
+        if 'image_size' in kwargs:
+            self.image_size = kwargs.get('image_size')
+
+            # Select package to use for resizing
+            if 'resize' in kwargs:
+                self._resize = kwargs.get('resize')
+            else:
+                 self._resize = "opencv"
+
+            # Import package for resizing observation
+            if self._resize == "opencv":
+                import cv2
+                self._cv2 = cv2
+            if self._resize == "pillow":
+                from PIL import Image
+                self._image = Image
+                
+        else:
+            self.image_size = None
         
         if stack_size == 0:
             self.shape = self.observation_shape + (3,)
@@ -185,6 +206,18 @@ class RGBObservation(ObservationType):
         raw_rgb = self.viewer.get_image()  # H x W x C
         #raw_rgb = np.moveaxis(raw_rgb, 0, 1)
         #return np.dot(raw_rgb[..., :3], self.weights).clip(0, 255).astype(np.uint8)
+        
+        # Resize image
+        if self.image_size is not None:
+            if self._resize == "opencv":
+                raw_rgb = self._cv2.resize(
+                    raw_rgb, (self.image_size, self.image_size), interpolation=self._cv2.INTER_AREA
+                )
+            if self._resize == "pillow":
+                raw_rgb = self._image.fromarray(raw_rgb)
+                raw_rgb = raw_rgb.resize((self.image_size, self.image_size), self._image.NEAREST)
+                raw_rgb = np.array(raw_rgb)
+        
         return raw_rgb.astype(np.uint8)
 
 
