@@ -140,6 +140,44 @@ def average_fisher_sensitivity(data_path):
         # Save as JSON
         with open(f"{data_path}/average-fisher-sensitivity_step-{step}.json", "w") as outfile:
             json.dump({k: total_afs[k].tolist() for k, v in total_afs.items()}, outfile)
+
+def performance_matrix(data_path, train_scheme, task_interval):
+
+    if train_scheme == "sequential-inc":
+        scenarios = ["perpendicular", "diagonal-25", "diagonal-50", "parallel"]
+    elif train_scheme == "sequential-dec":
+        scenarios = ["parallel", "diagonal-50", "diagonal-25", "perpendicular"]
+
+    # Read data
+    df_list = []
+    for s in scenarios:
+        df = pd.read_csv(f"{data_path}/{s}_reward_mean.csv")
+
+        df_filtered = df[df["idx"] % task_interval == 0]
+        df_filtered = pd.concat([df_filtered, df.tail(1)])
+
+        df_filtered = df_filtered.drop_duplicates()
+
+        df_list.append(df_filtered)
+        columns = df_filtered.columns[1:].tolist()
+
+    # Construct matrix and average across runs
+    matrix_avg = None
+    for run in columns:
+        cols = []
+        for df in df_list:
+            cols.append(df[run])
+        matrix = pd.concat(cols, axis="columns").to_numpy()
+        matrix = matrix.transpose()
+
+        if matrix_avg is None:
+            matrix_avg = matrix
+        else:
+            matrix_avg += matrix
+
+    matrix_avg = matrix_avg / len(columns)
+
+    np.savetxt(f"{data_path}/average_performance_matrix.csv", matrix_avg, delimiter=',', fmt='%.5f')
         
 # Functions for plotting
 # -----------------------------------------------------------------------------

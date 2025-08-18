@@ -26,7 +26,7 @@ from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
 from agent.drama import DramaAgent
-from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap
+from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix
 
 def main():
     
@@ -126,9 +126,10 @@ def main():
     elif args.algorithm in ["drama"]:
         image_size = config.drama_params["config"]["BasicSettings"]["ImageSize"] # Ensure env image size matches image size in config
         env_params.update({"observation": {"type": "RGBObservation",
-                                           "observation_shape": (image_size, image_size),
+                                           "observation_shape": (600, 600), # Ensure whole parking lot is in the image
                                            "stack_size": 0, # No stacking of frames
-                                           "center_ego": True,
+                                           "center_ego": False,
+                                           "image_size" : image_size # Observation image will be resized to (image_size, image_size)
                                            }
                            })
         
@@ -199,7 +200,8 @@ def main():
     average_fisher_sensitivity(args.path + "/data")
     
     # TODO: Matrix for forward and backward transfer metrics
-    
+    if args.scenario in ["sequential-inc", "sequential-dec"]:
+        performance_matrix(args.path + "/data", args.scenario, env_params["change_frequency"])
     
     # Create plots
     # -------------------------------------------------------------------------
