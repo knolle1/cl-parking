@@ -53,6 +53,8 @@ class DramaAgent(AbstractAgent):
         torch.backends.cudnn.allow_tf32 = True
         torch.backends.cudnn.benchmark = True
         warnings.filterwarnings("ignore")
+
+        print(env.config["observation"]["features"].index("sin_h"))
         
         # Map string dtype to torch dtype
         def map_dtype(d):
@@ -71,6 +73,11 @@ class DramaAgent(AbstractAgent):
     
         self.config = DotDict(config)
         self.device = device
+
+        # Update to ensure inputs for encoder/decoder match observation image size
+        img_size = self.config.BasicSettings.ImageSize
+        self.config.update_or_create("Models.WorldModel.Encoder.InputSize", [3, img_size, img_size])
+        self.config.update_or_create("Models.WorldModel.Decoder.InputSize", [3, img_size, img_size])
         
         if isinstance(env.action_space, Box):
             self.continous_action = True

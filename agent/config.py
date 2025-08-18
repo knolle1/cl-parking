@@ -137,7 +137,7 @@ sac_params = {"buffer_size" : 1_000_000,
 # Drama Hyperparameters
 drama_params = {"config" : {
   "BasicSettings": {
-    "ImageSize": 64, #64,
+    "ImageSize": 128, #64,
     "ImageChannel": 3,
     "ReplayBufferOnGPU": True,
     "Seed": 3710, # Will be overwritten by training seed of the run
@@ -208,26 +208,16 @@ drama_params = {"config" : {
         "Norm": "rms",
         "Kernel": 5,
         "Padding": "same",
-        "InputSize": [3, 64, 64]
+        "InputSize": [3, 64, 64]    # Will be updated to correspond with obervation image size
       },
       "Decoder": {
         "Depth": 16,
-        "Mults": [
-          1,
-          2,
-          3,
-          4,
-          4
-        ],
+        "Mults": [1, 2, 3, 4, 4],
         "Norm": "rms",
         "Kernel": 5,
         "Padding": "same",
         "FirstStrideOne": True,
-        "InputSize": [
-          3,
-          64,
-          64
-        ],
+        "InputSize": [3, 64, 64],   # Will be updated to correspond with obervation image size
         "FinalLayerSigmoid": True
       },
       "Reward": {
