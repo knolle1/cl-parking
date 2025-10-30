@@ -297,4 +297,7 @@ def main():
     wandb.agent(sweep_id, function=sweep_function, count=args.n_runs)
     
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)

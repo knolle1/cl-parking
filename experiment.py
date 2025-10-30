@@ -28,6 +28,8 @@ from agent.ppo import PPO
 from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix
 
+from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+
 def main():
     
     # Command line arguments
@@ -109,6 +111,7 @@ def main():
         AgentClass = PPO
     elif args.algorithm == "sac":
         hyperparameters = config.sac_params
+        torch.autograd.set_detect_anomaly(True)
         AgentClass = SACAgent
     elif args.algorithm == "drama":
         hyperparameters = config.drama_params
@@ -178,19 +181,32 @@ def main():
     # -------------------------------------------------------------------------
     
     # Create environment
-    env = gym.make('custom-parking-v0')
-    env.configure(env_params)
+    if args.algorithm == "sac":
+        # Create normalized vec env for stablebaseline implementation of SAC
+        def create_env():
+            env = gym.make('custom-parking-v0')
+            env.configure(env_params)
+            return env
+
+        vec_env = DummyVecEnv([create_env])
+        env = VecNormalize(vec_env)
+    else:
+        env = gym.make('custom-parking-v0')
+        env.configure(env_params)
     
     for i in range(args.start, args.n_runs):
         print(f"Starting run {i} ...")
+
+        seed = i
+        print("Using seed: ", seed)
         
-        agent = AgentClass(env, device, seed=i, **hyperparameters)
+        agent = AgentClass(env, device, seed=seed, **hyperparameters)
         
         agent.train(env, log_path=args.path, run_id=f"Run{i}", 
-                    train_seed=i, **train_params)
+                    train_seed=seed, **train_params)
         
         agent.record_video(env, 5, args.path, 
-                           run_id=i, seed=i, deterministic=True)
+                           run_id=i, seed=seed, deterministic=True)
         
         
     # Calculate aggregated metrics
@@ -231,4 +247,7 @@ def main():
     
     
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)

@@ -12,6 +12,8 @@ from .evaluation import Logger
 
 from stable_baselines3 import SAC
 from stable_baselines3.common.callbacks import BaseCallback
+from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
+from stable_baselines3.common.logger import configure
 
 from gymnasium.wrappers.record_video import RecordVideo  # Older version
 #from gymnasium.wrappers.rendering import RecordVideo
@@ -22,6 +24,7 @@ import json
 import numpy as np
 import os
 import torch
+from typing import Callable
 
 
 class EvalCallback(BaseCallback):
@@ -47,15 +50,22 @@ class EvalCallback(BaseCallback):
         # Set up evaluation environments
         self.eval_envs = {}
         for label in scenarios:
-            
+
+            if isinstance(env, VecNormalize):
+                config = env.get_attr("config")[0]
+                env_name = env.get_attr("unwrapped")[0].spec.id
+            else:
+                config = env.config
+                env_name = env.unwrapped.spec.id
+
             # Get evaluation environment configuration
-            params = copy.copy(env.config)
-            params.update(env.config["scenarios"][label])
+            params = copy.copy(config)
+            params.update(config["scenarios"][label])
             params["scenarios"] = {}       # Reset scenarios to just include current scenario
             params["change_scenario"] = []
             
             # Create evaluation environment
-            env_name = env.unwrapped.spec.id
+            #env_name = env.get_attr("unwrapped")[0].spec.id
             eval_env = gym.make(env_name)
             eval_env.configure(params)
             
@@ -86,7 +96,6 @@ class EvalCallback(BaseCallback):
             truncated_list = [] 
             
             for i in range(self.n_eval_episodes):
-                
                 terminated = False
                 truncated = False
                 
@@ -114,6 +123,19 @@ class EvalCallback(BaseCallback):
             results[f"{label}_truncated_std"] = np.std(truncated_list)
         
         self.my_logger.append(self.n_calls, results)
+
+        # Get average gradient
+        avg = 0
+        total_params = 0
+        for n, p in self.model.actor.named_parameters():
+                if p.grad is not None:
+                    total_params += p.grad.data.numel()
+                    avg += p.grad.data.sum().item()
+        print("Gradient sum", avg)
+        print("Total params", total_params)
+        if total_params > 0:
+            print("Gradient average", avg / total_params)
+        
         return results
         
         
@@ -121,17 +143,27 @@ class EvalCallback(BaseCallback):
         """
         Calculate Fisher information matrix when task changes
         """
-        # Create copy of environment for current task
-        task = self.env.get_current_task()
+        # Create copy of environment for current task 
+        if isinstance(self.env, VecNormalize):
+            task = self.env.env_method("get_current_task")[0]
+            config = self.env.get_attr("config")[0]
+            env_name = self.env.get_attr("unwrapped")[0].spec.id
+        else:
+            task = self.env.get_current_task()
+            config = self.env.config
+            env_name = self.env.unwrapped.spec.id
+        
         print("Current Task\n----------------------------------")
         print(task)
         
         # Get evaluation environment configuration
-        params = copy.copy(self.env.config)
+        #config = self.env.get_attr("config")[0]
+        params = copy.copy(config)
         params["change_scenario"] = [[task["labels"], task["probs"]]] 
         
         # Create evaluation environment
-        env_name = self.env.unwrapped.spec.id
+        #env_name = self.env.unwrapped.spec.id
+        #env_name = self.env.get_attr("unwrapped")[0].spec.id
         eval_env = gym.make(env_name)
         eval_env.configure(params)
         
@@ -302,14 +334,39 @@ class SACAgent(AbstractAgent):
         self.gamma = gamma
         self.batch_size = batch_size
         self.tau = tau
-        self.policy_kwargs = dict(net_arch=[layer_size] * num_layers)
+        self.policy_kwargs = {'net_arch' : [layer_size] * num_layers,
+                              'optimizer_class' : torch.optim.Adam,
+                              #'optimizer_class' : torch.optim.SGD,
+                             }
+
+        # Use learning rate schedule
+        # Code from https://stable-baselines3.readthedocs.io/en/master/guide/examples.html
+        def linear_schedule(initial_value: float) -> Callable[[float], float]:
+            """
+            Linear learning rate schedule.
         
+            :param initial_value: Initial learning rate.
+            :return: schedule that computes
+              current learning rate depending on remaining progress
+            """
+            def func(progress_remaining: float) -> float:
+                """
+                Progress will decrease from 1 (beginning) to 0.
+        
+                :param progress_remaining:
+                :return: current learning rate
+                """
+                return progress_remaining * initial_value
+        
+            return func
+            
         self.model = SAC('MlpPolicy', 
                          env,
                          device=device,
                          verbose=verbose, 
                          buffer_size=self.buffer_size,
-                         learning_rate=self.learning_rate,
+                         #learning_rate=self.learning_rate,
+                         learning_rate=linear_schedule(self.learning_rate),
                          gamma=self.gamma, 
                          batch_size=self.batch_size, 
                          tau=self.tau,
@@ -347,7 +404,11 @@ class SACAgent(AbstractAgent):
         
         # Reset environment global step, which is used to keep track for 
         # task changes
-        env.reset_global_step()
+        if isinstance(env, VecNormalize):
+            env.env_method("reset_global_step")
+        else:
+            env.reset_global_step()
+        
         
         if train_seed is not None:
             env.np_random = np.random.default_rng(train_seed)
@@ -367,6 +428,11 @@ class SACAgent(AbstractAgent):
 
         logger = Logger(log_path, metrics)
 
+        tmp_path = log_path + "/sb3_log"
+        # set up logger
+        new_logger = configure(tmp_path, ["csv"])#, "stdout"])
+        self.model.set_logger(new_logger)
+        
         callback = EvalCallback(env=env, 
                                 eval_freq=eval_freq, 
                                 n_eval_episodes=n_eval_episodes, 
@@ -382,10 +448,11 @@ class SACAgent(AbstractAgent):
         
     def record_video(self, env, n_eval_episodes, log_path, run_id, 
                      seed=None, deterministic=False):
-        
+
         # Create recording environment
-        env_name = env.unwrapped.spec.id
-        params = copy.copy(env.config)
+        env_name = env.get_attr("unwrapped")[0].spec.id
+        config = env.get_attr("config")[0]
+        params = copy.copy(config)
         rec_env = gym.make(env_name, render_mode="rgb_array")
         rec_env.configure(params)
         
