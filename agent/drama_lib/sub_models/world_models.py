@@ -629,6 +629,21 @@ class WorldModel(nn.Module):
             termination_hat_tensor = self.termination_decoder(self.dist_feat_buffer[:,:-1])
             self.termination_hat_buffer = termination_hat_tensor > 0
 
+            # Test imagination outputs
+            print("reward shape", self.reward_hat_buffer.shape)
+            print("termination shape", self.termination_hat_buffer.shape)
+            print("sample_buffer shape", self.sample_buffer.shape)
+            print("termination shape", self.termination_hat_buffer)
+            print("Terminated indices", self.termination_hat_buffer.nonzero())
+
+            reward_terminated = torch.where(self.termination_hat_buffer.nonzero(), self.reward_hat_buffer)
+            print("reward termination", reward_terminated)
+
+            obs_hat = self.image_decoder(self.sample_buffer[::imagine_batch_size//4]) * 255
+            obs_hat = torch.clamp(obs_hat, 0, 255)
+            print("obs_hat shape", obs_hat.shape)
+
+            a=1/0
 
             if log_video:
                 obs_hat = self.image_decoder(self.sample_buffer[::imagine_batch_size//4]) * 255
@@ -638,6 +653,8 @@ class WorldModel(nn.Module):
                 img_frames = img_frames.reshape(imagine_batch_length+1, img_shape[0], img_shape[1], img_shape[2] * 4).cpu().float().detach().numpy().astype(np.uint8)
                 #img_frames = img_frames.reshape(imagine_batch_length+1, 3, 64, 64 * 4).cpu().float().detach().numpy().astype(np.uint8)
                 logger.log("Imagine/predict_video", img_frames, global_step=global_step)
+
+                
         return torch.cat([self.sample_buffer, self.dist_feat_buffer], dim=-1), self.action_buffer, old_logits_tensor, torch.cat([context_flattened_sample, context_dist_feat], dim=-1), self.reward_hat_buffer, self.termination_hat_buffer
 
 

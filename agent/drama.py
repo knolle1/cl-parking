@@ -54,7 +54,7 @@ class DramaAgent(AbstractAgent):
         torch.backends.cudnn.benchmark = True
         warnings.filterwarnings("ignore")
 
-        print(env.config["observation"]["features"].index("sin_h"))
+        #print(env.config["observation"]["features"].index("sin_h"))
         
         # Map string dtype to torch dtype
         def map_dtype(d):

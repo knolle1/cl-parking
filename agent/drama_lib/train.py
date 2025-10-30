@@ -157,7 +157,7 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
         ob, reward, terminated, truncated, info = env.step(action)
         is_last = terminated or truncated
 
-        print(ob)
+        #print(ob)
         replay_buffer.append(current_ob, action, reward, terminated)
 
         sum_reward += reward
