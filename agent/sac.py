@@ -124,10 +124,12 @@ class EvalCallback(BaseCallback):
         
         self.my_logger.append(self.n_calls, results)
 
+        """
+        # Debugging
         # Get average gradient
         avg = 0
         total_params = 0
-        for n, p in self.model.actor.named_parameters():
+        for n, p in self.model.critic.named_parameters():
                 if p.grad is not None:
                     total_params += p.grad.data.numel()
                     avg += p.grad.data.sum().item()
@@ -135,6 +137,7 @@ class EvalCallback(BaseCallback):
         print("Total params", total_params)
         if total_params > 0:
             print("Gradient average", avg / total_params)
+        """
         
         return results
         
@@ -341,11 +344,12 @@ class SACAgent(AbstractAgent):
 
         # Use learning rate schedule
         # Code from https://stable-baselines3.readthedocs.io/en/master/guide/examples.html
-        def linear_schedule(initial_value: float) -> Callable[[float], float]:
+        def linear_schedule(initial_value: float, decrease_start=1) -> Callable[[float], float]:
             """
             Linear learning rate schedule.
         
             :param initial_value: Initial learning rate.
+            :param decrease_start: At which point of progress to start decreasing. Progress will decrease from 1 (beginning) to 0.
             :return: schedule that computes
               current learning rate depending on remaining progress
             """
@@ -356,7 +360,7 @@ class SACAgent(AbstractAgent):
                 :param progress_remaining:
                 :return: current learning rate
                 """
-                return progress_remaining * initial_value
+                return min((progress_remaining * initial_value)/decrease_start, initial_value)
         
             return func
             
@@ -365,8 +369,9 @@ class SACAgent(AbstractAgent):
                          device=device,
                          verbose=verbose, 
                          buffer_size=self.buffer_size,
-                         #learning_rate=self.learning_rate,
-                         learning_rate=linear_schedule(self.learning_rate),
+                         learning_rate=self.learning_rate,
+                         #learning_rate=linear_schedule(self.learning_rate),
+                         #learning_rate=linear_schedule(self.learning_rate, 0.8),
                          gamma=self.gamma, 
                          batch_size=self.batch_size, 
                          tau=self.tau,
@@ -450,8 +455,14 @@ class SACAgent(AbstractAgent):
                      seed=None, deterministic=False):
 
         # Create recording environment
-        env_name = env.get_attr("unwrapped")[0].spec.id
-        config = env.get_attr("config")[0]
+        if isinstance(env, VecNormalize):
+            config = env.get_attr("config")[0]
+            env_name = env.get_attr("unwrapped")[0].spec.id
+        else:
+            config = env.config
+            env_name = env.unwrapped.spec.id
+        #env_name = env.get_attr("unwrapped")[0].spec.id
+        #config = env.get_attr("config")[0]
         params = copy.copy(config)
         rec_env = gym.make(env_name, render_mode="rgb_array")
         rec_env.configure(params)

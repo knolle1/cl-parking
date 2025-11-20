@@ -19,8 +19,8 @@ random_baseline_path = "results/random_baseline/data"
 
 # Highway-env configuration
 env_default = {"add_width" : [0,0],
-               "fixed_goal" : [[0, 3], [0, -4], [1, 3], [1, -4]],
-               "start_pos" : [[-35, 0], [35, 3.141592653589793]],
+               "fixed_goal" : [[0, 1], [0, -2], [1, 1], [1, -2]],
+               "start_pos" : [[-12, 0], [12, 3.141592653589793]],
                "success_goal_reward": 0.12,
                "collision_reward": -10,
                "reward_p" : 0.5,
@@ -29,11 +29,11 @@ env_default = {"add_width" : [0,0],
                                                  "reward_weights": [1, 0.3, 0, 0, 0.05, 0.05],
                                                  "adjust_heading" : False
                                                  },
-                              "diagonal-25" : {"parking_angles" : [25, 25],
+                              "diagonal-25" : {"parking_angles" : [-25, 25],
                                                "reward_weights": [1, 0.3, 0, 0, 0.05, 0.05],
                                                "adjust_heading" : False
                                                },
-                              "diagonal-50" : {"parking_angles" : [50, 50],
+                              "diagonal-50" : {"parking_angles" : [-50, 50],
                                                "reward_weights": [1, 0.3, 0, 0, 0.05, 0.05],
                                                "adjust_heading" : False
                                                },
@@ -123,14 +123,72 @@ ppo_params = {"gamma" : 0.99,
               }
 """
 
-# SAC Hyperparameters
-sac_params = {"buffer_size" : 1_000_000, 
-              "learning_rate" : 9e-4, 
-              "gamma" : 0.995,
-              "batch_size" : 32, 
-              "tau" : 0.6,
-              "num_layers" : 6, 
+"""
+# SAC Hyperparameters (sweep run 17)
+sac_params = {"batch_size" : 128, 
+              "buffer_size" : 1_300_000, 
+              "gamma" : 0.996,
               "layer_size" : 1024, 
+              "learning_rate" : 4e-4, 
+              "num_layers" : 6, 
+              "tau" : 0.511,
+              "verbose" : 0,
+              }
+
+
+# SAC Hyperparameters (sweep run 18)
+sac_params = {"batch_size" : 256, 
+              "buffer_size" : 122_000, 
+              "gamma" : 0.997,
+              "layer_size" : 64, 
+              "learning_rate" : 5e-4, 
+              "num_layers" : 5, 
+              "tau" : 0.763,
+              "verbose" : 0,
+              }
+
+# SAC Hyperparameters (sweep run 20)
+sac_params = {"batch_size" : 128, 
+              "buffer_size" : 913_000, 
+              "gamma" : 0.996,
+              "layer_size" : 1024, 
+              "learning_rate" : 5e-4, 
+              "num_layers" : 6, 
+              "tau" : 0.355,
+              "verbose" : 0,
+              }
+
+# SAC Hyperparameters (sweep run 38)
+sac_params = {"batch_size" : 128, 
+              "buffer_size" : 250_000, 
+              "gamma" : 0.992,
+              "layer_size" : 128, 
+              "learning_rate" : 5e-4, 
+              "num_layers" : 6, 
+              "tau" : 0.985,
+              "verbose" : 0,
+              }
+
+# SAC Hyperparameters (sweep run 23)
+sac_params = {"batch_size" : 128, 
+              "buffer_size" : 1_370_000, 
+              "gamma" : 0.994,
+              "layer_size" : 1024, 
+              "learning_rate" : 5e-4, 
+              "num_layers" : 6, 
+              "tau" : 0.344,
+              "verbose" : 0,
+              }
+"""
+
+# SAC Hyperparameters (sweep run 20 exact)
+sac_params = {"batch_size" : 128, 
+              "buffer_size" : 913_444, 
+              "gamma" : 0.9960965446719684,
+              "layer_size" : 1024, 
+              "learning_rate" : 0.0005027205433964669, 
+              "num_layers" : 6, 
+              "tau" : 0.35546937994578165,
               "verbose" : 0,
               }
 
@@ -167,7 +225,7 @@ drama_params = {"config" : {
     "ImagineContextLength": 8,
     "ImagineBatchLength": 16,
     "RealityContextLength": 16,
-    "TrainDynamicsEverySteps": 1,
+    "TrainDynamicsEverySteps": 1, ### Try 2, 4, 8  to update world model
     "TrainDynamicsEpoch": 1,
     "TrainAgentEverySteps": 1,
     "FreezeWorldModelAfterSteps": 100000, # Will be overwritten as max_timesteps to ensure consistency with SAC and PPO training params

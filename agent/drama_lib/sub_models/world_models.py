@@ -607,7 +607,7 @@ class WorldModel(nn.Module):
                 #     sampled_tokens = sample_tokens(logits, inference_params)
                 #     sequences_cat = torch.cat([sequences_cat, sampled_tokens], dim=1)
                 prior_logits = self.dist_head.forward_prior(dist_feat_list[-1])
-                prior_sample = self.stright_throught_gradient(prior_logits)
+                prior_sample = self.stright_throught_gradient(prior_logits, sample_mode="mode")
                 prior_flattened_sample = self.flatten_sample(prior_sample)
                 sample_list.append(prior_flattened_sample)
                 self.sample_buffer[:, i+1:i+2] = prior_flattened_sample

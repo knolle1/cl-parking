@@ -25,7 +25,7 @@ from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
-from agent.drama import DramaAgent
+#from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix
 
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
@@ -181,7 +181,7 @@ def main():
     # -------------------------------------------------------------------------
     
     # Create environment
-    if args.algorithm == "sac":
+    if False: #args.algorithm == "sac":
         # Create normalized vec env for stablebaseline implementation of SAC
         def create_env():
             env = gym.make('custom-parking-v0')
@@ -196,7 +196,6 @@ def main():
     
     for i in range(args.start, args.n_runs):
         print(f"Starting run {i} ...")
-
         seed = i
         print("Using seed: ", seed)
         
