@@ -18,6 +18,7 @@ import json
 import sys
 import wandb
 import pandas as pd
+import torch
 
 import gymnasium as gym
 import highway_env
@@ -151,7 +152,7 @@ def main():
         AgentClass = PPO
         
     elif args.algorithm == "sac":
-        hp_bounds = {"buffer_size" : {'distribution': 'int_uniform', 'min': 1_000, 'max': 1_500_000}, 
+        hp_bounds = {"buffer_size" : {'distribution': 'int_uniform', 'min': 100_000, 'max': 1_500_000}, 
                      "learning_rate" : {'distribution': 'uniform', 'min': 1e-4, 'max': 1e-3}, 
                      "gamma" : {'distribution': 'uniform', 'min': 0.95, 'max': 0.999},
                      "batch_size" : {'values': [32, 64, 128, 256, 512, 1024]}, 
@@ -223,6 +224,8 @@ def main():
         hyperparam_names.sort()
         with open(args.path +  f"/hyperparameters.csv", "w") as outfile:
             outfile.write(",".join(["RunID"] + hyperparam_names) + "\n")
+
+    
     
     
     # Function to optimise
@@ -252,10 +255,13 @@ def main():
         # Create environment
         env = gym.make('custom-parking-v0')
         env.configure(env_params)
+
+        # Get device
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         
         # Train hyperparameters
         print(f"Starting run {run_counter} ...")
-        agent = AgentClass(env, **hyperparameters)
+        agent = AgentClass(env, device, seed=run_counter, **hyperparameters)
         agent.train(env, log_path=args.path, run_id=f"Run{run_counter}", 
                         train_seed=run_counter, **train_params)
             
@@ -285,7 +291,7 @@ def main():
             
         # Save video to wandb
         video_path = args.path + f"/video/run-{run_counter}-episode-0.mp4"
-        wandb.log({f"Episode_recording_{args.scenario}": wandb.Video(video_path)}, step=train_params["max_timesteps"])
+        wandb.log({f"Episode_recording_{args.scenario}": wandb.Video(video_path, format="mp4")}, step=step)#train_params["max_timesteps"])
         
         run_counter += 1
         
