@@ -118,10 +118,10 @@ class CustomParkingEnv(ParkingEnv):
                 "simulation_frequency": 15,
                 "policy_frequency": 5,
                 "duration": 100,
-                "screen_width": 600,
-                "screen_height": 300,
+                "screen_width": 175,
+                "screen_height": 175,
                 "centering_position": [0.5, 0.5],
-                "scaling": 7,
+                "scaling": 4,
                 "center_ego": False,
                 
                 # Parking parameters
@@ -226,20 +226,24 @@ class CustomParkingEnv(ParkingEnv):
         for row in range(2):
             row_idx = []
             alpha = (-1) ** row * self.config["parking_angles"][row] * np.pi / 180
+
+            spots = 6
             
+            # Perpendicular/diagonal parking
             if abs(self.config["parking_angles"][row] <= 50):
                 add_width = self.config["add_width"][row]
                 
                 delta_x = np.sin(alpha) * length # difference for end point of diagonal lanes
                 x_offset = (width+add_width) * (1 - np.cos(alpha)) / np.cos(alpha) / 2 # offset between spaces so they align
-                y_offset = 10
+                y_offset = 5
                 
-                spots = int(75 / ((width+add_width) + x_offset))
+                #spots = int(32 / ((width+add_width) + x_offset))
+                #print("spots", spots)
             
                 for k in range(spots):
                     x = (k - spots // 2) * ((width+add_width) + x_offset) + ((width+add_width)) / 2
-                    if alpha > 0:
-                        x -= delta_x
+                    #if alpha > 0:
+                    #    x -= delta_x/2
                     net.add_lane(
                         *nodes[0],
                         StraightLane(
@@ -251,14 +255,18 @@ class CustomParkingEnv(ParkingEnv):
                     
                     row_idx.append(idx)
                     idx += 1
+
+            # Parallel parking
             else:
                 x_offset = 0
-                y_offset = 10
+                y_offset = 5
                 
                 add_len = self.config["add_width"][row]
                 
-                spots = int(80 / (length+add_len))
-                #print(spots)
+                #spots = int(80 / (length+add_len))
+                #print("spots", spots)
+
+                spots = 4
                 
                 for k in range(spots):
                     #x = (k - spots // 2) * (length+add_len + x_offset) + (spots%2) * (length+add_len) / 2
@@ -342,7 +350,7 @@ class CustomParkingEnv(ParkingEnv):
             
         # Walls
         if self.config["add_walls"]:
-            width, height = 85, 42
+            width, height = 42, 32
             for y in [-height / 2, height / 2]:
                 obstacle = Obstacle(self.road, [0, y])
                 obstacle.LENGTH, obstacle.WIDTH = (width, 1)
