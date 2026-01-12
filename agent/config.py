@@ -121,9 +121,9 @@ ppo_params = {"gamma" : 0.99,
               "max_grad_norm" : 1,
               "layer_num" : 2,
               }
-"""
 
-"""
+
+
 # SAC Hyperparameters (sweep run 17)
 sac_params = {"batch_size" : 128, 
               "buffer_size" : 1_300_000, 
@@ -135,10 +135,10 @@ sac_params = {"batch_size" : 128,
               "verbose" : 0,
               }
 
-
+"""
 # SAC Hyperparameters (sweep run 18)
 sac_params = {"batch_size" : 256, 
-              "buffer_size" : 122_000, 
+              "buffer_size" : 1_000_000, #122_000, 
               "gamma" : 0.997,
               "layer_size" : 64, 
               "learning_rate" : 5e-4, 
@@ -146,7 +146,7 @@ sac_params = {"batch_size" : 256,
               "tau" : 0.763,
               "verbose" : 0,
               }
-
+"""
 # SAC Hyperparameters (sweep run 20)
 sac_params = {"batch_size" : 128, 
               "buffer_size" : 913_000, 
@@ -160,7 +160,7 @@ sac_params = {"batch_size" : 128,
 
 # SAC Hyperparameters (sweep run 38)
 sac_params = {"batch_size" : 128, 
-              "buffer_size" : 250_000, 
+              "buffer_size" : 1_000_000, #250_000, 
               "gamma" : 0.992,
               "layer_size" : 128, 
               "learning_rate" : 5e-4, 
@@ -179,7 +179,7 @@ sac_params = {"batch_size" : 128,
               "tau" : 0.344,
               "verbose" : 0,
               }
-"""
+
 
 # SAC Hyperparameters (sweep run 20 exact)
 sac_params = {"batch_size" : 128, 
@@ -191,11 +191,12 @@ sac_params = {"batch_size" : 128,
               "tau" : 0.35546937994578165,
               "verbose" : 0,
               }
+"""
 
 # Drama Hyperparameters
 drama_params = {"config" : {
   "BasicSettings": {
-    "ImageSize": 128, #64,
+    "ImageSize": 64,
     "ImageChannel": 3,
     "ReplayBufferOnGPU": True,
     "Seed": 3710, # Will be overwritten by training seed of the run
@@ -204,7 +205,7 @@ drama_params = {"config" : {
     "Use_amp": True,
     "Use_cg": True,
     "Compile": True,
-    "SavePath": "None"
+    "SavePath": "None" # 
   },
   "Evaluate": {
     "EpisodeNum": 10,  # Will be overwritten as n_eval_episodes to ensure consistency with SAC and PPO training params
@@ -225,7 +226,7 @@ drama_params = {"config" : {
     "ImagineContextLength": 8,
     "ImagineBatchLength": 16,
     "RealityContextLength": 16,
-    "TrainDynamicsEverySteps": 1, ### Try 2, 4, 8  to update world model
+    "TrainDynamicsEverySteps": 2, ### Try 2, 4, 8  to update world model
     "TrainDynamicsEpoch": 1,
     "TrainAgentEverySteps": 1,
     "FreezeWorldModelAfterSteps": 100000, # Will be overwritten as max_timesteps to ensure consistency with SAC and PPO training params
