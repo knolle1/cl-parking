@@ -1,6 +1,7 @@
 {
-  "timestamp": "2025-07-30 13:25:29.543290",
-  "cmd": "python experiment.py -a ppo -s parallel -p results/ppo/parallel -n 5 --gpu 0",
+  "timestamp": "2025-11-26 11:06:55.146269",
+  "cmd": "python experiment.py -a ppo -s parallel -p results/ppo/parallel -d PPO trained in parallel parking scenario -n 5 --gpu 0",
+  "description": "PPO trained in parallel parking scenario",
   "agent_type": "ppo",
   "scenario": "parallel",
   "output_path": "results/ppo/parallel",
@@ -48,13 +49,29 @@
     "fixed_goal": [
       [
         0,
-        3
+        1
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        -2
       ]
     ],
     "start_pos": [
       [
-        -35,
+        -12,
         0
+      ],
+      [
+        12,
+        3.141592653589793
       ]
     ],
     "success_goal_reward": 0.12,
@@ -79,7 +96,7 @@
       },
       "diagonal-25": {
         "parking_angles": [
-          25,
+          -25,
           25
         ],
         "reward_weights": [
@@ -94,7 +111,7 @@
       },
       "diagonal-50": {
         "parking_angles": [
-          50,
+          -50,
           50
         ],
         "reward_weights": [
