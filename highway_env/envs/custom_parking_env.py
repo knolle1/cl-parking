@@ -381,9 +381,11 @@ class CustomParkingEnv(ParkingEnv):
         :param p: the Lp^p norm used in the reward. Use p<1 to have high kurtosis for rewards in [0, 1]
         :return: the corresponding reward
         """
+        #print(achieved_goal)
+        #print(desired_goal)
         if self.config["adjust_heading"]:
-            idx_sin_h = self.config["observation"]["features"].index("sin_h")
-            idx_cos_h = self.config["observation"]["features"].index("cos_h")
+            idx_sin_h = self.observation_type_parking.features.index("sin_h") #self.config["observation"]["features"].index("sin_h")
+            idx_cos_h = self.observation_type_parking.features.index("cos_h") #self.config["observation"]["features"].index("cos_h")
 
             # Rotate angles for achieved goal 180 degrees
             if achieved_goal[idx_cos_h] < 0 or achieved_goal[idx_sin_h] == -1:

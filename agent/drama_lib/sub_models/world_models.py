@@ -629,6 +629,7 @@ class WorldModel(nn.Module):
             termination_hat_tensor = self.termination_decoder(self.dist_feat_buffer[:,:-1])
             self.termination_hat_buffer = termination_hat_tensor > 0
 
+            """
             # Test imagination outputs
             print("reward shape", self.reward_hat_buffer.shape)
             print("termination shape", self.termination_hat_buffer.shape)
@@ -642,8 +643,8 @@ class WorldModel(nn.Module):
             obs_hat = self.image_decoder(self.sample_buffer[::imagine_batch_size//4]) * 255
             obs_hat = torch.clamp(obs_hat, 0, 255)
             print("obs_hat shape", obs_hat.shape)
+            """
 
-            a=1/0
 
             if log_video:
                 obs_hat = self.image_decoder(self.sample_buffer[::imagine_batch_size//4]) * 255

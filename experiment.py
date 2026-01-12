@@ -25,7 +25,7 @@ from agent import config
 from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
-#from agent.drama import DramaAgent
+from agent.drama import DramaAgent
 from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix
 
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
@@ -77,6 +77,11 @@ def main():
                         help="Specify the run to start with. Use this if experiments crashed.",
                         default=0,
                         type=int)
+
+    parser.add_argument("-d", "--desc", 
+                        help="Description of the experiment.",
+                        default="",
+                        type=str)
     
     args, unknown = parser.parse_known_args()
     
@@ -111,7 +116,7 @@ def main():
         AgentClass = PPO
     elif args.algorithm == "sac":
         hyperparameters = config.sac_params
-        torch.autograd.set_detect_anomaly(True)
+        #torch.autograd.set_detect_anomaly(True)
         AgentClass = SACAgent
     elif args.algorithm == "drama":
         hyperparameters = config.drama_params
@@ -128,8 +133,9 @@ def main():
                            })
     elif args.algorithm in ["drama"]:
         image_size = config.drama_params["config"]["BasicSettings"]["ImageSize"] # Ensure env image size matches image size in config
+        print("image size" , image_size)
         env_params.update({"observation": {"type": "RGBObservation",
-                                           "observation_shape": (600, 600), # Ensure whole parking lot is in the image
+                                           "observation_shape": (175, 175), # Ensure whole parking lot is in the image
                                            "stack_size": 0, # No stacking of frames
                                            "center_ego": False,
                                            "image_size" : image_size # Observation image will be resized to (image_size, image_size)
@@ -161,6 +167,7 @@ def main():
     timestamp = dt.datetime.now()
     metadata = {"timestamp" : timestamp.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 "cmd" : "python experiment.py " + ' '.join(sys.argv[1:]),
+                "description" : args.desc,
                 "agent_type" : args.algorithm,
                 "scenario" : args.scenario,
                 "output_path" : args.path,
@@ -179,7 +186,8 @@ def main():
     
     # Start experiments
     # -------------------------------------------------------------------------
-    
+
+    """
     # Create environment
     if False: #args.algorithm == "sac":
         # Create normalized vec env for stablebaseline implementation of SAC
@@ -193,6 +201,11 @@ def main():
     else:
         env = gym.make('custom-parking-v0')
         env.configure(env_params)
+    """
+
+    # Create environment
+    env = gym.make('custom-parking-v0')
+    env.configure(env_params)
     
     for i in range(args.start, args.n_runs):
         print(f"Starting run {i} ...")

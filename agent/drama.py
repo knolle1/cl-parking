@@ -25,6 +25,7 @@ from .drama_lib.replay_buffer import ReplayBuffer
 from .drama_lib.env_wrapper import MaxLast2FrameSkipWrapper
 
 from gymnasium.spaces import Box, Discrete
+from gymnasium.wrappers.record_video import RecordVideo
 
 import gymnasium
 import argparse
@@ -159,8 +160,8 @@ class DramaAgent(AbstractAgent):
         """
         
         # Weights & Biases logging
-        logger_wandb = WandbLogger(config=self.config, project=self.config.Wandb.Init.Project, mode=self.config.Wandb.Init.Mode)
-        logdir_wandb = f"./saved_models/{self.config.n}/{self.config.BasicSettings.Env_name}/{logger_wandb.run.id}"
+        logger_wandb = WandbLogger(config=self.config, project=self.config.Wandb.Init.Project, mode=self.config.Wandb.Init.Mode,dir=log_path)
+        logdir_wandb = f"{log_path}/saved_models/{self.config.n}/{self.config.BasicSettings.Env_name}/{logger_wandb.run.id}"
         
         # CSV logging
         metrics = []
@@ -207,9 +208,80 @@ class DramaAgent(AbstractAgent):
         logger_wandb.close()
         logger_csv.close()
         
-        pass
     
         
     def record_video(self, env, n_eval_episodes, log_path, run_id, 
                      seed=None, deterministic=False):
-        pass
+        # Create recording environment
+        config = env.config
+        env_name = env.unwrapped.spec.id
+        #env_name = env.get_attr("unwrapped")[0].spec.id
+        #config = env.get_attr("config")[0]
+        params = copy.copy(config)
+        rec_env = gymnasium.make(env_name, render_mode="rgb_array")
+        rec_env.configure(params)
+        
+        # Create missing folders
+        if not os.path.exists(log_path+"/video"):
+            print(f"Creating output directory {log_path}/video")
+            os.makedirs(log_path+"/video")
+        
+        rec_env = RecordVideo(rec_env, log_path+"/video", name_prefix=f"run-{run_id}",
+                              episode_trigger=lambda x: True)
+        
+        # Seeding for evaluation purpose
+        if seed is not None:
+            rec_env.np_random = np.random.default_rng(seed)
+            rec_env.action_space.seed(seed)
+            rec_env.observation_space.seed(seed)
+        
+        for i in range(n_eval_episodes):
+
+            terminated = False
+            truncated = False
+            
+            current_obs, _ = env.reset()
+            context_obs = deque(maxlen=config.JointTrainAgent.RealityContextLength)
+            context_action = deque(maxlen=config.JointTrainAgent.RealityContextLength)
+            
+            episode_reward = 0
+            
+            while not terminated and not truncated:
+                with torch.no_grad():
+                    if len(context_action) == 0:
+                        action = rec_env.action_space.sample()
+                        # action = np.array([action], dtype=int)
+                        # inference_params = InferenceParams(max_seqlen=1, max_batch_size=1)
+                    else:
+                        context_latent = self.world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(world_model.device))
+                        model_context_action = np.stack(list(context_action))
+                        #model_context_action = torch.Tensor(model_context_action).to(world_model.device)
+                        # current_obs_tensor = rearrange(torch.Tensor(current_obs).to(world_model.device), "B H W C -> B 1 C H W")/255
+                        
+                        if self.is_continuous:
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L A-> 1 L A")
+                        else:
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
+                            
+                        #print(model_context_action.shape)
+                        if self.world_model.model == 'Transformer':
+                            prior_flattened_sample, last_dist_feat = self.world_model.calc_last_dist_feat(context_latent, model_context_action)
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                        elif self.world_model.model == 'Mamba' or self.world_model.model == 'Mamba2':
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent[:,-1:], model_context_action[:,-1:], inference_params)
+                            prior_flattened_sample, last_dist_feat = self.world_model.calc_last_dist_feat(context_latent, model_context_action)
+                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                        action = self.agent.sample_as_env_action(
+                            torch.cat([prior_flattened_sample, last_dist_feat], dim=-1),
+                            greedy=True
+                        )[0]
+
+                context_obs.append(rearrange(torch.Tensor(current_obs).to(self.world_model.device), "H W C -> 1 1 C H W")/255)
+                context_action.append(action)
+
+                obs, reward, terminated, truncated, info = rec_env.step(action)
+                # cv2.imshow("current_obs", process_visualize(obs[0]))
+                # cv2.waitKey(10)
+                # update current_obs, current_info and sum_reward
+                episode_reward += reward
+                current_obs = obs
