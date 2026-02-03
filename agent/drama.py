@@ -241,8 +241,8 @@ class DramaAgent(AbstractAgent):
             truncated = False
             
             current_obs, _ = env.reset()
-            context_obs = deque(maxlen=config.JointTrainAgent.RealityContextLength)
-            context_action = deque(maxlen=config.JointTrainAgent.RealityContextLength)
+            context_obs = deque(maxlen=self.config.JointTrainAgent.RealityContextLength)
+            context_action = deque(maxlen=self.config.JointTrainAgent.RealityContextLength)
             
             episode_reward = 0
             
