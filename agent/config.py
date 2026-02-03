@@ -121,21 +121,8 @@ ppo_params = {"gamma" : 0.99,
               "max_grad_norm" : 1,
               "layer_num" : 2,
               }
-
-
-
-# SAC Hyperparameters (sweep run 17)
-sac_params = {"batch_size" : 128, 
-              "buffer_size" : 1_300_000, 
-              "gamma" : 0.996,
-              "layer_size" : 1024, 
-              "learning_rate" : 4e-4, 
-              "num_layers" : 6, 
-              "tau" : 0.511,
-              "verbose" : 0,
-              }
-
 """
+
 # SAC Hyperparameters (sweep run 18)
 sac_params = {"batch_size" : 256, 
               "buffer_size" : 1_000_000, #122_000, 
@@ -146,52 +133,7 @@ sac_params = {"batch_size" : 256,
               "tau" : 0.763,
               "verbose" : 0,
               }
-"""
-# SAC Hyperparameters (sweep run 20)
-sac_params = {"batch_size" : 128, 
-              "buffer_size" : 913_000, 
-              "gamma" : 0.996,
-              "layer_size" : 1024, 
-              "learning_rate" : 5e-4, 
-              "num_layers" : 6, 
-              "tau" : 0.355,
-              "verbose" : 0,
-              }
 
-# SAC Hyperparameters (sweep run 38)
-sac_params = {"batch_size" : 128, 
-              "buffer_size" : 1_000_000, #250_000, 
-              "gamma" : 0.992,
-              "layer_size" : 128, 
-              "learning_rate" : 5e-4, 
-              "num_layers" : 6, 
-              "tau" : 0.985,
-              "verbose" : 0,
-              }
-
-# SAC Hyperparameters (sweep run 23)
-sac_params = {"batch_size" : 128, 
-              "buffer_size" : 1_370_000, 
-              "gamma" : 0.994,
-              "layer_size" : 1024, 
-              "learning_rate" : 5e-4, 
-              "num_layers" : 6, 
-              "tau" : 0.344,
-              "verbose" : 0,
-              }
-
-
-# SAC Hyperparameters (sweep run 20 exact)
-sac_params = {"batch_size" : 128, 
-              "buffer_size" : 913_444, 
-              "gamma" : 0.9960965446719684,
-              "layer_size" : 1024, 
-              "learning_rate" : 0.0005027205433964669, 
-              "num_layers" : 6, 
-              "tau" : 0.35546937994578165,
-              "verbose" : 0,
-              }
-"""
 
 # Drama Hyperparameters
 drama_params = {"config" : {
@@ -330,15 +272,15 @@ drama_params = {"config" : {
       },
       "PPO": {
         "NumLayers": 3,
-        "Gamma": 0.985,
-        "Lambda": 0.95,
-        "EpsilonClip": 0.2,
+        "Gamma": 0.99, #0.985,
+        "Lambda": 0.9, #0.95,
+        "EpsilonClip": 0.1, #0.2,
         "K_epochs": 3,
-        "Minibatch": 16384,
-        "CriticCoef": 1,
-        "EntropyCoef": 0.0003,
-        "KL_threshold": 0.01,
-        "Max_grad_norm": 100,
+        "Minibatch": 64, #16384,
+        "CriticCoef": 0.1, #1, #c_1
+        "EntropyCoef": 0.01, #0.0003, #c_2
+        "KL_threshold": 0.15, #0.01,
+        "Max_grad_norm": 0.5, #100,
         "Warmup_steps": 1000,
         "Act": "SiLU",
         "Optimiser": "Laprop",
@@ -351,10 +293,10 @@ drama_params = {"config" : {
           "Epsilon": 1e-20
         },
         "Actor": {
-          "HiddenUnits": 256
+          "HiddenUnits": 64, #256
         },
         "Critic": {
-          "HiddenUnits": 512 # Andrychowicz2020 wider critic network seems better  
+          "HiddenUnits": 64, #512 # Andrychowicz2020 wider critic network seems better  
         }
       }
     }
