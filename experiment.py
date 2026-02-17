@@ -17,7 +17,11 @@ import json
 import sys
 import torch
 
+#print("importing gym")
+#import gym
+
 import gymnasium as gym
+
 import highway_env
 highway_env.register_highway_envs()
 
