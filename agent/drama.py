@@ -240,7 +240,7 @@ class DramaAgent(AbstractAgent):
             terminated = False
             truncated = False
             
-            current_obs, _ = env.reset()
+            current_obs, _ = rec_env.reset()
             context_obs = deque(maxlen=self.config.JointTrainAgent.RealityContextLength)
             context_action = deque(maxlen=self.config.JointTrainAgent.RealityContextLength)
             
@@ -253,24 +253,24 @@ class DramaAgent(AbstractAgent):
                         # action = np.array([action], dtype=int)
                         # inference_params = InferenceParams(max_seqlen=1, max_batch_size=1)
                     else:
-                        context_latent = self.world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(world_model.device))
+                        context_latent = self.world_model.encode_obs(torch.cat(list(context_obs), dim=1).to(self.world_model.device))
                         model_context_action = np.stack(list(context_action))
-                        #model_context_action = torch.Tensor(model_context_action).to(world_model.device)
-                        # current_obs_tensor = rearrange(torch.Tensor(current_obs).to(world_model.device), "B H W C -> B 1 C H W")/255
+                        #model_context_action = torch.Tensor(model_context_action).to(self.world_model.device)
+                        # current_obs_tensor = rearrange(torch.Tensor(current_obs).to(self.world_model.device), "B H W C -> B 1 C H W")/255
                         
-                        if self.is_continuous:
-                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L A-> 1 L A")
+                        if self.continous_action:
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(self.world_model.device), "L A-> 1 L A")
                         else:
-                            model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
+                            model_context_action = rearrange(torch.Tensor(model_context_action).to(self.world_model.device), "L -> 1 L")
                             
                         #print(model_context_action.shape)
                         if self.world_model.model == 'Transformer':
                             prior_flattened_sample, last_dist_feat = self.world_model.calc_last_dist_feat(context_latent, model_context_action)
-                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                            # prior_flattened_sample, last_dist_feat = self.world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
                         elif self.world_model.model == 'Mamba' or self.world_model.model == 'Mamba2':
-                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent[:,-1:], model_context_action[:,-1:], inference_params)
+                            # prior_flattened_sample, last_dist_feat = self.world_model.calc_last_dist_feat(context_latent[:,-1:], model_context_action[:,-1:], inference_params)
                             prior_flattened_sample, last_dist_feat = self.world_model.calc_last_dist_feat(context_latent, model_context_action)
-                            # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
+                            # prior_flattened_sample, last_dist_feat = self.world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)
                         action = self.agent.sample_as_env_action(
                             torch.cat([prior_flattened_sample, last_dist_feat], dim=-1),
                             greedy=True

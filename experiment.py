@@ -16,8 +16,13 @@ import datetime as dt
 import json
 import sys
 import torch
+import wandb
+
+#print("importing gym")
+#import gym
 
 import gymnasium as gym
+
 import highway_env
 highway_env.register_highway_envs()
 
@@ -83,6 +88,10 @@ def main():
                         default="",
                         type=str)
     
+    parser.add_argument("-k", "--wandb-key", 
+                        help="Path to file containing API key for Weights and Biases.",
+                        type=str)
+    
     args, unknown = parser.parse_known_args()
     
     
@@ -121,7 +130,13 @@ def main():
     elif args.algorithm == "drama":
         hyperparameters = config.drama_params
         AgentClass = DramaAgent
-        
+
+    # Set WandB key if applicable
+    if args.wandb_key is not None:
+        with open(args.wandb_key) as f:
+            key = f.read()
+            wandb.login(key=key)
+            
            
     # Set observation type based on RL algorithm
     if args.algorithm in ["random", "ppo", "sac"]:

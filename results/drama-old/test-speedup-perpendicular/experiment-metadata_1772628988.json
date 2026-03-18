@@ -1,0 +1,354 @@
+{
+  "timestamp": "2026-03-04 12:56:28.290201",
+  "cmd": "python experiment.py -a drama -s perpendicular -p results/drama/test-speedup-perpendicular -n 1",
+  "description": "",
+  "agent_type": "drama",
+  "scenario": "perpendicular",
+  "output_path": "results/drama/test-speedup-perpendicular",
+  "n_runs": 1,
+  "random_baseline": "results/random_baseline/data",
+  "training_params": {
+    "scenario_timesteps": 500000,
+    "eval_freq": 10000,
+    "n_eval_episodes": 30,
+    "eval_scenarios": [
+      "perpendicular",
+      "diagonal-25",
+      "diagonal-50",
+      "parallel"
+    ],
+    "eval_seed": 1234,
+    "fisher_freq": 500000,
+    "fisher_steps": 1024,
+    "max_timesteps": 500000
+  },
+  "hyperparameters": {
+    "config": {
+      "BasicSettings": {
+        "ImageSize": 64,
+        "ImageChannel": 3,
+        "ReplayBufferOnGPU": true,
+        "Seed": 3710,
+        "Env_name": "HW/parking-v0",
+        "Use_amp": true,
+        "Use_cg": true,
+        "Compile": true,
+        "SavePath": "None"
+      },
+      "Evaluate": {
+        "EpisodeNum": 10,
+        "NumEnvs": 10,
+        "DuringTraining": true,
+        "EverySteps": 1000
+      },
+      "JointTrainAgent": {
+        "SampleMaxSteps": 105000,
+        "BufferMaxLength": 100000,
+        "WorldModelWarmUp": 1032,
+        "BehaviourWarmUp": 1032,
+        "NumEnvs": 1,
+        "BatchSize": 16,
+        "BatchLength": 128,
+        "ImagineBatchSize": 1024,
+        "ImagineContextLength": 8,
+        "ImagineBatchLength": 16,
+        "RealityContextLength": 16,
+        "TrainDynamicsEverySteps": 2,
+        "TrainDynamicsEpoch": 1,
+        "TrainAgentEverySteps": 1,
+        "FreezeWorldModelAfterSteps": 100000,
+        "FreezeBehaviourAfterSteps": 100000,
+        "SaveEverySteps": 2000,
+        "SaveModels": true,
+        "Tau": 10,
+        "ImaginationTau": 10,
+        "Alpha": 1,
+        "Beta": 1
+      },
+      "Models": {
+        "WorldModel": {
+          "dtype": "float32",
+          "Backbone": "Mamba2",
+          "InChannels": 3,
+          "Act": "SiLU",
+          "CategoricalDim": 32,
+          "ClassDim": 32,
+          "HiddenStateDim": 512,
+          "Optimiser": "Laprop",
+          "LatentDiscreteType": "naive",
+          "Max_grad_norm": 1000,
+          "Warmup_steps": 1000,
+          "Dropout": 0.1,
+          "Unimix_ratio": 0.01,
+          "Weight_decay": 0.0001,
+          "Adam": {
+            "LearningRate": 0.0001
+          },
+          "Laprop": {
+            "LearningRate": 4e-05,
+            "Epsilon": 1e-20
+          },
+          "Encoder": {
+            "Depth": 16,
+            "Mults": [
+              1,
+              2,
+              3,
+              4,
+              4
+            ],
+            "Norm": "rms",
+            "Kernel": 5,
+            "Padding": "same",
+            "InputSize": [
+              3,
+              64,
+              64
+            ]
+          },
+          "Decoder": {
+            "Depth": 16,
+            "Mults": [
+              1,
+              2,
+              3,
+              4,
+              4
+            ],
+            "Norm": "rms",
+            "Kernel": 5,
+            "Padding": "same",
+            "FirstStrideOne": true,
+            "InputSize": [
+              3,
+              64,
+              64
+            ],
+            "FinalLayerSigmoid": true
+          },
+          "Reward": {
+            "HiddenUnits": 256,
+            "LayerNum": 1
+          },
+          "Termination": {
+            "HiddenUnits": 256,
+            "LayerNum": 1
+          },
+          "Transformer": {
+            "FinalFeatureWidth": 4,
+            "NumLayers": 2,
+            "NumHeads": 8
+          },
+          "Mamba": {
+            "n_layer": 2,
+            "d_intermediate": 0,
+            "ssm_cfg": {
+              "d_state": 16
+            }
+          }
+        },
+        "Agent": {
+          "dtype": "float32",
+          "Policy": "PPO",
+          "Unimix_ratio": 0,
+          "AC": {
+            "NumLayers": 3,
+            "Gamma": 0.985,
+            "Lambda": 0.95,
+            "EntropyCoef": 0.0003,
+            "Max_grad_norm": 100,
+            "Warmup_steps": 1000,
+            "Act": "SiLU",
+            "Optimiser": "Laprop",
+            "Adam": {
+              "LearningRate": 3e-05,
+              "Epsilon": 1e-05
+            },
+            "Laprop": {
+              "LearningRate": 4e-05,
+              "Epsilon": 1e-20
+            },
+            "Actor": {
+              "HiddenUnits": 256
+            },
+            "Critic": {
+              "HiddenUnits": 512
+            }
+          },
+          "PPO": {
+            "NumLayers": 3,
+            "Gamma": 0.985,
+            "Lambda": 0.95,
+            "EpsilonClip": 0.2,
+            "K_epochs": 3,
+            "Minibatch": 16384,
+            "CriticCoef": 1,
+            "EntropyCoef": 0.0003,
+            "KL_threshold": 0.01,
+            "Max_grad_norm": 100,
+            "Warmup_steps": 1000,
+            "Act": "SiLU",
+            "Optimiser": "Laprop",
+            "Adam": {
+              "LearningRate": 3e-05,
+              "Epsilon": 1e-05
+            },
+            "Laprop": {
+              "LearningRate": 4e-05,
+              "Epsilon": 1e-20
+            },
+            "Actor": {
+              "HiddenUnits": 256
+            },
+            "Critic": {
+              "HiddenUnits": 512
+            }
+          }
+        }
+      },
+      "Wandb": {
+        "Init": {
+          "Mode": "online",
+          "Project": "cl-parking-drama"
+        }
+      },
+      "n": "standard"
+    }
+  },
+  "environment_config": {
+    "add_width": [
+      0,
+      0
+    ],
+    "fixed_goal": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        -2
+      ]
+    ],
+    "start_pos": [
+      [
+        -12,
+        0
+      ],
+      [
+        12,
+        3.141592653589793
+      ]
+    ],
+    "success_goal_reward": 0.12,
+    "collision_reward": -10,
+    "reward_p": 0.5,
+    "collision_reward_factor": 50,
+    "scenarios": {
+      "perpendicular": {
+        "parking_angles": [
+          0,
+          0
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-25": {
+        "parking_angles": [
+          -25,
+          25
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-50": {
+        "parking_angles": [
+          -50,
+          50
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel-adj": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": true
+      }
+    },
+    "change_scenario": [
+      [
+        [
+          "perpendicular"
+        ],
+        [
+          1
+        ]
+      ]
+    ],
+    "change_frequency": 500000,
+    "observation": {
+      "type": "RGBObservation",
+      "observation_shape": [
+        175,
+        175
+      ],
+      "stack_size": 0,
+      "center_ego": false,
+      "image_size": 64
+    }
+  }
+}
