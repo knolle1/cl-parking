@@ -31,7 +31,7 @@ from agent.sac import SACAgent
 from agent.random import RandomAgent
 from agent.ppo import PPO
 from agent.drama import DramaAgent
-from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix
+from agent.evaluation import plot_learning_curve, average_fisher_sensitivity, plot_AFS_heatmap, performance_matrix, average_fisher_minmaxscale
 
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 
@@ -44,7 +44,7 @@ def main():
     
     parser.add_argument("-a", "--algorithm", 
                         help="Specify the RL algorithm to use.", 
-                        choices=["random", "ppo", "sac", "drama"],
+                        choices=["random", "ppo", "sac", "drama", "ppo-ewc"],
                         required=True,
                         type=str)
     
@@ -122,6 +122,9 @@ def main():
         AgentClass = RandomAgent
     elif args.algorithm == "ppo":
         hyperparameters = config.ppo_params
+        AgentClass = PPO
+    elif args.algorithm == "ppo-ewc":
+        hyperparameters = config.ppo_ewc_params
         AgentClass = PPO
     elif args.algorithm == "sac":
         hyperparameters = config.sac_params
@@ -241,10 +244,12 @@ def main():
     
     # Average Fisher Sensitivity
     average_fisher_sensitivity(args.path + "/data")
+    average_fisher_minmaxscale(args.path + "/data")
     
-    # TODO: Matrix for forward and backward transfer metrics
+    # Matrix for forward and backward transfer metrics
     if args.scenario in ["sequential-inc", "sequential-dec"]:
-        performance_matrix(args.path + "/data", args.scenario, env_params["change_frequency"])
+        for metric in ["reward", "success"]:
+            performance_matrix(args.path + "/data", args.scenario, env_params["change_frequency"], performance_metric=metric)
     
     # Create plots
     # -------------------------------------------------------------------------
@@ -269,7 +274,7 @@ def main():
                         )
     
     # Create heatmaps for Average Fisher Sensitivity
-    plot_AFS_heatmap(args.path)
+    plot_AFS_heatmap(args.path, scale_all=True)
     
     
     

@@ -101,6 +101,29 @@ ppo_params = {"gamma" : 0.99,
               "layer_num" : 3
               }
 
+# PPO+EWC Hyperparameters
+ppo_ewc_params = {"gamma" : 0.99,
+              "lamb" : 0.9,
+              "eps_clip" : 0.1,
+              "K_epochs" : 20,
+              "num_cells" : 64,
+              "actor_lr" : 1e-4,
+              "critic_lr" : 3e-4,
+              "memory_size" : 2048,
+              "minibatch_size" : 64,
+              "c1" : .1,
+              "c2" : 0.01,
+              "kl_threshold" : 0.15,
+              "parameters_hardshare" : False,
+              "early_stop" : False,
+              "cal_total_loss" : True,
+              "max_grad_norm" : 0.5,
+              "layer_num" : 3,
+              "ewc_lambda" : 1, #0.5, 
+              "ewc_discount" : 0.1, #0.9,
+              "use_ewc" : True
+              }
+
 """
 # PPO Hyperparameters tuned parallel-adj
 ppo_params = {"gamma" : 0.99, 

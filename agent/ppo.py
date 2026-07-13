@@ -346,7 +346,8 @@ class PPO():
                  actor_lr, critic_lr, memory_size , minibatch_size,\
                  cal_total_loss, c1, c2, \
                  early_stop, kl_threshold, parameters_hardshare, \
-                 max_grad_norm
+                 max_grad_norm, \
+                 ewc_lambda=0, ewc_discount=0.9, use_ewc = False
                  ):
         """Init
 
@@ -366,6 +367,9 @@ class PPO():
             kl_threshold (float): approx kl divergence, use for early stop
             parameters_hardshare (bool): whether to share the first two layers of actor and critic
             device (_type_): tf device
+            ewc_lambda (float) : weight of EWC penalty
+            ewc_discount (float) : discount factor for updating online EWC
+            use_ewc (bool) : whether to apply EWC (regulariser will be updated at fisher_freq parameter from train())
 
         """
         seed_np_torch(seed)
@@ -433,6 +437,17 @@ class PPO():
         self.memory = PPOBuffer(observation_space.shape, action_space.shape, memory_size, gamma, lamb)
 
         self.device = device
+
+        # Init EWC variables
+        self.ewc_lambda = ewc_lambda
+        self.ewc_discount = ewc_discount
+        self.use_ewc = use_ewc
+        
+        if self.use_ewc is not None:
+            self.ewc_saved_params = {n: p.data.clone() for n, p in 
+                                     self.actor_critic.actor.named_parameters()}
+            self.ewc_importance = {n: torch.zeros_like(p).to(p.device) for n, p in 
+                                   self.actor_critic.actor.named_parameters()}
         
         # These two lines monitor the weights and gradients
         #wandb.watch(self.actor_critic.actor, log='all', log_freq=1000, idx=1)
@@ -595,6 +610,7 @@ class PPO():
         actor_loss_list = []
         critic_loss_list = []
         kl_approx_list = []
+        ewc_penalty_list = []
         
         # for _ in tnrange(self.K_epochs, desc=f"epochs", position=1, leave=False):
         for _ in range(self.K_epochs):
@@ -611,8 +627,15 @@ class PPO():
                 critic_loss_list.append(critic_loss.item())
                 kl_approx_list.append(kl_apx.item())
 
+                # Calculate EWC penalty
+                ewc_penalty = torch.tensor(0).float().to(self.device)
+                if self.use_ewc and self.ewc_lambda > 0:
+                    for n, p in self.actor_critic.actor.named_parameters():
+                        ewc_penalty += (self.ewc_importance[n] * (p - self.ewc_saved_params[n]).pow(2)).sum()
+                    ewc_penalty_list.append(ewc_penalty.item())
+
                 if self.cal_total_loss:
-                    total_loss = actor_loss + self.c1 * critic_loss - self.c2 * entropy_loss
+                    total_loss = actor_loss + self.c1 * critic_loss - self.c2 * entropy_loss + self.ewc_lambda * ewc_penalty
 
                 ### If this update is too big, early stop and try next minibatch
                 if self.early_stop and kl_apx > self.kl_threshold:
@@ -636,6 +659,8 @@ class PPO():
                     torch.nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)
                     self.actor_critic_opt.step()
 
+        #print("step", self.global_step, "EWC penalty", np.mean(ewc_penalty_list))
+            
         self.memory.reset()    
         # Logging, use the same metric as stable-baselines3 to compare performance
         #with torch.no_grad():
@@ -905,6 +930,18 @@ class PPO():
         # Save as JSON
         with open(path +  f"/fisher-diagonal_{run_id}.json", "w") as outfile:
             json.dump({k: v.tolist() for k, v in fisher.items()}, outfile)
+
+        # Update EWC regulariser
+        if self.use_ewc:
+            print("Updating EWC regulariser")
+            # Update EWC importance
+            with torch.no_grad():
+                for n, imp in self.ewc_importance.items():
+                    self.ewc_importance[n] = self.ewc_discount * imp + fisher[n]
+                    
+            # Update saved optimised parameters
+            self.ewc_saved_params = {n: p.data.clone() for n, p in 
+                                     self.actor_critic.actor.named_parameters()}
             
     def record_video(self, env, n_eval_episodes, log_path, run_id, 
                      seed=None, deterministic=False):
