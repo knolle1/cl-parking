@@ -153,22 +153,12 @@ class CustomParkingEnv(ParkingEnv):
 
     @profile
     def _info(self, obs, action) -> dict:
-        #info = super(CustomParkingEnv, self)._info(obs, action)
-        #if isinstance(self.observation_type, MultiAgentObservation):
-        #    success = tuple(
-        #        self._is_success(agent_obs["achieved_goal"], agent_obs["desired_goal"])
-        #        for agent_obs in obs
-        #    )
-        #else:
             
         obs = self.observation_type_parking.observe()
         achieved = obs[:len(self.observation_type_parking.features)]
         goal = obs[len(self.observation_type_parking.features):]
         success = self._is_success(achieved, goal)
             
-        #test_success = (self.compute_reward(achieved, goal, {})
-        #        > -self.config["success_goal_reward"]
-        #    ) and not self._is_crashed()  and self._is_goal_hit()
         info = {"is_success": success,
                 "is_crashed" : self._is_crashed(),
                 "achieved" : achieved,
@@ -199,7 +189,6 @@ class CustomParkingEnv(ParkingEnv):
                 
                 self.configure(self.config["scenarios"][self.current_scenario])
                 
-            #print(f"global_step: {self.global_step}, env_idx: {env_idx}, parking angles: {self.config['parking_angles']}")
         self._create_road()
         self._create_vehicles()
         self.episode_step = 0
@@ -236,14 +225,10 @@ class CustomParkingEnv(ParkingEnv):
                 delta_x = np.sin(alpha) * length # difference for end point of diagonal lanes
                 x_offset = (width+add_width) * (1 - np.cos(alpha)) / np.cos(alpha) / 2 # offset between spaces so they align
                 y_offset = 5
-                
-                #spots = int(32 / ((width+add_width) + x_offset))
-                #print("spots", spots)
             
                 for k in range(spots):
                     x = (k - spots // 2) * ((width+add_width) + x_offset) + ((width+add_width)) / 2
-                    #if alpha > 0:
-                    #    x -= delta_x/2
+
                     net.add_lane(
                         *nodes[0],
                         StraightLane(
@@ -260,16 +245,10 @@ class CustomParkingEnv(ParkingEnv):
             else:
                 x_offset = 0
                 y_offset = 5
-                
                 add_len = self.config["add_width"][row]
-                
-                #spots = int(80 / (length+add_len))
-                #print("spots", spots)
-
                 spots = 4
                 
                 for k in range(spots):
-                    #x = (k - spots // 2) * (length+add_len + x_offset) + (spots%2) * (length+add_len) / 2
                     x = - spots * (length+add_len) / 2 + k * (length+add_len)
                     net.add_lane(
                         *nodes[0], 
@@ -288,7 +267,7 @@ class CustomParkingEnv(ParkingEnv):
             record_history=self.config["show_trajectories"],
         )
         
-        #print(self.spot_idx)
+
 
     @profile
     def _create_vehicles(self) -> None:
@@ -310,20 +289,15 @@ class CustomParkingEnv(ParkingEnv):
             vehicle.color = VehicleGraphics.EGO_COLOR
             self.road.vehicles.append(vehicle)
             self.controlled_vehicles.append(vehicle)
-            #empty_spots.remove(vehicle.lane_index)
 
         # Goal
         for vehicle in self.controlled_vehicles:
             if self.config["fixed_goal"] == None:
                 lane_index = empty_spots[self.np_random.choice(np.arange(len(empty_spots)))] # Pick random goal
             elif type(self.config["fixed_goal"]) == list:
-                #top_row_idx = np.arange(len(empty_spots)/2)
-                #bottom_row_idx = np.arange(len(empty_spots)/2) + len(empty_spots)/2
-                #idx = (top_row_idx, bottom_row_idx)
                 goal_set = []
                 for row, spot in self.config["fixed_goal"]:
                     goal_set.append(self.spot_idx[row][spot])
-                #print(goal_set)
                 lane_index = empty_spots[self.np_random.choice(goal_set)] # Pick random goal from specified set
             else:
                 lane_index = empty_spots[self.config["fixed_goal"]]
@@ -343,7 +317,6 @@ class CustomParkingEnv(ParkingEnv):
             lane = self.road.network.get_lane(lane_index)
             obstacle = Obstacle(self.road, lane.position(lane.length / 2, 0), heading=lane.heading)
             obstacle.LENGTH, obstacle.WIDTH = (self.road.vehicles[0].LENGTH, self.road.vehicles[0].WIDTH)
-            #obstacle.diagonal = np.sqrt(obstacle.LENGTH**2 + obstacle.WIDTH**2)
             self.road.objects.append(obstacle)
             
             empty_spots.remove(lane_index)
@@ -381,27 +354,21 @@ class CustomParkingEnv(ParkingEnv):
         :param p: the Lp^p norm used in the reward. Use p<1 to have high kurtosis for rewards in [0, 1]
         :return: the corresponding reward
         """
-        #print(achieved_goal)
-        #print(desired_goal)
+
         if self.config["adjust_heading"]:
             idx_sin_h = self.observation_type_parking.features.index("sin_h") #self.config["observation"]["features"].index("sin_h")
             idx_cos_h = self.observation_type_parking.features.index("cos_h") #self.config["observation"]["features"].index("cos_h")
 
             # Rotate angles for achieved goal 180 degrees
             if achieved_goal[idx_cos_h] < 0 or achieved_goal[idx_sin_h] == -1:
-                #print(f"Rotating achieved goal. cos_h = {achieved_goal[idx_cos_h]}, sin_h = {achieved_goal[idx_sin_h]}")
                 achieved_goal[idx_cos_h] *= -1
                 achieved_goal[idx_sin_h] *= -1
-                #print(f"After rotate. cos_h = {achieved_goal[idx_cos_h]}, sin_h = {achieved_goal[idx_sin_h]}")
 
             # Rotate angles for desired goal 180 degrees
             if desired_goal[idx_cos_h] < 0 or desired_goal[idx_sin_h] == -1:
-                #print(f"Rotating desired goal. cos_h = {desired_goal[idx_cos_h]}, sin_h = {desired_goal[idx_sin_h]}")
                 desired_goal[idx_cos_h] *= -1
                 desired_goal[idx_sin_h] *= -1
-                #print(f"After rotate. cos_h = {desired_goal[idx_cos_h]}, sin_h = {desired_goal[idx_sin_h]}")
 
-                #a = 1/0
         
         return -np.power(
             np.dot(
@@ -415,17 +382,6 @@ class CustomParkingEnv(ParkingEnv):
     def _reward(self, action: np.ndarray) -> float:
         obs = self.observation_type_parking.observe()
         obs = obs if isinstance(obs, tuple) else (obs,)
-        #reward = sum(
-        #    self.compute_reward(
-        #        agent_obs[:len(self.observation_type_parking.features)], # Achieved goal
-        #        agent_obs[len(self.observation_type_parking.features):], # Desired goal
-        #        {}
-        #    )
-        #    for agent_obs in obs
-        #)
-        #reward += self.config["collision_reward"] * sum(
-        #    v.crashed for v in self.controlled_vehicles
-        #)
         
         reward = sum(
             (1 + self.config["collision_reward_factor"]*int(vehicle.crashed)) * self.compute_reward(
@@ -489,12 +445,3 @@ class CustomParkingEnv(ParkingEnv):
         """Task defined by array of scenario labels and corresponding probabilities"""
         return self.current_task
 
-
-#class ParkingEnvActionRepeat(ParkingEnv):
-#    def __init__(self):
-#        super().__init__({"policy_frequency": 1, "duration": 20})
-
-
-#class ParkingEnvParkedVehicles(ParkingEnv):
-#    def __init__(self):
-#        super().__init__({"vehicles_count": 10})

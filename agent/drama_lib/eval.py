@@ -178,7 +178,6 @@ def evaluate(config,
                         else:
                             model_context_action = rearrange(torch.Tensor(model_context_action).to(world_model.device), "L -> 1 L")
                             
-                        #print(model_context_action.shape)
                         if world_model.model == 'Transformer':
                             prior_flattened_sample, last_dist_feat = world_model.calc_last_dist_feat(context_latent, model_context_action)
                             # prior_flattened_sample, last_dist_feat = world_model.calc_last_post_feat(context_latent, model_context_action, current_obs_tensor)

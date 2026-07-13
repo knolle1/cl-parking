@@ -15,10 +15,8 @@ import torch.nn.functional as F
 import torch
 from torch.distributions import Categorical, Normal
 import gymnasium as gym
-#from tqdm.notebook import tnrange
 import numpy as np
 import scipy
-#import wandb
 from gymnasium.spaces import Box, Discrete
 import os
 import random
@@ -26,7 +24,6 @@ import random
 from gymnasium.wrappers.record_video import RecordVideo  # Older version
 #from gymnasium.wrappers.rendering import RecordVideo
 
-#from gymnasium.wrappers import NormalizeObservation
 import copy
 import json
 
@@ -530,47 +527,6 @@ class PPO():
         self.memory.GAE_cal(last_value)
 
         
-
-
-    # def evaluate_recording(self, env):
-    #     self.actor_critic.eval()
-        
-    #     env_name = env.spec.id
-
-    #     video_folder = os.path.join(wandb.run.dir, 'videos')
-
-    #     env = RecordVideo(env, video_folder, name_prefix=env_name)
-
-    #     obs, _ = env.reset()
-
-    #     done = False
-
-    #     action_shape = env.action_space.shape
-
-    #     while not done:
-    #         obs_tensor = torch.tensor(obs, \
-    #                                 dtype=torch.float32, device=self.device).unsqueeze(0)
-    #         with torch.no_grad():
-    #             action, _, _ = self.actor_critic.act(obs_tensor)
-
-    #         if self.continous_action:
-    #             action = action.cpu().numpy().reshape(action_shape)
-    #         else:
-    #             action = action.item()
-    #         next_obs, reward, terminated, truncated, _ = env.step(action)
-    #         done = terminated or truncated
-    #         obs = next_obs
-
-        
-    #     mp4_files = [file for file in os.listdir(video_folder) if file.endswith(".mp4")]
-
-    #     for mp4_file in mp4_files:
-    #         wandb.log({'Episode_recording': wandb.Video(os.path.join(video_folder, mp4_file))})
-
-    #     env.close()
-        
-
-
     def compute_loss(self, data):
         """compute the loss of state value, policy and entropy
 
@@ -612,7 +568,6 @@ class PPO():
         kl_approx_list = []
         ewc_penalty_list = []
         
-        # for _ in tnrange(self.K_epochs, desc=f"epochs", position=1, leave=False):
         for _ in range(self.K_epochs):
             
             # resample the minibatch every epochs
@@ -659,25 +614,8 @@ class PPO():
                     torch.nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)
                     self.actor_critic_opt.step()
 
-        #print("step", self.global_step, "EWC penalty", np.mean(ewc_penalty_list))
             
-        self.memory.reset()    
-        # Logging, use the same metric as stable-baselines3 to compare performance
-        #with torch.no_grad():
-        #    if self.continous_action:
-        #        mean_std = np.exp(self.actor_critic.actor.log_std.mean().item())
-        #        wandb.log({'mean_std': mean_std})
-        #
-        #wandb.log(
-        #    {
-        #        'actor_loss': np.mean(actor_loss_list),
-        #        'critic_loss' : np.mean(critic_loss_list),
-        #        'entropy_loss' : np.mean(entropy_loss_list),
-        #        'KL_approx' : np.mean(kl_approx_list)
-        #    }, step=self.global_step
-        #)
-        #if self.early_stop:
-        #    wandb.run.summary['early_stop_count'] = self._early_stop_count 
+        self.memory.reset() 
 
                 
     def train(self, env, max_timesteps, eval_freq, n_eval_episodes, 
@@ -760,12 +698,7 @@ class PPO():
             
         self.logger.close()
 
-        # save the model to the wandb run folder
-        # PATH = os.path.join(wandb.run.dir, "actor_critic.pt")
-        # torch.save(self.actor_critic.state_dict(), PATH)
 
-
-        #wandb.run.summary['total_episode'] = self.episode_count
         
     def evaluate(self):
         results = {}

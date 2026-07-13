@@ -147,7 +147,6 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
                         greedy=False
                     )[0]
 
-            #print(current_ob)
             context_obs.append(rearrange(torch.Tensor(current_ob).to(world_model.device), "H W C -> 1 1 C H W")/255)
             context_action.append(action)
         else:
@@ -157,7 +156,6 @@ def joint_train_world_model_agent(env, is_continuous, config, logdir,
         ob, reward, terminated, truncated, info = env.step(action)
         is_last = terminated or truncated
 
-        #print(ob)
         replay_buffer.append(current_ob, action, reward, terminated)
 
         sum_reward += reward

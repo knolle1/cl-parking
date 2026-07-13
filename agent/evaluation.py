@@ -227,17 +227,6 @@ def performance_matrix(data_path, train_scheme, task_interval, performance_metri
 # Functions for plotting
 # -----------------------------------------------------------------------------
 
-"""
-# Define colour map for consistency accross plots
-colours = {"ideal" : mcolors.TABLEAU_COLORS["tab:green"],
-           "random" : mcolors.TABLEAU_COLORS["tab:red"],
-           "sac" : mcolors.TABLEAU_COLORS["tab:blue"],
-           "ppo" : mcolors.TABLEAU_COLORS["tab:orange"],
-           "drama" : mcolors.TABLEAU_COLORS["tab:purple"],
-           "ppo-ewc" : mcolors.TABLEAU_COLORS["tab:brown"],
-           }
-"""
-
 # Format plot labels
 # Code from https://stackoverflow.com/questions/59969492/how-to-print-10k-20k-1m-in-the-xlabel-of-matplotlib-plot
 def format_func(value, tick_number=None):
@@ -415,7 +404,6 @@ def plot_learning_curve(plot_path, data_paths, max_steps=2_000_000, task_interva
         # Use same axis ranges across all plots
         for i in range(nrows):
             # Check if there is more than 1 subplot
-            # Check if there is more than 1 subplot
             if nrows > 1 and plot_envs is None:
                 ax_i = ax[i]
             elif nrows > 1 and plot_envs is not None:
@@ -480,7 +468,6 @@ def plot_AFS_heatmap(path, fisher_type="average-fisher-sensitivity", scale_all=F
                     data[layer] = np.array(data[layer])
                     vmax = max(vmax, np.max(data[layer]))
 
-        #print(f"Found vmax {vmax} in layer {layer} for step {step}")
         for layer in layer_names:
             if not scale_all:
                 vmax = 0
@@ -546,7 +533,6 @@ def plot_AFS_heatmap(path, fisher_type="average-fisher-sensitivity", scale_all=F
                 data_rows, data_cols = data[f"{layer}"].shape
 
                 # Plot heatmap
-                #im = ax.imshow(data[f"{layer}"], vmin=0, vmax=vmax,aspect="auto", cmap='magma')
                 im = ax.imshow(data[f"{layer}"], vmin=0, vmax=vmax,aspect="auto", cmap='magma', extent=(0,data_cols,data_rows,0))
 
                 # Calculate minor axis ticks
@@ -573,7 +559,6 @@ def plot_AFS_heatmap(path, fisher_type="average-fisher-sensitivity", scale_all=F
                 cbar.ax.set_ylabel("Average Fisher Sensitivity", rotation=90, va="bottom")
                 cbar.ax.yaxis.set_label_position('left')
 
-            #print(f"Final vmax {vmax} in layer {layer} for step {step}")
             fig.suptitle(f"Layer: {layer}\nStep: {step}")
             
             fig.tight_layout()

@@ -248,10 +248,6 @@ class MixerModel(nn.Module):
 
 
     def forward(self, samples, action, inference_params=None, **mixer_kwargs):
-        #print("mamba input samples shape:", samples.shape)
-        #print("mamba input action shape:", action.shape)
-        #print("mamba input samples dtype:", samples.dtype)
-        #print("mamba input action dtype:", action.dtype)
         
         if self.is_continuous:
             action = action.float()

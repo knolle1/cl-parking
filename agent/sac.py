@@ -123,21 +123,6 @@ class EvalCallback(BaseCallback):
             results[f"{label}_truncated_std"] = np.std(truncated_list)
         
         self.my_logger.append(self.n_calls, results)
-
-        """
-        # Debugging
-        # Get average gradient
-        avg = 0
-        total_params = 0
-        for n, p in self.model.critic.named_parameters():
-                if p.grad is not None:
-                    total_params += p.grad.data.numel()
-                    avg += p.grad.data.sum().item()
-        print("Gradient sum", avg)
-        print("Total params", total_params)
-        if total_params > 0:
-            print("Gradient average", avg / total_params)
-        """
         
         return results
         
@@ -461,8 +446,7 @@ class SACAgent(AbstractAgent):
         else:
             config = env.config
             env_name = env.unwrapped.spec.id
-        #env_name = env.get_attr("unwrapped")[0].spec.id
-        #config = env.get_attr("config")[0]
+            
         params = copy.copy(config)
         rec_env = gym.make(env_name, render_mode="rgb_array")
         rec_env.configure(params)
