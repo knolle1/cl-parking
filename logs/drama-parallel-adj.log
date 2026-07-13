@@ -1,0 +1,343 @@
+image size 64
+Using device: cuda:0
+Starting run 2 ...
+Using seed:  2
+World model total parameters: 7,153,411
+Dynamic model parameters: 3,735,456
+Encoder parameters: 232,272
+Decoder parameters: 1,281,811
+Discretisation layer parameters: 1,574,912
+Actor parameters: 526,338
+Critic parameters: 1,444,607
+Current env: [33mcustom-parking-v0[0m
+Evaluating step 0
+[32mSaving model at total steps 0[0m
+init_imagine_buffer: 1024x16@torch.float32
+[32mSaving model at total steps 2000[0m
+[32mSaving model at total steps 4000[0m
+[32mSaving model at total steps 6000[0m
+[32mSaving model at total steps 8000[0m
+Evaluating step 10000
+[32mSaving model at total steps 10000[0m
+[32mSaving model at total steps 12000[0m
+[32mSaving model at total steps 14000[0m
+[32mSaving model at total steps 16000[0m
+[32mSaving model at total steps 18000[0m
+Evaluating step 20000
+[32mSaving model at total steps 20000[0m
+[32mSaving model at total steps 22000[0m
+[32mSaving model at total steps 24000[0m
+[32mSaving model at total steps 26000[0m
+[32mSaving model at total steps 28000[0m
+Evaluating step 30000
+[32mSaving model at total steps 30000[0m
+[32mSaving model at total steps 32000[0m
+[32mSaving model at total steps 34000[0m
+[32mSaving model at total steps 36000[0m
+[32mSaving model at total steps 38000[0m
+Evaluating step 40000
+[32mSaving model at total steps 40000[0m
+[32mSaving model at total steps 42000[0m
+[32mSaving model at total steps 44000[0m
+[32mSaving model at total steps 46000[0m
+[32mSaving model at total steps 48000[0m
+Evaluating step 50000
+[32mSaving model at total steps 50000[0m
+[32mSaving model at total steps 52000[0m
+[32mSaving model at total steps 54000[0m
+[32mSaving model at total steps 56000[0m
+[32mSaving model at total steps 58000[0m
+Evaluating step 60000
+[32mSaving model at total steps 60000[0m
+[32mSaving model at total steps 62000[0m
+[32mSaving model at total steps 64000[0m
+[32mSaving model at total steps 66000[0m
+[32mSaving model at total steps 68000[0m
+Evaluating step 70000
+[32mSaving model at total steps 70000[0m
+[32mSaving model at total steps 72000[0m
+[32mSaving model at total steps 74000[0m
+[32mSaving model at total steps 76000[0m
+[32mSaving model at total steps 78000[0m
+Evaluating step 80000
+[32mSaving model at total steps 80000[0m
+[32mSaving model at total steps 82000[0m
+[32mSaving model at total steps 84000[0m
+[32mSaving model at total steps 86000[0m
+[32mSaving model at total steps 88000[0m
+Evaluating step 90000
+[32mSaving model at total steps 90000[0m
+[32mSaving model at total steps 92000[0m
+[32mSaving model at total steps 94000[0m
+[32mSaving model at total steps 96000[0m
+[32mSaving model at total steps 98000[0m
+Evaluating step 100000
+[32mSaving model at total steps 100000[0m
+[32mSaving model at total steps 102000[0m
+[32mSaving model at total steps 104000[0m
+[32mSaving model at total steps 106000[0m
+[32mSaving model at total steps 108000[0m
+Evaluating step 110000
+[32mSaving model at total steps 110000[0m
+[32mSaving model at total steps 112000[0m
+[32mSaving model at total steps 114000[0m
+[32mSaving model at total steps 116000[0m
+[32mSaving model at total steps 118000[0m
+Evaluating step 120000
+[32mSaving model at total steps 120000[0m
+[32mSaving model at total steps 122000[0m
+[32mSaving model at total steps 124000[0m
+[32mSaving model at total steps 126000[0m
+[32mSaving model at total steps 128000[0m
+Evaluating step 130000
+[32mSaving model at total steps 130000[0m
+[32mSaving model at total steps 132000[0m
+[32mSaving model at total steps 134000[0m
+[32mSaving model at total steps 136000[0m
+[32mSaving model at total steps 138000[0m
+Evaluating step 140000
+[32mSaving model at total steps 140000[0m
+[32mSaving model at total steps 142000[0m
+[32mSaving model at total steps 144000[0m
+[32mSaving model at total steps 146000[0m
+[32mSaving model at total steps 148000[0m
+Evaluating step 150000
+[32mSaving model at total steps 150000[0m
+[32mSaving model at total steps 152000[0m
+[32mSaving model at total steps 154000[0m
+[32mSaving model at total steps 156000[0m
+[32mSaving model at total steps 158000[0m
+Evaluating step 160000
+[32mSaving model at total steps 160000[0m
+[32mSaving model at total steps 162000[0m
+[32mSaving model at total steps 164000[0m
+[32mSaving model at total steps 166000[0m
+[32mSaving model at total steps 168000[0m
+Evaluating step 170000
+[32mSaving model at total steps 170000[0m
+[32mSaving model at total steps 172000[0m
+[32mSaving model at total steps 174000[0m
+[32mSaving model at total steps 176000[0m
+[32mSaving model at total steps 178000[0m
+Evaluating step 180000
+[32mSaving model at total steps 180000[0m
+[32mSaving model at total steps 182000[0m
+[32mSaving model at total steps 184000[0m
+[32mSaving model at total steps 186000[0m
+[32mSaving model at total steps 188000[0m
+Evaluating step 190000
+[32mSaving model at total steps 190000[0m
+[32mSaving model at total steps 192000[0m
+[32mSaving model at total steps 194000[0m
+[32mSaving model at total steps 196000[0m
+[32mSaving model at total steps 198000[0m
+Evaluating step 200000
+[32mSaving model at total steps 200000[0m
+[32mSaving model at total steps 202000[0m
+[32mSaving model at total steps 204000[0m
+[32mSaving model at total steps 206000[0m
+[32mSaving model at total steps 208000[0m
+Evaluating step 210000
+[32mSaving model at total steps 210000[0m
+[32mSaving model at total steps 212000[0m
+[32mSaving model at total steps 214000[0m
+[32mSaving model at total steps 216000[0m
+[32mSaving model at total steps 218000[0m
+Evaluating step 220000
+[32mSaving model at total steps 220000[0m
+[32mSaving model at total steps 222000[0m
+[32mSaving model at total steps 224000[0m
+[32mSaving model at total steps 226000[0m
+[32mSaving model at total steps 228000[0m
+Evaluating step 230000
+[32mSaving model at total steps 230000[0m
+[32mSaving model at total steps 232000[0m
+[32mSaving model at total steps 234000[0m
+[32mSaving model at total steps 236000[0m
+[32mSaving model at total steps 238000[0m
+Evaluating step 240000
+[32mSaving model at total steps 240000[0m
+[32mSaving model at total steps 242000[0m
+[32mSaving model at total steps 244000[0m
+[32mSaving model at total steps 246000[0m
+[32mSaving model at total steps 248000[0m
+Evaluating step 250000
+[32mSaving model at total steps 250000[0m
+[32mSaving model at total steps 252000[0m
+[32mSaving model at total steps 254000[0m
+[32mSaving model at total steps 256000[0m
+[32mSaving model at total steps 258000[0m
+Evaluating step 260000
+[32mSaving model at total steps 260000[0m
+[32mSaving model at total steps 262000[0m
+[32mSaving model at total steps 264000[0m
+[32mSaving model at total steps 266000[0m
+[32mSaving model at total steps 268000[0m
+Evaluating step 270000
+[32mSaving model at total steps 270000[0m
+[32mSaving model at total steps 272000[0m
+[32mSaving model at total steps 274000[0m
+[32mSaving model at total steps 276000[0m
+[32mSaving model at total steps 278000[0m
+Evaluating step 280000
+[32mSaving model at total steps 280000[0m
+[32mSaving model at total steps 282000[0m
+[32mSaving model at total steps 284000[0m
+[32mSaving model at total steps 286000[0m
+[32mSaving model at total steps 288000[0m
+Evaluating step 290000
+[32mSaving model at total steps 290000[0m
+[32mSaving model at total steps 292000[0m
+[32mSaving model at total steps 294000[0m
+[32mSaving model at total steps 296000[0m
+[32mSaving model at total steps 298000[0m
+Evaluating step 300000
+[32mSaving model at total steps 300000[0m
+[32mSaving model at total steps 302000[0m
+[32mSaving model at total steps 304000[0m
+[32mSaving model at total steps 306000[0m
+[32mSaving model at total steps 308000[0m
+Evaluating step 310000
+[32mSaving model at total steps 310000[0m
+[32mSaving model at total steps 312000[0m
+[32mSaving model at total steps 314000[0m
+[32mSaving model at total steps 316000[0m
+[32mSaving model at total steps 318000[0m
+Evaluating step 320000
+[32mSaving model at total steps 320000[0m
+[32mSaving model at total steps 322000[0m
+[32mSaving model at total steps 324000[0m
+[32mSaving model at total steps 326000[0m
+[32mSaving model at total steps 328000[0m
+Evaluating step 330000
+[32mSaving model at total steps 330000[0m
+[32mSaving model at total steps 332000[0m
+[32mSaving model at total steps 334000[0m
+[32mSaving model at total steps 336000[0m
+[32mSaving model at total steps 338000[0m
+Evaluating step 340000
+[32mSaving model at total steps 340000[0m
+[32mSaving model at total steps 342000[0m
+[32mSaving model at total steps 344000[0m
+[32mSaving model at total steps 346000[0m
+[32mSaving model at total steps 348000[0m
+Evaluating step 350000
+[32mSaving model at total steps 350000[0m
+[32mSaving model at total steps 352000[0m
+[32mSaving model at total steps 354000[0m
+[32mSaving model at total steps 356000[0m
+[32mSaving model at total steps 358000[0m
+Evaluating step 360000
+[32mSaving model at total steps 360000[0m
+[32mSaving model at total steps 362000[0m
+[32mSaving model at total steps 364000[0m
+[32mSaving model at total steps 366000[0m
+[32mSaving model at total steps 368000[0m
+Evaluating step 370000
+[32mSaving model at total steps 370000[0m
+[32mSaving model at total steps 372000[0m
+[32mSaving model at total steps 374000[0m
+[32mSaving model at total steps 376000[0m
+[32mSaving model at total steps 378000[0m
+Evaluating step 380000
+[32mSaving model at total steps 380000[0m
+[32mSaving model at total steps 382000[0m
+[32mSaving model at total steps 384000[0m
+[32mSaving model at total steps 386000[0m
+[32mSaving model at total steps 388000[0m
+Evaluating step 390000
+[32mSaving model at total steps 390000[0m
+[32mSaving model at total steps 392000[0m
+[32mSaving model at total steps 394000[0m
+[32mSaving model at total steps 396000[0m
+[32mSaving model at total steps 398000[0m
+Evaluating step 400000
+[32mSaving model at total steps 400000[0m
+[32mSaving model at total steps 402000[0m
+[32mSaving model at total steps 404000[0m
+[32mSaving model at total steps 406000[0m
+[32mSaving model at total steps 408000[0m
+Evaluating step 410000
+[32mSaving model at total steps 410000[0m
+[32mSaving model at total steps 412000[0m
+[32mSaving model at total steps 414000[0m
+[32mSaving model at total steps 416000[0m
+[32mSaving model at total steps 418000[0m
+Evaluating step 420000
+[32mSaving model at total steps 420000[0m
+[32mSaving model at total steps 422000[0m
+[32mSaving model at total steps 424000[0m
+[32mSaving model at total steps 426000[0m
+[32mSaving model at total steps 428000[0m
+Evaluating step 430000
+[32mSaving model at total steps 430000[0m
+[32mSaving model at total steps 432000[0m
+[32mSaving model at total steps 434000[0m
+[32mSaving model at total steps 436000[0m
+[32mSaving model at total steps 438000[0m
+Evaluating step 440000
+[32mSaving model at total steps 440000[0m
+[32mSaving model at total steps 442000[0m
+[32mSaving model at total steps 444000[0m
+[32mSaving model at total steps 446000[0m
+[32mSaving model at total steps 448000[0m
+Evaluating step 450000
+[32mSaving model at total steps 450000[0m
+[32mSaving model at total steps 452000[0m
+[32mSaving model at total steps 454000[0m
+[32mSaving model at total steps 456000[0m
+[32mSaving model at total steps 458000[0m
+Evaluating step 460000
+[32mSaving model at total steps 460000[0m
+[32mSaving model at total steps 462000[0m
+[32mSaving model at total steps 464000[0m
+[32mSaving model at total steps 466000[0m
+[32mSaving model at total steps 468000[0m
+Evaluating step 470000
+[32mSaving model at total steps 470000[0m
+[32mSaving model at total steps 472000[0m
+[32mSaving model at total steps 474000[0m
+[32mSaving model at total steps 476000[0m
+[32mSaving model at total steps 478000[0m
+Evaluating step 480000
+[32mSaving model at total steps 480000[0m
+[32mSaving model at total steps 482000[0m
+[32mSaving model at total steps 484000[0m
+[32mSaving model at total steps 486000[0m
+[32mSaving model at total steps 488000[0m
+Evaluating step 490000
+[32mSaving model at total steps 490000[0m
+[32mSaving model at total steps 492000[0m
+[32mSaving model at total steps 494000[0m
+[32mSaving model at total steps 496000[0m
+[32mSaving model at total steps 498000[0m
+Evaluating step 500000
+[32mSaving model at total steps 500000[0m
+[32mSaving model at total steps 502000[0m
+[32mSaving model at total steps 504000[0m
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel-adj/video/run-2-episode-4.mp4
+Creating output directory results/drama/parallel-adj/plots

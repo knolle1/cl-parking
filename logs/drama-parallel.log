@@ -1,0 +1,1243 @@
+image size 64
+Using device: cuda:0
+Starting run 2 ...
+Using seed:  2
+World model total parameters: 7,153,411
+Dynamic model parameters: 3,735,456
+Encoder parameters: 232,272
+Decoder parameters: 1,281,811
+Discretisation layer parameters: 1,574,912
+Actor parameters: 526,338
+Critic parameters: 1,444,607
+Current env: [33mcustom-parking-v0[0m
+Evaluating step 0
+[32mSaving model at total steps 0[0m
+init_imagine_buffer: 1024x16@torch.float32
+[32mSaving model at total steps 2000[0m
+[32mSaving model at total steps 4000[0m
+[32mSaving model at total steps 6000[0m
+[32mSaving model at total steps 8000[0m
+Evaluating step 10000
+[32mSaving model at total steps 10000[0m
+[32mSaving model at total steps 12000[0m
+[32mSaving model at total steps 14000[0m
+[32mSaving model at total steps 16000[0m
+[32mSaving model at total steps 18000[0m
+Evaluating step 20000
+[32mSaving model at total steps 20000[0m
+[32mSaving model at total steps 22000[0m
+[32mSaving model at total steps 24000[0m
+[32mSaving model at total steps 26000[0m
+[32mSaving model at total steps 28000[0m
+Evaluating step 30000
+[32mSaving model at total steps 30000[0m
+[32mSaving model at total steps 32000[0m
+[32mSaving model at total steps 34000[0m
+[32mSaving model at total steps 36000[0m
+[32mSaving model at total steps 38000[0m
+Evaluating step 40000
+[32mSaving model at total steps 40000[0m
+[32mSaving model at total steps 42000[0m
+[32mSaving model at total steps 44000[0m
+[32mSaving model at total steps 46000[0m
+[32mSaving model at total steps 48000[0m
+Evaluating step 50000
+[32mSaving model at total steps 50000[0m
+[32mSaving model at total steps 52000[0m
+[32mSaving model at total steps 54000[0m
+[32mSaving model at total steps 56000[0m
+[32mSaving model at total steps 58000[0m
+Evaluating step 60000
+[32mSaving model at total steps 60000[0m
+[32mSaving model at total steps 62000[0m
+[32mSaving model at total steps 64000[0m
+[32mSaving model at total steps 66000[0m
+[32mSaving model at total steps 68000[0m
+Evaluating step 70000
+[32mSaving model at total steps 70000[0m
+[32mSaving model at total steps 72000[0m
+[32mSaving model at total steps 74000[0m
+[32mSaving model at total steps 76000[0m
+[32mSaving model at total steps 78000[0m
+Evaluating step 80000
+[32mSaving model at total steps 80000[0m
+[32mSaving model at total steps 82000[0m
+[32mSaving model at total steps 84000[0m
+[32mSaving model at total steps 86000[0m
+[32mSaving model at total steps 88000[0m
+Evaluating step 90000
+[32mSaving model at total steps 90000[0m
+[32mSaving model at total steps 92000[0m
+[32mSaving model at total steps 94000[0m
+[32mSaving model at total steps 96000[0m
+[32mSaving model at total steps 98000[0m
+Evaluating step 100000
+[32mSaving model at total steps 100000[0m
+[32mSaving model at total steps 102000[0m
+[32mSaving model at total steps 104000[0m
+[32mSaving model at total steps 106000[0m
+[32mSaving model at total steps 108000[0m
+Evaluating step 110000
+[32mSaving model at total steps 110000[0m
+[32mSaving model at total steps 112000[0m
+[32mSaving model at total steps 114000[0m
+[32mSaving model at total steps 116000[0m
+[32mSaving model at total steps 118000[0m
+Evaluating step 120000
+[32mSaving model at total steps 120000[0m
+[32mSaving model at total steps 122000[0m
+[32mSaving model at total steps 124000[0m
+[32mSaving model at total steps 126000[0m
+[32mSaving model at total steps 128000[0m
+Evaluating step 130000
+[32mSaving model at total steps 130000[0m
+[32mSaving model at total steps 132000[0m
+[32mSaving model at total steps 134000[0m
+[32mSaving model at total steps 136000[0m
+[32mSaving model at total steps 138000[0m
+Evaluating step 140000
+[32mSaving model at total steps 140000[0m
+[32mSaving model at total steps 142000[0m
+[32mSaving model at total steps 144000[0m
+[32mSaving model at total steps 146000[0m
+[32mSaving model at total steps 148000[0m
+Evaluating step 150000
+[32mSaving model at total steps 150000[0m
+[32mSaving model at total steps 152000[0m
+[32mSaving model at total steps 154000[0m
+[32mSaving model at total steps 156000[0m
+[32mSaving model at total steps 158000[0m
+Evaluating step 160000
+[32mSaving model at total steps 160000[0m
+[32mSaving model at total steps 162000[0m
+[32mSaving model at total steps 164000[0m
+[32mSaving model at total steps 166000[0m
+[32mSaving model at total steps 168000[0m
+Evaluating step 170000
+[32mSaving model at total steps 170000[0m
+[32mSaving model at total steps 172000[0m
+[32mSaving model at total steps 174000[0m
+[32mSaving model at total steps 176000[0m
+[32mSaving model at total steps 178000[0m
+Evaluating step 180000
+[32mSaving model at total steps 180000[0m
+[32mSaving model at total steps 182000[0m
+[32mSaving model at total steps 184000[0m
+[32mSaving model at total steps 186000[0m
+[32mSaving model at total steps 188000[0m
+Evaluating step 190000
+[32mSaving model at total steps 190000[0m
+[32mSaving model at total steps 192000[0m
+[32mSaving model at total steps 194000[0m
+[32mSaving model at total steps 196000[0m
+[32mSaving model at total steps 198000[0m
+Evaluating step 200000
+[32mSaving model at total steps 200000[0m
+[32mSaving model at total steps 202000[0m
+[32mSaving model at total steps 204000[0m
+[32mSaving model at total steps 206000[0m
+[32mSaving model at total steps 208000[0m
+Evaluating step 210000
+[32mSaving model at total steps 210000[0m
+[32mSaving model at total steps 212000[0m
+[32mSaving model at total steps 214000[0m
+[32mSaving model at total steps 216000[0m
+[32mSaving model at total steps 218000[0m
+Evaluating step 220000
+[32mSaving model at total steps 220000[0m
+[32mSaving model at total steps 222000[0m
+[32mSaving model at total steps 224000[0m
+[32mSaving model at total steps 226000[0m
+[32mSaving model at total steps 228000[0m
+Evaluating step 230000
+[32mSaving model at total steps 230000[0m
+[32mSaving model at total steps 232000[0m
+[32mSaving model at total steps 234000[0m
+[32mSaving model at total steps 236000[0m
+[32mSaving model at total steps 238000[0m
+Evaluating step 240000
+[32mSaving model at total steps 240000[0m
+[32mSaving model at total steps 242000[0m
+[32mSaving model at total steps 244000[0m
+[32mSaving model at total steps 246000[0m
+[32mSaving model at total steps 248000[0m
+Evaluating step 250000
+[32mSaving model at total steps 250000[0m
+[32mSaving model at total steps 252000[0m
+[32mSaving model at total steps 254000[0m
+[32mSaving model at total steps 256000[0m
+[32mSaving model at total steps 258000[0m
+Evaluating step 260000
+[32mSaving model at total steps 260000[0m
+[32mSaving model at total steps 262000[0m
+[32mSaving model at total steps 264000[0m
+[32mSaving model at total steps 266000[0m
+[32mSaving model at total steps 268000[0m
+Evaluating step 270000
+[32mSaving model at total steps 270000[0m
+[32mSaving model at total steps 272000[0m
+[32mSaving model at total steps 274000[0m
+[32mSaving model at total steps 276000[0m
+[32mSaving model at total steps 278000[0m
+Evaluating step 280000
+[32mSaving model at total steps 280000[0m
+[32mSaving model at total steps 282000[0m
+[32mSaving model at total steps 284000[0m
+[32mSaving model at total steps 286000[0m
+[32mSaving model at total steps 288000[0m
+Evaluating step 290000
+[32mSaving model at total steps 290000[0m
+[32mSaving model at total steps 292000[0m
+[32mSaving model at total steps 294000[0m
+[32mSaving model at total steps 296000[0m
+[32mSaving model at total steps 298000[0m
+Evaluating step 300000
+[32mSaving model at total steps 300000[0m
+[32mSaving model at total steps 302000[0m
+[32mSaving model at total steps 304000[0m
+[32mSaving model at total steps 306000[0m
+[32mSaving model at total steps 308000[0m
+Evaluating step 310000
+[32mSaving model at total steps 310000[0m
+[32mSaving model at total steps 312000[0m
+[32mSaving model at total steps 314000[0m
+[32mSaving model at total steps 316000[0m
+[32mSaving model at total steps 318000[0m
+Evaluating step 320000
+[32mSaving model at total steps 320000[0m
+[32mSaving model at total steps 322000[0m
+[32mSaving model at total steps 324000[0m
+[32mSaving model at total steps 326000[0m
+[32mSaving model at total steps 328000[0m
+Evaluating step 330000
+[32mSaving model at total steps 330000[0m
+[32mSaving model at total steps 332000[0m
+[32mSaving model at total steps 334000[0m
+[32mSaving model at total steps 336000[0m
+[32mSaving model at total steps 338000[0m
+Evaluating step 340000
+[32mSaving model at total steps 340000[0m
+[32mSaving model at total steps 342000[0m
+[32mSaving model at total steps 344000[0m
+[32mSaving model at total steps 346000[0m
+[32mSaving model at total steps 348000[0m
+Evaluating step 350000
+[32mSaving model at total steps 350000[0m
+[32mSaving model at total steps 352000[0m
+[32mSaving model at total steps 354000[0m
+[32mSaving model at total steps 356000[0m
+[32mSaving model at total steps 358000[0m
+Evaluating step 360000
+[32mSaving model at total steps 360000[0m
+[32mSaving model at total steps 362000[0m
+[32mSaving model at total steps 364000[0m
+[32mSaving model at total steps 366000[0m
+[32mSaving model at total steps 368000[0m
+Evaluating step 370000
+[32mSaving model at total steps 370000[0m
+[32mSaving model at total steps 372000[0m
+[32mSaving model at total steps 374000[0m
+[32mSaving model at total steps 376000[0m
+[32mSaving model at total steps 378000[0m
+Evaluating step 380000
+[32mSaving model at total steps 380000[0m
+[32mSaving model at total steps 382000[0m
+[32mSaving model at total steps 384000[0m
+[32mSaving model at total steps 386000[0m
+[32mSaving model at total steps 388000[0m
+Evaluating step 390000
+[32mSaving model at total steps 390000[0m
+[32mSaving model at total steps 392000[0m
+[32mSaving model at total steps 394000[0m
+[32mSaving model at total steps 396000[0m
+[32mSaving model at total steps 398000[0m
+Evaluating step 400000
+[32mSaving model at total steps 400000[0m
+[32mSaving model at total steps 402000[0m
+[32mSaving model at total steps 404000[0m
+[32mSaving model at total steps 406000[0m
+[32mSaving model at total steps 408000[0m
+Evaluating step 410000
+[32mSaving model at total steps 410000[0m
+[32mSaving model at total steps 412000[0m
+[32mSaving model at total steps 414000[0m
+[32mSaving model at total steps 416000[0m
+[32mSaving model at total steps 418000[0m
+Evaluating step 420000
+[32mSaving model at total steps 420000[0m
+[32mSaving model at total steps 422000[0m
+[32mSaving model at total steps 424000[0m
+[32mSaving model at total steps 426000[0m
+[32mSaving model at total steps 428000[0m
+Evaluating step 430000
+[32mSaving model at total steps 430000[0m
+[32mSaving model at total steps 432000[0m
+[32mSaving model at total steps 434000[0m
+[32mSaving model at total steps 436000[0m
+[32mSaving model at total steps 438000[0m
+Evaluating step 440000
+[32mSaving model at total steps 440000[0m
+[32mSaving model at total steps 442000[0m
+[32mSaving model at total steps 444000[0m
+[32mSaving model at total steps 446000[0m
+[32mSaving model at total steps 448000[0m
+Evaluating step 450000
+[32mSaving model at total steps 450000[0m
+[32mSaving model at total steps 452000[0m
+[32mSaving model at total steps 454000[0m
+[32mSaving model at total steps 456000[0m
+[32mSaving model at total steps 458000[0m
+Evaluating step 460000
+[32mSaving model at total steps 460000[0m
+[32mSaving model at total steps 462000[0m
+[32mSaving model at total steps 464000[0m
+[32mSaving model at total steps 466000[0m
+[32mSaving model at total steps 468000[0m
+Evaluating step 470000
+[32mSaving model at total steps 470000[0m
+[32mSaving model at total steps 472000[0m
+[32mSaving model at total steps 474000[0m
+[32mSaving model at total steps 476000[0m
+[32mSaving model at total steps 478000[0m
+Evaluating step 480000
+[32mSaving model at total steps 480000[0m
+[32mSaving model at total steps 482000[0m
+[32mSaving model at total steps 484000[0m
+[32mSaving model at total steps 486000[0m
+[32mSaving model at total steps 488000[0m
+Evaluating step 490000
+[32mSaving model at total steps 490000[0m
+[32mSaving model at total steps 492000[0m
+[32mSaving model at total steps 494000[0m
+[32mSaving model at total steps 496000[0m
+[32mSaving model at total steps 498000[0m
+Evaluating step 500000
+[32mSaving model at total steps 500000[0m
+[32mSaving model at total steps 502000[0m
+[32mSaving model at total steps 504000[0m
+[32mSaving model at total steps 506000[0m
+[32mSaving model at total steps 508000[0m
+Evaluating step 510000
+[32mSaving model at total steps 510000[0m
+[32mSaving model at total steps 512000[0m
+[32mSaving model at total steps 514000[0m
+[32mSaving model at total steps 516000[0m
+[32mSaving model at total steps 518000[0m
+Evaluating step 520000
+[32mSaving model at total steps 520000[0m
+[32mSaving model at total steps 522000[0m
+[32mSaving model at total steps 524000[0m
+[32mSaving model at total steps 526000[0m
+[32mSaving model at total steps 528000[0m
+Evaluating step 530000
+[32mSaving model at total steps 530000[0m
+[32mSaving model at total steps 532000[0m
+[32mSaving model at total steps 534000[0m
+[32mSaving model at total steps 536000[0m
+[32mSaving model at total steps 538000[0m
+Evaluating step 540000
+[32mSaving model at total steps 540000[0m
+[32mSaving model at total steps 542000[0m
+[32mSaving model at total steps 544000[0m
+[32mSaving model at total steps 546000[0m
+[32mSaving model at total steps 548000[0m
+Evaluating step 550000
+[32mSaving model at total steps 550000[0m
+[32mSaving model at total steps 552000[0m
+[32mSaving model at total steps 554000[0m
+[32mSaving model at total steps 556000[0m
+[32mSaving model at total steps 558000[0m
+Evaluating step 560000
+[32mSaving model at total steps 560000[0m
+[32mSaving model at total steps 562000[0m
+[32mSaving model at total steps 564000[0m
+[32mSaving model at total steps 566000[0m
+[32mSaving model at total steps 568000[0m
+Evaluating step 570000
+[32mSaving model at total steps 570000[0m
+[32mSaving model at total steps 572000[0m
+[32mSaving model at total steps 574000[0m
+[32mSaving model at total steps 576000[0m
+[32mSaving model at total steps 578000[0m
+Evaluating step 580000
+[32mSaving model at total steps 580000[0m
+[32mSaving model at total steps 582000[0m
+[32mSaving model at total steps 584000[0m
+[32mSaving model at total steps 586000[0m
+[32mSaving model at total steps 588000[0m
+Evaluating step 590000
+[32mSaving model at total steps 590000[0m
+[32mSaving model at total steps 592000[0m
+[32mSaving model at total steps 594000[0m
+[32mSaving model at total steps 596000[0m
+[32mSaving model at total steps 598000[0m
+Evaluating step 600000
+[32mSaving model at total steps 600000[0m
+[32mSaving model at total steps 602000[0m
+[32mSaving model at total steps 604000[0m
+[32mSaving model at total steps 606000[0m
+[32mSaving model at total steps 608000[0m
+Evaluating step 610000
+[32mSaving model at total steps 610000[0m
+[32mSaving model at total steps 612000[0m
+[32mSaving model at total steps 614000[0m
+[32mSaving model at total steps 616000[0m
+[32mSaving model at total steps 618000[0m
+Evaluating step 620000
+[32mSaving model at total steps 620000[0m
+[32mSaving model at total steps 622000[0m
+[32mSaving model at total steps 624000[0m
+[32mSaving model at total steps 626000[0m
+[32mSaving model at total steps 628000[0m
+Evaluating step 630000
+[32mSaving model at total steps 630000[0m
+[32mSaving model at total steps 632000[0m
+[32mSaving model at total steps 634000[0m
+[32mSaving model at total steps 636000[0m
+[32mSaving model at total steps 638000[0m
+Evaluating step 640000
+[32mSaving model at total steps 640000[0m
+[32mSaving model at total steps 642000[0m
+[32mSaving model at total steps 644000[0m
+[32mSaving model at total steps 646000[0m
+[32mSaving model at total steps 648000[0m
+Evaluating step 650000
+[32mSaving model at total steps 650000[0m
+[32mSaving model at total steps 652000[0m
+[32mSaving model at total steps 654000[0m
+[32mSaving model at total steps 656000[0m
+[32mSaving model at total steps 658000[0m
+Evaluating step 660000
+[32mSaving model at total steps 660000[0m
+[32mSaving model at total steps 662000[0m
+[32mSaving model at total steps 664000[0m
+[32mSaving model at total steps 666000[0m
+[32mSaving model at total steps 668000[0m
+Evaluating step 670000
+[32mSaving model at total steps 670000[0m
+[32mSaving model at total steps 672000[0m
+[32mSaving model at total steps 674000[0m
+[32mSaving model at total steps 676000[0m
+[32mSaving model at total steps 678000[0m
+Evaluating step 680000
+[32mSaving model at total steps 680000[0m
+[32mSaving model at total steps 682000[0m
+[32mSaving model at total steps 684000[0m
+[32mSaving model at total steps 686000[0m
+[32mSaving model at total steps 688000[0m
+Evaluating step 690000
+[32mSaving model at total steps 690000[0m
+[32mSaving model at total steps 692000[0m
+[32mSaving model at total steps 694000[0m
+[32mSaving model at total steps 696000[0m
+[32mSaving model at total steps 698000[0m
+Evaluating step 700000
+[32mSaving model at total steps 700000[0m
+[32mSaving model at total steps 702000[0m
+[32mSaving model at total steps 704000[0m
+[32mSaving model at total steps 706000[0m
+[32mSaving model at total steps 708000[0m
+Evaluating step 710000
+[32mSaving model at total steps 710000[0m
+[32mSaving model at total steps 712000[0m
+[32mSaving model at total steps 714000[0m
+[32mSaving model at total steps 716000[0m
+[32mSaving model at total steps 718000[0m
+Evaluating step 720000
+[32mSaving model at total steps 720000[0m
+[32mSaving model at total steps 722000[0m
+[32mSaving model at total steps 724000[0m
+[32mSaving model at total steps 726000[0m
+[32mSaving model at total steps 728000[0m
+Evaluating step 730000
+[32mSaving model at total steps 730000[0m
+[32mSaving model at total steps 732000[0m
+[32mSaving model at total steps 734000[0m
+[32mSaving model at total steps 736000[0m
+[32mSaving model at total steps 738000[0m
+Evaluating step 740000
+[32mSaving model at total steps 740000[0m
+[32mSaving model at total steps 742000[0m
+[32mSaving model at total steps 744000[0m
+[32mSaving model at total steps 746000[0m
+[32mSaving model at total steps 748000[0m
+Evaluating step 750000
+[32mSaving model at total steps 750000[0m
+[32mSaving model at total steps 752000[0m
+[32mSaving model at total steps 754000[0m
+[32mSaving model at total steps 756000[0m
+[32mSaving model at total steps 758000[0m
+Evaluating step 760000
+[32mSaving model at total steps 760000[0m
+[32mSaving model at total steps 762000[0m
+[32mSaving model at total steps 764000[0m
+[32mSaving model at total steps 766000[0m
+[32mSaving model at total steps 768000[0m
+Evaluating step 770000
+[32mSaving model at total steps 770000[0m
+[32mSaving model at total steps 772000[0m
+[32mSaving model at total steps 774000[0m
+[32mSaving model at total steps 776000[0m
+[32mSaving model at total steps 778000[0m
+Evaluating step 780000
+[32mSaving model at total steps 780000[0m
+[32mSaving model at total steps 782000[0m
+[32mSaving model at total steps 784000[0m
+[32mSaving model at total steps 786000[0m
+[32mSaving model at total steps 788000[0m
+Evaluating step 790000
+[32mSaving model at total steps 790000[0m
+[32mSaving model at total steps 792000[0m
+[32mSaving model at total steps 794000[0m
+[32mSaving model at total steps 796000[0m
+[32mSaving model at total steps 798000[0m
+Evaluating step 800000
+[32mSaving model at total steps 800000[0m
+[32mSaving model at total steps 802000[0m
+[32mSaving model at total steps 804000[0m
+[32mSaving model at total steps 806000[0m
+[32mSaving model at total steps 808000[0m
+Evaluating step 810000
+[32mSaving model at total steps 810000[0m
+[32mSaving model at total steps 812000[0m
+[32mSaving model at total steps 814000[0m
+[32mSaving model at total steps 816000[0m
+[32mSaving model at total steps 818000[0m
+Evaluating step 820000
+[32mSaving model at total steps 820000[0m
+[32mSaving model at total steps 822000[0m
+[32mSaving model at total steps 824000[0m
+[32mSaving model at total steps 826000[0m
+[32mSaving model at total steps 828000[0m
+Evaluating step 830000
+[32mSaving model at total steps 830000[0m
+[32mSaving model at total steps 832000[0m
+[32mSaving model at total steps 834000[0m
+[32mSaving model at total steps 836000[0m
+[32mSaving model at total steps 838000[0m
+Evaluating step 840000
+[32mSaving model at total steps 840000[0m
+[32mSaving model at total steps 842000[0m
+[32mSaving model at total steps 844000[0m
+[32mSaving model at total steps 846000[0m
+[32mSaving model at total steps 848000[0m
+Evaluating step 850000
+[32mSaving model at total steps 850000[0m
+[32mSaving model at total steps 852000[0m
+[32mSaving model at total steps 854000[0m
+[32mSaving model at total steps 856000[0m
+[32mSaving model at total steps 858000[0m
+Evaluating step 860000
+[32mSaving model at total steps 860000[0m
+[32mSaving model at total steps 862000[0m
+[32mSaving model at total steps 864000[0m
+[32mSaving model at total steps 866000[0m
+[32mSaving model at total steps 868000[0m
+Evaluating step 870000
+[32mSaving model at total steps 870000[0m
+[32mSaving model at total steps 872000[0m
+[32mSaving model at total steps 874000[0m
+[32mSaving model at total steps 876000[0m
+[32mSaving model at total steps 878000[0m
+Evaluating step 880000
+[32mSaving model at total steps 880000[0m
+[32mSaving model at total steps 882000[0m
+[32mSaving model at total steps 884000[0m
+[32mSaving model at total steps 886000[0m
+[32mSaving model at total steps 888000[0m
+Evaluating step 890000
+[32mSaving model at total steps 890000[0m
+[32mSaving model at total steps 892000[0m
+[32mSaving model at total steps 894000[0m
+[32mSaving model at total steps 896000[0m
+[32mSaving model at total steps 898000[0m
+Evaluating step 900000
+[32mSaving model at total steps 900000[0m
+[32mSaving model at total steps 902000[0m
+[32mSaving model at total steps 904000[0m
+[32mSaving model at total steps 906000[0m
+[32mSaving model at total steps 908000[0m
+Evaluating step 910000
+[32mSaving model at total steps 910000[0m
+[32mSaving model at total steps 912000[0m
+[32mSaving model at total steps 914000[0m
+[32mSaving model at total steps 916000[0m
+[32mSaving model at total steps 918000[0m
+Evaluating step 920000
+[32mSaving model at total steps 920000[0m
+[32mSaving model at total steps 922000[0m
+[32mSaving model at total steps 924000[0m
+[32mSaving model at total steps 926000[0m
+[32mSaving model at total steps 928000[0m
+Evaluating step 930000
+[32mSaving model at total steps 930000[0m
+[32mSaving model at total steps 932000[0m
+[32mSaving model at total steps 934000[0m
+[32mSaving model at total steps 936000[0m
+[32mSaving model at total steps 938000[0m
+Evaluating step 940000
+[32mSaving model at total steps 940000[0m
+[32mSaving model at total steps 942000[0m
+[32mSaving model at total steps 944000[0m
+[32mSaving model at total steps 946000[0m
+[32mSaving model at total steps 948000[0m
+Evaluating step 950000
+[32mSaving model at total steps 950000[0m
+[32mSaving model at total steps 952000[0m
+[32mSaving model at total steps 954000[0m
+[32mSaving model at total steps 956000[0m
+[32mSaving model at total steps 958000[0m
+Evaluating step 960000
+[32mSaving model at total steps 960000[0m
+[32mSaving model at total steps 962000[0m
+[32mSaving model at total steps 964000[0m
+[32mSaving model at total steps 966000[0m
+[32mSaving model at total steps 968000[0m
+Evaluating step 970000
+[32mSaving model at total steps 970000[0m
+[32mSaving model at total steps 972000[0m
+[32mSaving model at total steps 974000[0m
+[32mSaving model at total steps 976000[0m
+[32mSaving model at total steps 978000[0m
+Evaluating step 980000
+[32mSaving model at total steps 980000[0m
+[32mSaving model at total steps 982000[0m
+[32mSaving model at total steps 984000[0m
+[32mSaving model at total steps 986000[0m
+[32mSaving model at total steps 988000[0m
+Evaluating step 990000
+[32mSaving model at total steps 990000[0m
+[32mSaving model at total steps 992000[0m
+[32mSaving model at total steps 994000[0m
+[32mSaving model at total steps 996000[0m
+[32mSaving model at total steps 998000[0m
+Evaluating step 1000000
+[32mSaving model at total steps 1000000[0m
+[32mSaving model at total steps 1002000[0m
+[32mSaving model at total steps 1004000[0m
+[32mSaving model at total steps 1006000[0m
+[32mSaving model at total steps 1008000[0m
+Evaluating step 1010000
+[32mSaving model at total steps 1010000[0m
+[32mSaving model at total steps 1012000[0m
+[32mSaving model at total steps 1014000[0m
+[32mSaving model at total steps 1016000[0m
+[32mSaving model at total steps 1018000[0m
+Evaluating step 1020000
+[32mSaving model at total steps 1020000[0m
+[32mSaving model at total steps 1022000[0m
+[32mSaving model at total steps 1024000[0m
+[32mSaving model at total steps 1026000[0m
+[32mSaving model at total steps 1028000[0m
+Evaluating step 1030000
+[32mSaving model at total steps 1030000[0m
+[32mSaving model at total steps 1032000[0m
+[32mSaving model at total steps 1034000[0m
+[32mSaving model at total steps 1036000[0m
+[32mSaving model at total steps 1038000[0m
+Evaluating step 1040000
+[32mSaving model at total steps 1040000[0m
+[32mSaving model at total steps 1042000[0m
+[32mSaving model at total steps 1044000[0m
+[32mSaving model at total steps 1046000[0m
+[32mSaving model at total steps 1048000[0m
+Evaluating step 1050000
+[32mSaving model at total steps 1050000[0m
+[32mSaving model at total steps 1052000[0m
+[32mSaving model at total steps 1054000[0m
+[32mSaving model at total steps 1056000[0m
+[32mSaving model at total steps 1058000[0m
+Evaluating step 1060000
+[32mSaving model at total steps 1060000[0m
+[32mSaving model at total steps 1062000[0m
+[32mSaving model at total steps 1064000[0m
+[32mSaving model at total steps 1066000[0m
+[32mSaving model at total steps 1068000[0m
+Evaluating step 1070000
+[32mSaving model at total steps 1070000[0m
+[32mSaving model at total steps 1072000[0m
+[32mSaving model at total steps 1074000[0m
+[32mSaving model at total steps 1076000[0m
+[32mSaving model at total steps 1078000[0m
+Evaluating step 1080000
+[32mSaving model at total steps 1080000[0m
+[32mSaving model at total steps 1082000[0m
+[32mSaving model at total steps 1084000[0m
+[32mSaving model at total steps 1086000[0m
+[32mSaving model at total steps 1088000[0m
+Evaluating step 1090000
+[32mSaving model at total steps 1090000[0m
+[32mSaving model at total steps 1092000[0m
+[32mSaving model at total steps 1094000[0m
+[32mSaving model at total steps 1096000[0m
+[32mSaving model at total steps 1098000[0m
+Evaluating step 1100000
+[32mSaving model at total steps 1100000[0m
+[32mSaving model at total steps 1102000[0m
+[32mSaving model at total steps 1104000[0m
+[32mSaving model at total steps 1106000[0m
+[32mSaving model at total steps 1108000[0m
+Evaluating step 1110000
+[32mSaving model at total steps 1110000[0m
+[32mSaving model at total steps 1112000[0m
+[32mSaving model at total steps 1114000[0m
+[32mSaving model at total steps 1116000[0m
+[32mSaving model at total steps 1118000[0m
+Evaluating step 1120000
+[32mSaving model at total steps 1120000[0m
+[32mSaving model at total steps 1122000[0m
+[32mSaving model at total steps 1124000[0m
+[32mSaving model at total steps 1126000[0m
+[32mSaving model at total steps 1128000[0m
+Evaluating step 1130000
+[32mSaving model at total steps 1130000[0m
+[32mSaving model at total steps 1132000[0m
+[32mSaving model at total steps 1134000[0m
+[32mSaving model at total steps 1136000[0m
+[32mSaving model at total steps 1138000[0m
+Evaluating step 1140000
+[32mSaving model at total steps 1140000[0m
+[32mSaving model at total steps 1142000[0m
+[32mSaving model at total steps 1144000[0m
+[32mSaving model at total steps 1146000[0m
+[32mSaving model at total steps 1148000[0m
+Evaluating step 1150000
+[32mSaving model at total steps 1150000[0m
+[32mSaving model at total steps 1152000[0m
+[32mSaving model at total steps 1154000[0m
+[32mSaving model at total steps 1156000[0m
+[32mSaving model at total steps 1158000[0m
+Evaluating step 1160000
+[32mSaving model at total steps 1160000[0m
+[32mSaving model at total steps 1162000[0m
+[32mSaving model at total steps 1164000[0m
+[32mSaving model at total steps 1166000[0m
+[32mSaving model at total steps 1168000[0m
+Evaluating step 1170000
+[32mSaving model at total steps 1170000[0m
+[32mSaving model at total steps 1172000[0m
+[32mSaving model at total steps 1174000[0m
+[32mSaving model at total steps 1176000[0m
+[32mSaving model at total steps 1178000[0m
+Evaluating step 1180000
+[32mSaving model at total steps 1180000[0m
+[32mSaving model at total steps 1182000[0m
+[32mSaving model at total steps 1184000[0m
+[32mSaving model at total steps 1186000[0m
+[32mSaving model at total steps 1188000[0m
+Evaluating step 1190000
+[32mSaving model at total steps 1190000[0m
+[32mSaving model at total steps 1192000[0m
+[32mSaving model at total steps 1194000[0m
+[32mSaving model at total steps 1196000[0m
+[32mSaving model at total steps 1198000[0m
+Evaluating step 1200000
+[32mSaving model at total steps 1200000[0m
+[32mSaving model at total steps 1202000[0m
+[32mSaving model at total steps 1204000[0m
+[32mSaving model at total steps 1206000[0m
+[32mSaving model at total steps 1208000[0m
+Evaluating step 1210000
+[32mSaving model at total steps 1210000[0m
+[32mSaving model at total steps 1212000[0m
+[32mSaving model at total steps 1214000[0m
+[32mSaving model at total steps 1216000[0m
+[32mSaving model at total steps 1218000[0m
+Evaluating step 1220000
+[32mSaving model at total steps 1220000[0m
+[32mSaving model at total steps 1222000[0m
+[32mSaving model at total steps 1224000[0m
+[32mSaving model at total steps 1226000[0m
+[32mSaving model at total steps 1228000[0m
+Evaluating step 1230000
+[32mSaving model at total steps 1230000[0m
+[32mSaving model at total steps 1232000[0m
+[32mSaving model at total steps 1234000[0m
+[32mSaving model at total steps 1236000[0m
+[32mSaving model at total steps 1238000[0m
+Evaluating step 1240000
+[32mSaving model at total steps 1240000[0m
+[32mSaving model at total steps 1242000[0m
+[32mSaving model at total steps 1244000[0m
+[32mSaving model at total steps 1246000[0m
+[32mSaving model at total steps 1248000[0m
+Evaluating step 1250000
+[32mSaving model at total steps 1250000[0m
+[32mSaving model at total steps 1252000[0m
+[32mSaving model at total steps 1254000[0m
+[32mSaving model at total steps 1256000[0m
+[32mSaving model at total steps 1258000[0m
+Evaluating step 1260000
+[32mSaving model at total steps 1260000[0m
+[32mSaving model at total steps 1262000[0m
+[32mSaving model at total steps 1264000[0m
+[32mSaving model at total steps 1266000[0m
+[32mSaving model at total steps 1268000[0m
+Evaluating step 1270000
+[32mSaving model at total steps 1270000[0m
+[32mSaving model at total steps 1272000[0m
+[32mSaving model at total steps 1274000[0m
+[32mSaving model at total steps 1276000[0m
+[32mSaving model at total steps 1278000[0m
+Evaluating step 1280000
+[32mSaving model at total steps 1280000[0m
+[32mSaving model at total steps 1282000[0m
+[32mSaving model at total steps 1284000[0m
+[32mSaving model at total steps 1286000[0m
+[32mSaving model at total steps 1288000[0m
+Evaluating step 1290000
+[32mSaving model at total steps 1290000[0m
+[32mSaving model at total steps 1292000[0m
+[32mSaving model at total steps 1294000[0m
+[32mSaving model at total steps 1296000[0m
+[32mSaving model at total steps 1298000[0m
+Evaluating step 1300000
+[32mSaving model at total steps 1300000[0m
+[32mSaving model at total steps 1302000[0m
+[32mSaving model at total steps 1304000[0m
+[32mSaving model at total steps 1306000[0m
+[32mSaving model at total steps 1308000[0m
+Evaluating step 1310000
+[32mSaving model at total steps 1310000[0m
+[32mSaving model at total steps 1312000[0m
+[32mSaving model at total steps 1314000[0m
+[32mSaving model at total steps 1316000[0m
+[32mSaving model at total steps 1318000[0m
+Evaluating step 1320000
+[32mSaving model at total steps 1320000[0m
+[32mSaving model at total steps 1322000[0m
+[32mSaving model at total steps 1324000[0m
+[32mSaving model at total steps 1326000[0m
+[32mSaving model at total steps 1328000[0m
+Evaluating step 1330000
+[32mSaving model at total steps 1330000[0m
+[32mSaving model at total steps 1332000[0m
+[32mSaving model at total steps 1334000[0m
+[32mSaving model at total steps 1336000[0m
+[32mSaving model at total steps 1338000[0m
+Evaluating step 1340000
+[32mSaving model at total steps 1340000[0m
+[32mSaving model at total steps 1342000[0m
+[32mSaving model at total steps 1344000[0m
+[32mSaving model at total steps 1346000[0m
+[32mSaving model at total steps 1348000[0m
+Evaluating step 1350000
+[32mSaving model at total steps 1350000[0m
+[32mSaving model at total steps 1352000[0m
+[32mSaving model at total steps 1354000[0m
+[32mSaving model at total steps 1356000[0m
+[32mSaving model at total steps 1358000[0m
+Evaluating step 1360000
+[32mSaving model at total steps 1360000[0m
+[32mSaving model at total steps 1362000[0m
+[32mSaving model at total steps 1364000[0m
+[32mSaving model at total steps 1366000[0m
+[32mSaving model at total steps 1368000[0m
+Evaluating step 1370000
+[32mSaving model at total steps 1370000[0m
+[32mSaving model at total steps 1372000[0m
+[32mSaving model at total steps 1374000[0m
+[32mSaving model at total steps 1376000[0m
+[32mSaving model at total steps 1378000[0m
+Evaluating step 1380000
+[32mSaving model at total steps 1380000[0m
+[32mSaving model at total steps 1382000[0m
+[32mSaving model at total steps 1384000[0m
+[32mSaving model at total steps 1386000[0m
+[32mSaving model at total steps 1388000[0m
+Evaluating step 1390000
+[32mSaving model at total steps 1390000[0m
+[32mSaving model at total steps 1392000[0m
+[32mSaving model at total steps 1394000[0m
+[32mSaving model at total steps 1396000[0m
+[32mSaving model at total steps 1398000[0m
+Evaluating step 1400000
+[32mSaving model at total steps 1400000[0m
+[32mSaving model at total steps 1402000[0m
+[32mSaving model at total steps 1404000[0m
+[32mSaving model at total steps 1406000[0m
+[32mSaving model at total steps 1408000[0m
+Evaluating step 1410000
+[32mSaving model at total steps 1410000[0m
+[32mSaving model at total steps 1412000[0m
+[32mSaving model at total steps 1414000[0m
+[32mSaving model at total steps 1416000[0m
+[32mSaving model at total steps 1418000[0m
+Evaluating step 1420000
+[32mSaving model at total steps 1420000[0m
+[32mSaving model at total steps 1422000[0m
+[32mSaving model at total steps 1424000[0m
+[32mSaving model at total steps 1426000[0m
+[32mSaving model at total steps 1428000[0m
+Evaluating step 1430000
+[32mSaving model at total steps 1430000[0m
+[32mSaving model at total steps 1432000[0m
+[32mSaving model at total steps 1434000[0m
+[32mSaving model at total steps 1436000[0m
+[32mSaving model at total steps 1438000[0m
+Evaluating step 1440000
+[32mSaving model at total steps 1440000[0m
+[32mSaving model at total steps 1442000[0m
+[32mSaving model at total steps 1444000[0m
+[32mSaving model at total steps 1446000[0m
+[32mSaving model at total steps 1448000[0m
+Evaluating step 1450000
+[32mSaving model at total steps 1450000[0m
+[32mSaving model at total steps 1452000[0m
+[32mSaving model at total steps 1454000[0m
+[32mSaving model at total steps 1456000[0m
+[32mSaving model at total steps 1458000[0m
+Evaluating step 1460000
+[32mSaving model at total steps 1460000[0m
+[32mSaving model at total steps 1462000[0m
+[32mSaving model at total steps 1464000[0m
+[32mSaving model at total steps 1466000[0m
+[32mSaving model at total steps 1468000[0m
+Evaluating step 1470000
+[32mSaving model at total steps 1470000[0m
+[32mSaving model at total steps 1472000[0m
+[32mSaving model at total steps 1474000[0m
+[32mSaving model at total steps 1476000[0m
+[32mSaving model at total steps 1478000[0m
+Evaluating step 1480000
+[32mSaving model at total steps 1480000[0m
+[32mSaving model at total steps 1482000[0m
+[32mSaving model at total steps 1484000[0m
+[32mSaving model at total steps 1486000[0m
+[32mSaving model at total steps 1488000[0m
+Evaluating step 1490000
+[32mSaving model at total steps 1490000[0m
+[32mSaving model at total steps 1492000[0m
+[32mSaving model at total steps 1494000[0m
+[32mSaving model at total steps 1496000[0m
+[32mSaving model at total steps 1498000[0m
+Evaluating step 1500000
+[32mSaving model at total steps 1500000[0m
+[32mSaving model at total steps 1502000[0m
+[32mSaving model at total steps 1504000[0m
+[32mSaving model at total steps 1506000[0m
+[32mSaving model at total steps 1508000[0m
+Evaluating step 1510000
+[32mSaving model at total steps 1510000[0m
+[32mSaving model at total steps 1512000[0m
+[32mSaving model at total steps 1514000[0m
+[32mSaving model at total steps 1516000[0m
+[32mSaving model at total steps 1518000[0m
+Evaluating step 1520000
+[32mSaving model at total steps 1520000[0m
+[32mSaving model at total steps 1522000[0m
+[32mSaving model at total steps 1524000[0m
+[32mSaving model at total steps 1526000[0m
+[32mSaving model at total steps 1528000[0m
+Evaluating step 1530000
+[32mSaving model at total steps 1530000[0m
+[32mSaving model at total steps 1532000[0m
+[32mSaving model at total steps 1534000[0m
+[32mSaving model at total steps 1536000[0m
+[32mSaving model at total steps 1538000[0m
+Evaluating step 1540000
+[32mSaving model at total steps 1540000[0m
+[32mSaving model at total steps 1542000[0m
+[32mSaving model at total steps 1544000[0m
+[32mSaving model at total steps 1546000[0m
+[32mSaving model at total steps 1548000[0m
+Evaluating step 1550000
+[32mSaving model at total steps 1550000[0m
+[32mSaving model at total steps 1552000[0m
+[32mSaving model at total steps 1554000[0m
+[32mSaving model at total steps 1556000[0m
+[32mSaving model at total steps 1558000[0m
+Evaluating step 1560000
+[32mSaving model at total steps 1560000[0m
+[32mSaving model at total steps 1562000[0m
+[32mSaving model at total steps 1564000[0m
+[32mSaving model at total steps 1566000[0m
+[32mSaving model at total steps 1568000[0m
+Evaluating step 1570000
+[32mSaving model at total steps 1570000[0m
+[32mSaving model at total steps 1572000[0m
+[32mSaving model at total steps 1574000[0m
+[32mSaving model at total steps 1576000[0m
+[32mSaving model at total steps 1578000[0m
+Evaluating step 1580000
+[32mSaving model at total steps 1580000[0m
+[32mSaving model at total steps 1582000[0m
+[32mSaving model at total steps 1584000[0m
+[32mSaving model at total steps 1586000[0m
+[32mSaving model at total steps 1588000[0m
+Evaluating step 1590000
+[32mSaving model at total steps 1590000[0m
+[32mSaving model at total steps 1592000[0m
+[32mSaving model at total steps 1594000[0m
+[32mSaving model at total steps 1596000[0m
+[32mSaving model at total steps 1598000[0m
+Evaluating step 1600000
+[32mSaving model at total steps 1600000[0m
+[32mSaving model at total steps 1602000[0m
+[32mSaving model at total steps 1604000[0m
+[32mSaving model at total steps 1606000[0m
+[32mSaving model at total steps 1608000[0m
+Evaluating step 1610000
+[32mSaving model at total steps 1610000[0m
+[32mSaving model at total steps 1612000[0m
+[32mSaving model at total steps 1614000[0m
+[32mSaving model at total steps 1616000[0m
+[32mSaving model at total steps 1618000[0m
+Evaluating step 1620000
+[32mSaving model at total steps 1620000[0m
+[32mSaving model at total steps 1622000[0m
+[32mSaving model at total steps 1624000[0m
+[32mSaving model at total steps 1626000[0m
+[32mSaving model at total steps 1628000[0m
+Evaluating step 1630000
+[32mSaving model at total steps 1630000[0m
+[32mSaving model at total steps 1632000[0m
+[32mSaving model at total steps 1634000[0m
+[32mSaving model at total steps 1636000[0m
+[32mSaving model at total steps 1638000[0m
+Evaluating step 1640000
+[32mSaving model at total steps 1640000[0m
+[32mSaving model at total steps 1642000[0m
+[32mSaving model at total steps 1644000[0m
+[32mSaving model at total steps 1646000[0m
+[32mSaving model at total steps 1648000[0m
+Evaluating step 1650000
+[32mSaving model at total steps 1650000[0m
+[32mSaving model at total steps 1652000[0m
+[32mSaving model at total steps 1654000[0m
+[32mSaving model at total steps 1656000[0m
+[32mSaving model at total steps 1658000[0m
+Evaluating step 1660000
+[32mSaving model at total steps 1660000[0m
+[32mSaving model at total steps 1662000[0m
+[32mSaving model at total steps 1664000[0m
+[32mSaving model at total steps 1666000[0m
+[32mSaving model at total steps 1668000[0m
+Evaluating step 1670000
+[32mSaving model at total steps 1670000[0m
+[32mSaving model at total steps 1672000[0m
+[32mSaving model at total steps 1674000[0m
+[32mSaving model at total steps 1676000[0m
+[32mSaving model at total steps 1678000[0m
+Evaluating step 1680000
+[32mSaving model at total steps 1680000[0m
+[32mSaving model at total steps 1682000[0m
+[32mSaving model at total steps 1684000[0m
+[32mSaving model at total steps 1686000[0m
+[32mSaving model at total steps 1688000[0m
+Evaluating step 1690000
+[32mSaving model at total steps 1690000[0m
+[32mSaving model at total steps 1692000[0m
+[32mSaving model at total steps 1694000[0m
+[32mSaving model at total steps 1696000[0m
+[32mSaving model at total steps 1698000[0m
+Evaluating step 1700000
+[32mSaving model at total steps 1700000[0m
+[32mSaving model at total steps 1702000[0m
+[32mSaving model at total steps 1704000[0m
+[32mSaving model at total steps 1706000[0m
+[32mSaving model at total steps 1708000[0m
+Evaluating step 1710000
+[32mSaving model at total steps 1710000[0m
+[32mSaving model at total steps 1712000[0m
+[32mSaving model at total steps 1714000[0m
+[32mSaving model at total steps 1716000[0m
+[32mSaving model at total steps 1718000[0m
+Evaluating step 1720000
+[32mSaving model at total steps 1720000[0m
+[32mSaving model at total steps 1722000[0m
+[32mSaving model at total steps 1724000[0m
+[32mSaving model at total steps 1726000[0m
+[32mSaving model at total steps 1728000[0m
+Evaluating step 1730000
+[32mSaving model at total steps 1730000[0m
+[32mSaving model at total steps 1732000[0m
+[32mSaving model at total steps 1734000[0m
+[32mSaving model at total steps 1736000[0m
+[32mSaving model at total steps 1738000[0m
+Evaluating step 1740000
+[32mSaving model at total steps 1740000[0m
+[32mSaving model at total steps 1742000[0m
+[32mSaving model at total steps 1744000[0m
+[32mSaving model at total steps 1746000[0m
+[32mSaving model at total steps 1748000[0m
+Evaluating step 1750000
+[32mSaving model at total steps 1750000[0m
+[32mSaving model at total steps 1752000[0m
+[32mSaving model at total steps 1754000[0m
+[32mSaving model at total steps 1756000[0m
+[32mSaving model at total steps 1758000[0m
+Evaluating step 1760000
+[32mSaving model at total steps 1760000[0m
+[32mSaving model at total steps 1762000[0m
+[32mSaving model at total steps 1764000[0m
+[32mSaving model at total steps 1766000[0m
+[32mSaving model at total steps 1768000[0m
+Evaluating step 1770000
+[32mSaving model at total steps 1770000[0m
+[32mSaving model at total steps 1772000[0m
+[32mSaving model at total steps 1774000[0m
+[32mSaving model at total steps 1776000[0m
+[32mSaving model at total steps 1778000[0m
+Evaluating step 1780000
+[32mSaving model at total steps 1780000[0m
+[32mSaving model at total steps 1782000[0m
+[32mSaving model at total steps 1784000[0m
+[32mSaving model at total steps 1786000[0m
+[32mSaving model at total steps 1788000[0m
+Evaluating step 1790000
+[32mSaving model at total steps 1790000[0m
+[32mSaving model at total steps 1792000[0m
+[32mSaving model at total steps 1794000[0m
+[32mSaving model at total steps 1796000[0m
+[32mSaving model at total steps 1798000[0m
+Evaluating step 1800000
+[32mSaving model at total steps 1800000[0m
+[32mSaving model at total steps 1802000[0m
+[32mSaving model at total steps 1804000[0m
+[32mSaving model at total steps 1806000[0m
+[32mSaving model at total steps 1808000[0m
+Evaluating step 1810000
+[32mSaving model at total steps 1810000[0m
+[32mSaving model at total steps 1812000[0m
+[32mSaving model at total steps 1814000[0m
+[32mSaving model at total steps 1816000[0m
+[32mSaving model at total steps 1818000[0m
+Evaluating step 1820000
+[32mSaving model at total steps 1820000[0m
+[32mSaving model at total steps 1822000[0m
+[32mSaving model at total steps 1824000[0m
+[32mSaving model at total steps 1826000[0m
+[32mSaving model at total steps 1828000[0m
+Evaluating step 1830000
+[32mSaving model at total steps 1830000[0m
+[32mSaving model at total steps 1832000[0m
+[32mSaving model at total steps 1834000[0m
+[32mSaving model at total steps 1836000[0m
+[32mSaving model at total steps 1838000[0m
+Evaluating step 1840000
+[32mSaving model at total steps 1840000[0m
+[32mSaving model at total steps 1842000[0m
+[32mSaving model at total steps 1844000[0m
+[32mSaving model at total steps 1846000[0m
+[32mSaving model at total steps 1848000[0m
+Evaluating step 1850000
+[32mSaving model at total steps 1850000[0m
+[32mSaving model at total steps 1852000[0m
+[32mSaving model at total steps 1854000[0m
+[32mSaving model at total steps 1856000[0m
+[32mSaving model at total steps 1858000[0m
+Evaluating step 1860000
+[32mSaving model at total steps 1860000[0m
+[32mSaving model at total steps 1862000[0m
+[32mSaving model at total steps 1864000[0m
+[32mSaving model at total steps 1866000[0m
+[32mSaving model at total steps 1868000[0m
+Evaluating step 1870000
+[32mSaving model at total steps 1870000[0m
+[32mSaving model at total steps 1872000[0m
+[32mSaving model at total steps 1874000[0m
+[32mSaving model at total steps 1876000[0m
+[32mSaving model at total steps 1878000[0m
+Evaluating step 1880000
+[32mSaving model at total steps 1880000[0m
+[32mSaving model at total steps 1882000[0m
+[32mSaving model at total steps 1884000[0m
+[32mSaving model at total steps 1886000[0m
+[32mSaving model at total steps 1888000[0m
+Evaluating step 1890000
+[32mSaving model at total steps 1890000[0m
+[32mSaving model at total steps 1892000[0m
+[32mSaving model at total steps 1894000[0m
+[32mSaving model at total steps 1896000[0m
+[32mSaving model at total steps 1898000[0m
+Evaluating step 1900000
+[32mSaving model at total steps 1900000[0m
+[32mSaving model at total steps 1902000[0m
+[32mSaving model at total steps 1904000[0m
+[32mSaving model at total steps 1906000[0m
+[32mSaving model at total steps 1908000[0m
+Evaluating step 1910000
+[32mSaving model at total steps 1910000[0m
+[32mSaving model at total steps 1912000[0m
+[32mSaving model at total steps 1914000[0m
+[32mSaving model at total steps 1916000[0m
+[32mSaving model at total steps 1918000[0m
+Evaluating step 1920000
+[32mSaving model at total steps 1920000[0m
+[32mSaving model at total steps 1922000[0m
+[32mSaving model at total steps 1924000[0m
+[32mSaving model at total steps 1926000[0m
+[32mSaving model at total steps 1928000[0m
+Evaluating step 1930000
+[32mSaving model at total steps 1930000[0m
+[32mSaving model at total steps 1932000[0m
+[32mSaving model at total steps 1934000[0m
+[32mSaving model at total steps 1936000[0m
+[32mSaving model at total steps 1938000[0m
+Evaluating step 1940000
+[32mSaving model at total steps 1940000[0m
+[32mSaving model at total steps 1942000[0m
+[32mSaving model at total steps 1944000[0m
+[32mSaving model at total steps 1946000[0m
+[32mSaving model at total steps 1948000[0m
+Evaluating step 1950000
+[32mSaving model at total steps 1950000[0m
+[32mSaving model at total steps 1952000[0m
+[32mSaving model at total steps 1954000[0m
+[32mSaving model at total steps 1956000[0m
+[32mSaving model at total steps 1958000[0m
+Evaluating step 1960000
+[32mSaving model at total steps 1960000[0m
+[32mSaving model at total steps 1962000[0m
+[32mSaving model at total steps 1964000[0m
+[32mSaving model at total steps 1966000[0m
+[32mSaving model at total steps 1968000[0m
+Evaluating step 1970000
+[32mSaving model at total steps 1970000[0m
+[32mSaving model at total steps 1972000[0m
+[32mSaving model at total steps 1974000[0m
+[32mSaving model at total steps 1976000[0m
+[32mSaving model at total steps 1978000[0m
+Evaluating step 1980000
+[32mSaving model at total steps 1980000[0m
+[32mSaving model at total steps 1982000[0m
+[32mSaving model at total steps 1984000[0m
+[32mSaving model at total steps 1986000[0m
+[32mSaving model at total steps 1988000[0m
+Evaluating step 1990000
+[32mSaving model at total steps 1990000[0m
+[32mSaving model at total steps 1992000[0m
+[32mSaving model at total steps 1994000[0m
+[32mSaving model at total steps 1996000[0m
+[32mSaving model at total steps 1998000[0m
+Evaluating step 2000000
+[32mSaving model at total steps 2000000[0m
+[32mSaving model at total steps 2002000[0m
+[32mSaving model at total steps 2004000[0m
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/drama/parallel_2M/video/run-2-episode-4.mp4
+Creating output directory results/drama/parallel_2M/plots

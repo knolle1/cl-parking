@@ -1,0 +1,13 @@
+image size 64
+Using device: cuda:0
+Starting run 2 ...
+Using seed:  2
+World model total parameters: 7,153,411
+Dynamic model parameters: 3,735,456
+Encoder parameters: 232,272
+Decoder parameters: 1,281,811
+Discretisation layer parameters: 1,574,912
+Actor parameters: 526,338
+Critic parameters: 1,444,607
+Current env: [33mcustom-parking-v0[0m
+Evaluating step 0

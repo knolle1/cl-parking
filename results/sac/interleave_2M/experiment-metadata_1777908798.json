@@ -1,0 +1,187 @@
+{
+  "timestamp": "2026-05-04 15:33:18.315756",
+  "cmd": "python experiment.py -a sac -s interleave -p results/sac/interleave_2M -n 0 -d Fix plots",
+  "description": "Fix plots",
+  "agent_type": "sac",
+  "scenario": "interleave",
+  "output_path": "results/sac/interleave_2M",
+  "n_runs": 0,
+  "random_baseline": "results/random_baseline/data",
+  "training_params": {
+    "scenario_timesteps": 2000000,
+    "eval_freq": 10000,
+    "n_eval_episodes": 30,
+    "eval_scenarios": [
+      "perpendicular",
+      "diagonal-25",
+      "diagonal-50",
+      "parallel"
+    ],
+    "eval_seed": 1234,
+    "fisher_freq": 500000,
+    "fisher_steps": 1024,
+    "max_timesteps": 2000000
+  },
+  "hyperparameters": {
+    "batch_size": 256,
+    "buffer_size": 1000000,
+    "gamma": 0.997,
+    "layer_size": 64,
+    "learning_rate": 0.0005,
+    "num_layers": 5,
+    "tau": 0.763,
+    "verbose": 0
+  },
+  "environment_config": {
+    "add_width": [
+      0,
+      0
+    ],
+    "fixed_goal": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        -2
+      ]
+    ],
+    "start_pos": [
+      [
+        -12,
+        0
+      ],
+      [
+        12,
+        3.141592653589793
+      ]
+    ],
+    "success_goal_reward": 0.12,
+    "collision_reward": -10,
+    "reward_p": 0.5,
+    "collision_reward_factor": 50,
+    "scenarios": {
+      "perpendicular": {
+        "parking_angles": [
+          0,
+          0
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-25": {
+        "parking_angles": [
+          -25,
+          25
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "diagonal-50": {
+        "parking_angles": [
+          -50,
+          50
+        ],
+        "reward_weights": [
+          1,
+          0.3,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": false
+      },
+      "parallel-adj": {
+        "parking_angles": [
+          90,
+          90
+        ],
+        "reward_weights": [
+          0.3,
+          1,
+          0,
+          0,
+          0.05,
+          0.05
+        ],
+        "adjust_heading": true
+      }
+    },
+    "change_scenario": [
+      [
+        [
+          "perpendicular",
+          "diagonal-25",
+          "diagonal-50",
+          "parallel"
+        ],
+        [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ]
+      ]
+    ],
+    "change_frequency": 2000000,
+    "observation": {
+      "type": "CustomKinematicsGoal",
+      "features": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "cos_h",
+        "sin_h"
+      ],
+      "scales": [
+        100,
+        100,
+        5,
+        5,
+        1,
+        1
+      ],
+      "normalize": false
+    }
+  }
+}

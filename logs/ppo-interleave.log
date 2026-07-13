@@ -1,0 +1,148 @@
+Using device: cuda:0
+Creating output directory results/ppo-ewc/perpendicular-test ...
+Starting run 0 ...
+Using seed:  0
+step 2048 EWC penalty nan
+step 4096 EWC penalty nan
+step 6144 EWC penalty nan
+step 8192 EWC penalty nan
+Evaluating step 10000
+step 10240 EWC penalty nan
+step 12288 EWC penalty nan
+step 14336 EWC penalty nan
+step 16384 EWC penalty nan
+step 18432 EWC penalty nan
+Evaluating step 20000
+step 20480 EWC penalty nan
+step 22528 EWC penalty nan
+step 24576 EWC penalty nan
+step 26624 EWC penalty nan
+step 28672 EWC penalty nan
+Evaluating step 30000
+step 30720 EWC penalty nan
+step 32768 EWC penalty nan
+step 34816 EWC penalty nan
+step 36864 EWC penalty nan
+step 38912 EWC penalty nan
+Evaluating step 40000
+step 40960 EWC penalty nan
+step 43008 EWC penalty nan
+step 45056 EWC penalty nan
+step 47104 EWC penalty nan
+step 49152 EWC penalty nan
+Evaluating step 50000
+step 51200 EWC penalty nan
+step 53248 EWC penalty nan
+step 55296 EWC penalty nan
+step 57344 EWC penalty nan
+step 59392 EWC penalty nan
+Evaluating step 60000
+step 61440 EWC penalty nan
+step 63488 EWC penalty nan
+step 65536 EWC penalty nan
+step 67584 EWC penalty nan
+step 69632 EWC penalty nan
+Evaluating step 70000
+step 71680 EWC penalty nan
+step 73728 EWC penalty nan
+step 75776 EWC penalty nan
+step 77824 EWC penalty nan
+step 79872 EWC penalty nan
+Evaluating step 80000
+step 81920 EWC penalty nan
+step 83968 EWC penalty nan
+step 86016 EWC penalty nan
+step 88064 EWC penalty nan
+Evaluating step 90000
+step 90112 EWC penalty nan
+step 92160 EWC penalty nan
+step 94208 EWC penalty nan
+step 96256 EWC penalty nan
+step 98304 EWC penalty nan
+Evaluating step 100000
+step 100352 EWC penalty nan
+step 102400 EWC penalty nan
+step 104448 EWC penalty nan
+step 106496 EWC penalty nan
+step 108544 EWC penalty nan
+Evaluating step 110000
+step 110592 EWC penalty nan
+step 112640 EWC penalty nan
+step 114688 EWC penalty nan
+step 116736 EWC penalty nan
+step 118784 EWC penalty nan
+Evaluating step 120000
+step 120832 EWC penalty nan
+step 122880 EWC penalty nan
+step 124928 EWC penalty nan
+step 126976 EWC penalty nan
+step 129024 EWC penalty nan
+Evaluating step 130000
+step 131072 EWC penalty nan
+step 133120 EWC penalty nan
+step 135168 EWC penalty nan
+step 137216 EWC penalty nan
+step 139264 EWC penalty nan
+Evaluating step 140000
+step 141312 EWC penalty nan
+step 143360 EWC penalty nan
+step 145408 EWC penalty nan
+step 147456 EWC penalty nan
+step 149504 EWC penalty nan
+Evaluating step 150000
+step 151552 EWC penalty nan
+step 153600 EWC penalty nan
+step 155648 EWC penalty nan
+step 157696 EWC penalty nan
+step 159744 EWC penalty nan
+Evaluating step 160000
+step 161792 EWC penalty nan
+step 163840 EWC penalty nan
+step 165888 EWC penalty nan
+step 167936 EWC penalty nan
+step 169984 EWC penalty nan
+Evaluating step 170000
+step 172032 EWC penalty nan
+step 174080 EWC penalty nan
+step 176128 EWC penalty nan
+step 178176 EWC penalty nan
+Evaluating step 180000
+step 180224 EWC penalty nan
+step 182272 EWC penalty nan
+step 184320 EWC penalty nan
+step 186368 EWC penalty nan
+step 188416 EWC penalty nan
+Evaluating step 190000
+step 190464 EWC penalty nan
+step 192512 EWC penalty nan
+step 194560 EWC penalty nan
+step 196608 EWC penalty nan
+step 198656 EWC penalty nan
+Evaluating step 200000
+step 200704 EWC penalty nan
+step 202752 EWC penalty nan
+step 204800 EWC penalty nan
+step 206848 EWC penalty nan
+step 208896 EWC penalty nan
+Evaluating step 210000
+step 210944 EWC penalty nan
+step 212992 EWC penalty nan
+step 215040 EWC penalty nan
+step 217088 EWC penalty nan
+step 219136 EWC penalty nan
+Evaluating step 220000
+step 221184 EWC penalty nan
+step 223232 EWC penalty nan
+step 225280 EWC penalty nan
+step 227328 EWC penalty nan
+step 229376 EWC penalty nan
+Evaluating step 230000
+step 231424 EWC penalty nan
+step 233472 EWC penalty nan
+step 235520 EWC penalty nan
+step 237568 EWC penalty nan
+step 239616 EWC penalty nan
+Evaluating step 240000
+step 241664 EWC penalty nan
+step 243712 EWC penalty nan
+step 245760 EWC penalty nan

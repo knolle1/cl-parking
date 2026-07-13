@@ -1,0 +1,1299 @@
+Using device: cuda:0
+Creating output directory results/ppo-ewc/sequential-inc_lambda-1 ...
+Starting run 0 ...
+Using seed:  0
+Evaluating step 10000
+Evaluating step 20000
+Evaluating step 30000
+Evaluating step 40000
+Evaluating step 50000
+Evaluating step 60000
+Evaluating step 70000
+Evaluating step 80000
+Evaluating step 90000
+Evaluating step 100000
+Evaluating step 110000
+Evaluating step 120000
+Evaluating step 130000
+Evaluating step 140000
+Evaluating step 150000
+Evaluating step 160000
+Evaluating step 170000
+Evaluating step 180000
+Evaluating step 190000
+Evaluating step 200000
+Evaluating step 210000
+Evaluating step 220000
+Evaluating step 230000
+Evaluating step 240000
+Evaluating step 250000
+Evaluating step 260000
+Evaluating step 270000
+Evaluating step 280000
+Evaluating step 290000
+Evaluating step 300000
+Evaluating step 310000
+Evaluating step 320000
+Evaluating step 330000
+Evaluating step 340000
+Evaluating step 350000
+Evaluating step 360000
+Evaluating step 370000
+Evaluating step 380000
+Evaluating step 390000
+Evaluating step 400000
+Evaluating step 410000
+Evaluating step 420000
+Evaluating step 430000
+Evaluating step 440000
+Evaluating step 450000
+Evaluating step 460000
+Evaluating step 470000
+Evaluating step 480000
+Evaluating step 490000
+Evaluating step 500000
+Calculating Fisher step 500000
+Current Task
+----------------------------------
+{'labels': ['perpendicular'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 510000
+Evaluating step 520000
+Evaluating step 530000
+Evaluating step 540000
+Evaluating step 550000
+Evaluating step 560000
+Evaluating step 570000
+Evaluating step 580000
+Evaluating step 590000
+Evaluating step 600000
+Evaluating step 610000
+Evaluating step 620000
+Evaluating step 630000
+Evaluating step 640000
+Evaluating step 650000
+Evaluating step 660000
+Evaluating step 670000
+Evaluating step 680000
+Evaluating step 690000
+Evaluating step 700000
+Evaluating step 710000
+Evaluating step 720000
+Evaluating step 730000
+Evaluating step 740000
+Evaluating step 750000
+Evaluating step 760000
+Evaluating step 770000
+Evaluating step 780000
+Evaluating step 790000
+Evaluating step 800000
+Evaluating step 810000
+Evaluating step 820000
+Evaluating step 830000
+Evaluating step 840000
+Evaluating step 850000
+Evaluating step 860000
+Evaluating step 870000
+Evaluating step 880000
+Evaluating step 890000
+Evaluating step 900000
+Evaluating step 910000
+Evaluating step 920000
+Evaluating step 930000
+Evaluating step 940000
+Evaluating step 950000
+Evaluating step 960000
+Evaluating step 970000
+Evaluating step 980000
+Evaluating step 990000
+Evaluating step 1000000
+Calculating Fisher step 1000000
+Current Task
+----------------------------------
+{'labels': ['diagonal-25'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1010000
+Evaluating step 1020000
+Evaluating step 1030000
+Evaluating step 1040000
+Evaluating step 1050000
+Evaluating step 1060000
+Evaluating step 1070000
+Evaluating step 1080000
+Evaluating step 1090000
+Evaluating step 1100000
+Evaluating step 1110000
+Evaluating step 1120000
+Evaluating step 1130000
+Evaluating step 1140000
+Evaluating step 1150000
+Evaluating step 1160000
+Evaluating step 1170000
+Evaluating step 1180000
+Evaluating step 1190000
+Evaluating step 1200000
+Evaluating step 1210000
+Evaluating step 1220000
+Evaluating step 1230000
+Evaluating step 1240000
+Evaluating step 1250000
+Evaluating step 1260000
+Evaluating step 1270000
+Evaluating step 1280000
+Evaluating step 1290000
+Evaluating step 1300000
+Evaluating step 1310000
+Evaluating step 1320000
+Evaluating step 1330000
+Evaluating step 1340000
+Evaluating step 1350000
+Evaluating step 1360000
+Evaluating step 1370000
+Evaluating step 1380000
+Evaluating step 1390000
+Evaluating step 1400000
+Evaluating step 1410000
+Evaluating step 1420000
+Evaluating step 1430000
+Evaluating step 1440000
+Evaluating step 1450000
+Evaluating step 1460000
+Evaluating step 1470000
+Evaluating step 1480000
+Evaluating step 1490000
+Evaluating step 1500000
+Calculating Fisher step 1500000
+Current Task
+----------------------------------
+{'labels': ['diagonal-50'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1510000
+Evaluating step 1520000
+Evaluating step 1530000
+Evaluating step 1540000
+Evaluating step 1550000
+Evaluating step 1560000
+Evaluating step 1570000
+Evaluating step 1580000
+Evaluating step 1590000
+Evaluating step 1600000
+Evaluating step 1610000
+Evaluating step 1620000
+Evaluating step 1630000
+Evaluating step 1640000
+Evaluating step 1650000
+Evaluating step 1660000
+Evaluating step 1670000
+Evaluating step 1680000
+Evaluating step 1690000
+Evaluating step 1700000
+Evaluating step 1710000
+Evaluating step 1720000
+Evaluating step 1730000
+Evaluating step 1740000
+Evaluating step 1750000
+Evaluating step 1760000
+Evaluating step 1770000
+Evaluating step 1780000
+Evaluating step 1790000
+Evaluating step 1800000
+Evaluating step 1810000
+Evaluating step 1820000
+Evaluating step 1830000
+Evaluating step 1840000
+Evaluating step 1850000
+Evaluating step 1860000
+Evaluating step 1870000
+Evaluating step 1880000
+Evaluating step 1890000
+Evaluating step 1900000
+Evaluating step 1910000
+Evaluating step 1920000
+Evaluating step 1930000
+Evaluating step 1940000
+Evaluating step 1950000
+Evaluating step 1960000
+Evaluating step 1970000
+Evaluating step 1980000
+Evaluating step 1990000
+Evaluating step 1998848
+Calculating Fisher step 1998848
+Current Task
+----------------------------------
+{'labels': ['parallel'], 'probs': array([1.])}
+Updating EWC regulariser
+Creating output directory results/ppo-ewc/sequential-inc_lambda-1/video
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-0-episode-4.mp4
+Starting run 1 ...
+Using seed:  1
+Evaluating step 10000
+Evaluating step 20000
+Evaluating step 30000
+Evaluating step 40000
+Evaluating step 50000
+Evaluating step 60000
+Evaluating step 70000
+Evaluating step 80000
+Evaluating step 90000
+Evaluating step 100000
+Evaluating step 110000
+Evaluating step 120000
+Evaluating step 130000
+Evaluating step 140000
+Evaluating step 150000
+Evaluating step 160000
+Evaluating step 170000
+Evaluating step 180000
+Evaluating step 190000
+Evaluating step 200000
+Evaluating step 210000
+Evaluating step 220000
+Evaluating step 230000
+Evaluating step 240000
+Evaluating step 250000
+Evaluating step 260000
+Evaluating step 270000
+Evaluating step 280000
+Evaluating step 290000
+Evaluating step 300000
+Evaluating step 310000
+Evaluating step 320000
+Evaluating step 330000
+Evaluating step 340000
+Evaluating step 350000
+Evaluating step 360000
+Evaluating step 370000
+Evaluating step 380000
+Evaluating step 390000
+Evaluating step 400000
+Evaluating step 410000
+Evaluating step 420000
+Evaluating step 430000
+Evaluating step 440000
+Evaluating step 450000
+Evaluating step 460000
+Evaluating step 470000
+Evaluating step 480000
+Evaluating step 490000
+Evaluating step 500000
+Calculating Fisher step 500000
+Current Task
+----------------------------------
+{'labels': ['perpendicular'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 510000
+Evaluating step 520000
+Evaluating step 530000
+Evaluating step 540000
+Evaluating step 550000
+Evaluating step 560000
+Evaluating step 570000
+Evaluating step 580000
+Evaluating step 590000
+Evaluating step 600000
+Evaluating step 610000
+Evaluating step 620000
+Evaluating step 630000
+Evaluating step 640000
+Evaluating step 650000
+Evaluating step 660000
+Evaluating step 670000
+Evaluating step 680000
+Evaluating step 690000
+Evaluating step 700000
+Evaluating step 710000
+Evaluating step 720000
+Evaluating step 730000
+Evaluating step 740000
+Evaluating step 750000
+Evaluating step 760000
+Evaluating step 770000
+Evaluating step 780000
+Evaluating step 790000
+Evaluating step 800000
+Evaluating step 810000
+Evaluating step 820000
+Evaluating step 830000
+Evaluating step 840000
+Evaluating step 850000
+Evaluating step 860000
+Evaluating step 870000
+Evaluating step 880000
+Evaluating step 890000
+Evaluating step 900000
+Evaluating step 910000
+Evaluating step 920000
+Evaluating step 930000
+Evaluating step 940000
+Evaluating step 950000
+Evaluating step 960000
+Evaluating step 970000
+Evaluating step 980000
+Evaluating step 990000
+Evaluating step 1000000
+Calculating Fisher step 1000000
+Current Task
+----------------------------------
+{'labels': ['diagonal-25'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1010000
+Evaluating step 1020000
+Evaluating step 1030000
+Evaluating step 1040000
+Evaluating step 1050000
+Evaluating step 1060000
+Evaluating step 1070000
+Evaluating step 1080000
+Evaluating step 1090000
+Evaluating step 1100000
+Evaluating step 1110000
+Evaluating step 1120000
+Evaluating step 1130000
+Evaluating step 1140000
+Evaluating step 1150000
+Evaluating step 1160000
+Evaluating step 1170000
+Evaluating step 1180000
+Evaluating step 1190000
+Evaluating step 1200000
+Evaluating step 1210000
+Evaluating step 1220000
+Evaluating step 1230000
+Evaluating step 1240000
+Evaluating step 1250000
+Evaluating step 1260000
+Evaluating step 1270000
+Evaluating step 1280000
+Evaluating step 1290000
+Evaluating step 1300000
+Evaluating step 1310000
+Evaluating step 1320000
+Evaluating step 1330000
+Evaluating step 1340000
+Evaluating step 1350000
+Evaluating step 1360000
+Evaluating step 1370000
+Evaluating step 1380000
+Evaluating step 1390000
+Evaluating step 1400000
+Evaluating step 1410000
+Evaluating step 1420000
+Evaluating step 1430000
+Evaluating step 1440000
+Evaluating step 1450000
+Evaluating step 1460000
+Evaluating step 1470000
+Evaluating step 1480000
+Evaluating step 1490000
+Evaluating step 1500000
+Calculating Fisher step 1500000
+Current Task
+----------------------------------
+{'labels': ['diagonal-50'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1510000
+Evaluating step 1520000
+Evaluating step 1530000
+Evaluating step 1540000
+Evaluating step 1550000
+Evaluating step 1560000
+Evaluating step 1570000
+Evaluating step 1580000
+Evaluating step 1590000
+Evaluating step 1600000
+Evaluating step 1610000
+Evaluating step 1620000
+Evaluating step 1630000
+Evaluating step 1640000
+Evaluating step 1650000
+Evaluating step 1660000
+Evaluating step 1670000
+Evaluating step 1680000
+Evaluating step 1690000
+Evaluating step 1700000
+Evaluating step 1710000
+Evaluating step 1720000
+Evaluating step 1730000
+Evaluating step 1740000
+Evaluating step 1750000
+Evaluating step 1760000
+Evaluating step 1770000
+Evaluating step 1780000
+Evaluating step 1790000
+Evaluating step 1800000
+Evaluating step 1810000
+Evaluating step 1820000
+Evaluating step 1830000
+Evaluating step 1840000
+Evaluating step 1850000
+Evaluating step 1860000
+Evaluating step 1870000
+Evaluating step 1880000
+Evaluating step 1890000
+Evaluating step 1900000
+Evaluating step 1910000
+Evaluating step 1920000
+Evaluating step 1930000
+Evaluating step 1940000
+Evaluating step 1950000
+Evaluating step 1960000
+Evaluating step 1970000
+Evaluating step 1980000
+Evaluating step 1990000
+Evaluating step 1998848
+Calculating Fisher step 1998848
+Current Task
+----------------------------------
+{'labels': ['parallel'], 'probs': array([1.])}
+Updating EWC regulariser
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-1-episode-4.mp4
+Starting run 2 ...
+Using seed:  2
+Evaluating step 10000
+Evaluating step 20000
+Evaluating step 30000
+Evaluating step 40000
+Evaluating step 50000
+Evaluating step 60000
+Evaluating step 70000
+Evaluating step 80000
+Evaluating step 90000
+Evaluating step 100000
+Evaluating step 110000
+Evaluating step 120000
+Evaluating step 130000
+Evaluating step 140000
+Evaluating step 150000
+Evaluating step 160000
+Evaluating step 170000
+Evaluating step 180000
+Evaluating step 190000
+Evaluating step 200000
+Evaluating step 210000
+Evaluating step 220000
+Evaluating step 230000
+Evaluating step 240000
+Evaluating step 250000
+Evaluating step 260000
+Evaluating step 270000
+Evaluating step 280000
+Evaluating step 290000
+Evaluating step 300000
+Evaluating step 310000
+Evaluating step 320000
+Evaluating step 330000
+Evaluating step 340000
+Evaluating step 350000
+Evaluating step 360000
+Evaluating step 370000
+Evaluating step 380000
+Evaluating step 390000
+Evaluating step 400000
+Evaluating step 410000
+Evaluating step 420000
+Evaluating step 430000
+Evaluating step 440000
+Evaluating step 450000
+Evaluating step 460000
+Evaluating step 470000
+Evaluating step 480000
+Evaluating step 490000
+Evaluating step 500000
+Calculating Fisher step 500000
+Current Task
+----------------------------------
+{'labels': ['perpendicular'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 510000
+Evaluating step 520000
+Evaluating step 530000
+Evaluating step 540000
+Evaluating step 550000
+Evaluating step 560000
+Evaluating step 570000
+Evaluating step 580000
+Evaluating step 590000
+Evaluating step 600000
+Evaluating step 610000
+Evaluating step 620000
+Evaluating step 630000
+Evaluating step 640000
+Evaluating step 650000
+Evaluating step 660000
+Evaluating step 670000
+Evaluating step 680000
+Evaluating step 690000
+Evaluating step 700000
+Evaluating step 710000
+Evaluating step 720000
+Evaluating step 730000
+Evaluating step 740000
+Evaluating step 750000
+Evaluating step 760000
+Evaluating step 770000
+Evaluating step 780000
+Evaluating step 790000
+Evaluating step 800000
+Evaluating step 810000
+Evaluating step 820000
+Evaluating step 830000
+Evaluating step 840000
+Evaluating step 850000
+Evaluating step 860000
+Evaluating step 870000
+Evaluating step 880000
+Evaluating step 890000
+Evaluating step 900000
+Evaluating step 910000
+Evaluating step 920000
+Evaluating step 930000
+Evaluating step 940000
+Evaluating step 950000
+Evaluating step 960000
+Evaluating step 970000
+Evaluating step 980000
+Evaluating step 990000
+Evaluating step 1000000
+Calculating Fisher step 1000000
+Current Task
+----------------------------------
+{'labels': ['diagonal-25'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1010000
+Evaluating step 1020000
+Evaluating step 1030000
+Evaluating step 1040000
+Evaluating step 1050000
+Evaluating step 1060000
+Evaluating step 1070000
+Evaluating step 1080000
+Evaluating step 1090000
+Evaluating step 1100000
+Evaluating step 1110000
+Evaluating step 1120000
+Evaluating step 1130000
+Evaluating step 1140000
+Evaluating step 1150000
+Evaluating step 1160000
+Evaluating step 1170000
+Evaluating step 1180000
+Evaluating step 1190000
+Evaluating step 1200000
+Evaluating step 1210000
+Evaluating step 1220000
+Evaluating step 1230000
+Evaluating step 1240000
+Evaluating step 1250000
+Evaluating step 1260000
+Evaluating step 1270000
+Evaluating step 1280000
+Evaluating step 1290000
+Evaluating step 1300000
+Evaluating step 1310000
+Evaluating step 1320000
+Evaluating step 1330000
+Evaluating step 1340000
+Evaluating step 1350000
+Evaluating step 1360000
+Evaluating step 1370000
+Evaluating step 1380000
+Evaluating step 1390000
+Evaluating step 1400000
+Evaluating step 1410000
+Evaluating step 1420000
+Evaluating step 1430000
+Evaluating step 1440000
+Evaluating step 1450000
+Evaluating step 1460000
+Evaluating step 1470000
+Evaluating step 1480000
+Evaluating step 1490000
+Evaluating step 1500000
+Calculating Fisher step 1500000
+Current Task
+----------------------------------
+{'labels': ['diagonal-50'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1510000
+Evaluating step 1520000
+Evaluating step 1530000
+Evaluating step 1540000
+Evaluating step 1550000
+Evaluating step 1560000
+Evaluating step 1570000
+Evaluating step 1580000
+Evaluating step 1590000
+Evaluating step 1600000
+Evaluating step 1610000
+Evaluating step 1620000
+Evaluating step 1630000
+Evaluating step 1640000
+Evaluating step 1650000
+Evaluating step 1660000
+Evaluating step 1670000
+Evaluating step 1680000
+Evaluating step 1690000
+Evaluating step 1700000
+Evaluating step 1710000
+Evaluating step 1720000
+Evaluating step 1730000
+Evaluating step 1740000
+Evaluating step 1750000
+Evaluating step 1760000
+Evaluating step 1770000
+Evaluating step 1780000
+Evaluating step 1790000
+Evaluating step 1800000
+Evaluating step 1810000
+Evaluating step 1820000
+Evaluating step 1830000
+Evaluating step 1840000
+Evaluating step 1850000
+Evaluating step 1860000
+Evaluating step 1870000
+Evaluating step 1880000
+Evaluating step 1890000
+Evaluating step 1900000
+Evaluating step 1910000
+Evaluating step 1920000
+Evaluating step 1930000
+Evaluating step 1940000
+Evaluating step 1950000
+Evaluating step 1960000
+Evaluating step 1970000
+Evaluating step 1980000
+Evaluating step 1990000
+Evaluating step 1998848
+Calculating Fisher step 1998848
+Current Task
+----------------------------------
+{'labels': ['parallel'], 'probs': array([1.])}
+Updating EWC regulariser
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-2-episode-4.mp4
+Starting run 3 ...
+Using seed:  3
+Evaluating step 10000
+Evaluating step 20000
+Evaluating step 30000
+Evaluating step 40000
+Evaluating step 50000
+Evaluating step 60000
+Evaluating step 70000
+Evaluating step 80000
+Evaluating step 90000
+Evaluating step 100000
+Evaluating step 110000
+Evaluating step 120000
+Evaluating step 130000
+Evaluating step 140000
+Evaluating step 150000
+Evaluating step 160000
+Evaluating step 170000
+Evaluating step 180000
+Evaluating step 190000
+Evaluating step 200000
+Evaluating step 210000
+Evaluating step 220000
+Evaluating step 230000
+Evaluating step 240000
+Evaluating step 250000
+Evaluating step 260000
+Evaluating step 270000
+Evaluating step 280000
+Evaluating step 290000
+Evaluating step 300000
+Evaluating step 310000
+Evaluating step 320000
+Evaluating step 330000
+Evaluating step 340000
+Evaluating step 350000
+Evaluating step 360000
+Evaluating step 370000
+Evaluating step 380000
+Evaluating step 390000
+Evaluating step 400000
+Evaluating step 410000
+Evaluating step 420000
+Evaluating step 430000
+Evaluating step 440000
+Evaluating step 450000
+Evaluating step 460000
+Evaluating step 470000
+Evaluating step 480000
+Evaluating step 490000
+Evaluating step 500000
+Calculating Fisher step 500000
+Current Task
+----------------------------------
+{'labels': ['perpendicular'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 510000
+Evaluating step 520000
+Evaluating step 530000
+Evaluating step 540000
+Evaluating step 550000
+Evaluating step 560000
+Evaluating step 570000
+Evaluating step 580000
+Evaluating step 590000
+Evaluating step 600000
+Evaluating step 610000
+Evaluating step 620000
+Evaluating step 630000
+Evaluating step 640000
+Evaluating step 650000
+Evaluating step 660000
+Evaluating step 670000
+Evaluating step 680000
+Evaluating step 690000
+Evaluating step 700000
+Evaluating step 710000
+Evaluating step 720000
+Evaluating step 730000
+Evaluating step 740000
+Evaluating step 750000
+Evaluating step 760000
+Evaluating step 770000
+Evaluating step 780000
+Evaluating step 790000
+Evaluating step 800000
+Evaluating step 810000
+Evaluating step 820000
+Evaluating step 830000
+Evaluating step 840000
+Evaluating step 850000
+Evaluating step 860000
+Evaluating step 870000
+Evaluating step 880000
+Evaluating step 890000
+Evaluating step 900000
+Evaluating step 910000
+Evaluating step 920000
+Evaluating step 930000
+Evaluating step 940000
+Evaluating step 950000
+Evaluating step 960000
+Evaluating step 970000
+Evaluating step 980000
+Evaluating step 990000
+Evaluating step 1000000
+Calculating Fisher step 1000000
+Current Task
+----------------------------------
+{'labels': ['diagonal-25'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1010000
+Evaluating step 1020000
+Evaluating step 1030000
+Evaluating step 1040000
+Evaluating step 1050000
+Evaluating step 1060000
+Evaluating step 1070000
+Evaluating step 1080000
+Evaluating step 1090000
+Evaluating step 1100000
+Evaluating step 1110000
+Evaluating step 1120000
+Evaluating step 1130000
+Evaluating step 1140000
+Evaluating step 1150000
+Evaluating step 1160000
+Evaluating step 1170000
+Evaluating step 1180000
+Evaluating step 1190000
+Evaluating step 1200000
+Evaluating step 1210000
+Evaluating step 1220000
+Evaluating step 1230000
+Evaluating step 1240000
+Evaluating step 1250000
+Evaluating step 1260000
+Evaluating step 1270000
+Evaluating step 1280000
+Evaluating step 1290000
+Evaluating step 1300000
+Evaluating step 1310000
+Evaluating step 1320000
+Evaluating step 1330000
+Evaluating step 1340000
+Evaluating step 1350000
+Evaluating step 1360000
+Evaluating step 1370000
+Evaluating step 1380000
+Evaluating step 1390000
+Evaluating step 1400000
+Evaluating step 1410000
+Evaluating step 1420000
+Evaluating step 1430000
+Evaluating step 1440000
+Evaluating step 1450000
+Evaluating step 1460000
+Evaluating step 1470000
+Evaluating step 1480000
+Evaluating step 1490000
+Evaluating step 1500000
+Calculating Fisher step 1500000
+Current Task
+----------------------------------
+{'labels': ['diagonal-50'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1510000
+Evaluating step 1520000
+Evaluating step 1530000
+Evaluating step 1540000
+Evaluating step 1550000
+Evaluating step 1560000
+Evaluating step 1570000
+Evaluating step 1580000
+Evaluating step 1590000
+Evaluating step 1600000
+Evaluating step 1610000
+Evaluating step 1620000
+Evaluating step 1630000
+Evaluating step 1640000
+Evaluating step 1650000
+Evaluating step 1660000
+Evaluating step 1670000
+Evaluating step 1680000
+Evaluating step 1690000
+Evaluating step 1700000
+Evaluating step 1710000
+Evaluating step 1720000
+Evaluating step 1730000
+Evaluating step 1740000
+Evaluating step 1750000
+Evaluating step 1760000
+Evaluating step 1770000
+Evaluating step 1780000
+Evaluating step 1790000
+Evaluating step 1800000
+Evaluating step 1810000
+Evaluating step 1820000
+Evaluating step 1830000
+Evaluating step 1840000
+Evaluating step 1850000
+Evaluating step 1860000
+Evaluating step 1870000
+Evaluating step 1880000
+Evaluating step 1890000
+Evaluating step 1900000
+Evaluating step 1910000
+Evaluating step 1920000
+Evaluating step 1930000
+Evaluating step 1940000
+Evaluating step 1950000
+Evaluating step 1960000
+Evaluating step 1970000
+Evaluating step 1980000
+Evaluating step 1990000
+Evaluating step 1998848
+Calculating Fisher step 1998848
+Current Task
+----------------------------------
+{'labels': ['parallel'], 'probs': array([1.])}
+Updating EWC regulariser
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-3-episode-4.mp4
+Starting run 4 ...
+Using seed:  4
+Evaluating step 10000
+Evaluating step 20000
+Evaluating step 30000
+Evaluating step 40000
+Evaluating step 50000
+Evaluating step 60000
+Evaluating step 70000
+Evaluating step 80000
+Evaluating step 90000
+Evaluating step 100000
+Evaluating step 110000
+Evaluating step 120000
+Evaluating step 130000
+Evaluating step 140000
+Evaluating step 150000
+Evaluating step 160000
+Evaluating step 170000
+Evaluating step 180000
+Evaluating step 190000
+Evaluating step 200000
+Evaluating step 210000
+Evaluating step 220000
+Evaluating step 230000
+Evaluating step 240000
+Evaluating step 250000
+Evaluating step 260000
+Evaluating step 270000
+Evaluating step 280000
+Evaluating step 290000
+Evaluating step 300000
+Evaluating step 310000
+Evaluating step 320000
+Evaluating step 330000
+Evaluating step 340000
+Evaluating step 350000
+Evaluating step 360000
+Evaluating step 370000
+Evaluating step 380000
+Evaluating step 390000
+Evaluating step 400000
+Evaluating step 410000
+Evaluating step 420000
+Evaluating step 430000
+Evaluating step 440000
+Evaluating step 450000
+Evaluating step 460000
+Evaluating step 470000
+Evaluating step 480000
+Evaluating step 490000
+Evaluating step 500000
+Calculating Fisher step 500000
+Current Task
+----------------------------------
+{'labels': ['perpendicular'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 510000
+Evaluating step 520000
+Evaluating step 530000
+Evaluating step 540000
+Evaluating step 550000
+Evaluating step 560000
+Evaluating step 570000
+Evaluating step 580000
+Evaluating step 590000
+Evaluating step 600000
+Evaluating step 610000
+Evaluating step 620000
+Evaluating step 630000
+Evaluating step 640000
+Evaluating step 650000
+Evaluating step 660000
+Evaluating step 670000
+Evaluating step 680000
+Evaluating step 690000
+Evaluating step 700000
+Evaluating step 710000
+Evaluating step 720000
+Evaluating step 730000
+Evaluating step 740000
+Evaluating step 750000
+Evaluating step 760000
+Evaluating step 770000
+Evaluating step 780000
+Evaluating step 790000
+Evaluating step 800000
+Evaluating step 810000
+Evaluating step 820000
+Evaluating step 830000
+Evaluating step 840000
+Evaluating step 850000
+Evaluating step 860000
+Evaluating step 870000
+Evaluating step 880000
+Evaluating step 890000
+Evaluating step 900000
+Evaluating step 910000
+Evaluating step 920000
+Evaluating step 930000
+Evaluating step 940000
+Evaluating step 950000
+Evaluating step 960000
+Evaluating step 970000
+Evaluating step 980000
+Evaluating step 990000
+Evaluating step 1000000
+Calculating Fisher step 1000000
+Current Task
+----------------------------------
+{'labels': ['diagonal-25'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1010000
+Evaluating step 1020000
+Evaluating step 1030000
+Evaluating step 1040000
+Evaluating step 1050000
+Evaluating step 1060000
+Evaluating step 1070000
+Evaluating step 1080000
+Evaluating step 1090000
+Evaluating step 1100000
+Evaluating step 1110000
+Evaluating step 1120000
+Evaluating step 1130000
+Evaluating step 1140000
+Evaluating step 1150000
+Evaluating step 1160000
+Evaluating step 1170000
+Evaluating step 1180000
+Evaluating step 1190000
+Evaluating step 1200000
+Evaluating step 1210000
+Evaluating step 1220000
+Evaluating step 1230000
+Evaluating step 1240000
+Evaluating step 1250000
+Evaluating step 1260000
+Evaluating step 1270000
+Evaluating step 1280000
+Evaluating step 1290000
+Evaluating step 1300000
+Evaluating step 1310000
+Evaluating step 1320000
+Evaluating step 1330000
+Evaluating step 1340000
+Evaluating step 1350000
+Evaluating step 1360000
+Evaluating step 1370000
+Evaluating step 1380000
+Evaluating step 1390000
+Evaluating step 1400000
+Evaluating step 1410000
+Evaluating step 1420000
+Evaluating step 1430000
+Evaluating step 1440000
+Evaluating step 1450000
+Evaluating step 1460000
+Evaluating step 1470000
+Evaluating step 1480000
+Evaluating step 1490000
+Evaluating step 1500000
+Calculating Fisher step 1500000
+Current Task
+----------------------------------
+{'labels': ['diagonal-50'], 'probs': array([1.])}
+Updating EWC regulariser
+Evaluating step 1510000
+Evaluating step 1520000
+Evaluating step 1530000
+Evaluating step 1540000
+Evaluating step 1550000
+Evaluating step 1560000
+Evaluating step 1570000
+Evaluating step 1580000
+Evaluating step 1590000
+Evaluating step 1600000
+Evaluating step 1610000
+Evaluating step 1620000
+Evaluating step 1630000
+Evaluating step 1640000
+Evaluating step 1650000
+Evaluating step 1660000
+Evaluating step 1670000
+Evaluating step 1680000
+Evaluating step 1690000
+Evaluating step 1700000
+Evaluating step 1710000
+Evaluating step 1720000
+Evaluating step 1730000
+Evaluating step 1740000
+Evaluating step 1750000
+Evaluating step 1760000
+Evaluating step 1770000
+Evaluating step 1780000
+Evaluating step 1790000
+Evaluating step 1800000
+Evaluating step 1810000
+Evaluating step 1820000
+Evaluating step 1830000
+Evaluating step 1840000
+Evaluating step 1850000
+Evaluating step 1860000
+Evaluating step 1870000
+Evaluating step 1880000
+Evaluating step 1890000
+Evaluating step 1900000
+Evaluating step 1910000
+Evaluating step 1920000
+Evaluating step 1930000
+Evaluating step 1940000
+Evaluating step 1950000
+Evaluating step 1960000
+Evaluating step 1970000
+Evaluating step 1980000
+Evaluating step 1990000
+Evaluating step 1998848
+Calculating Fisher step 1998848
+Current Task
+----------------------------------
+{'labels': ['parallel'], 'probs': array([1.])}
+Updating EWC regulariser
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-0.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-0.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-1.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-1.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-2.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-2.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-2.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-3.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-3.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-3.mp4
+Moviepy - Building video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-4.mp4.
+Moviepy - Writing video /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-4.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/jovyan/cl-parking/results/ppo-ewc/sequential-inc_lambda-1/video/run-4-episode-4.mp4
+fisher-diagonal_Run2.json
+Total Fisher information: 1016.4419290289443
+fisher-diagonal_Run3.json
+Total Fisher information: 1228.864132823801
+fisher-diagonal_Run4.json
+Total Fisher information: 1146.813097850184
+fisher-diagonal_Run0.json
+Total Fisher information: 992.8272937767688
+fisher-diagonal_Run1.json
+Total Fisher information: 1408.8267905549865
+fisher-diagonal_Run2.json
+Total Fisher information: 2626.306260604294
+fisher-diagonal_Run3.json
+Total Fisher information: 914.1527641013217
+fisher-diagonal_Run4.json
+Total Fisher information: 3038.056483758387
+fisher-diagonal_Run0.json
+Total Fisher information: 1224.6989885659768
+fisher-diagonal_Run1.json
+Total Fisher information: 1241.3544398114534
+fisher-diagonal_Run2.json
+Total Fisher information: 1993.060149719703
+fisher-diagonal_Run3.json
+Total Fisher information: 1168.1289487922622
+fisher-diagonal_Run4.json
+Total Fisher information: 833.0753306029656
+fisher-diagonal_Run0.json
+Total Fisher information: 829.4164229043417
+fisher-diagonal_Run1.json
+Total Fisher information: 1377.8667374721767
+fisher-diagonal_Run2.json
+Total Fisher information: 1234.9862675646273
+fisher-diagonal_Run3.json
+Total Fisher information: 1304.5255995551088
+fisher-diagonal_Run4.json
+Total Fisher information: 1037.0326589385477
+fisher-diagonal_Run0.json
+Total Fisher information: 1020.6651529758701
+fisher-diagonal_Run1.json
+Total Fisher information: 1288.5476391996162
+fisher-diagonal_Run2.json
+fisher-diagonal_Run3.json
+fisher-diagonal_Run4.json
+fisher-diagonal_Run0.json
+fisher-diagonal_Run1.json
+fisher-diagonal_Run2.json
+fisher-diagonal_Run3.json
+fisher-diagonal_Run4.json
+fisher-diagonal_Run0.json
+fisher-diagonal_Run1.json
+fisher-diagonal_Run2.json
+fisher-diagonal_Run3.json
+fisher-diagonal_Run4.json
+fisher-diagonal_Run0.json
+fisher-diagonal_Run1.json
+fisher-diagonal_Run2.json
+fisher-diagonal_Run3.json
+fisher-diagonal_Run4.json
+fisher-diagonal_Run0.json
+fisher-diagonal_Run1.json
+Creating output directory results/ppo-ewc/sequential-inc_lambda-1/plots
