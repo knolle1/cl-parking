@@ -1,6 +1,14 @@
-# Evaluating RL in Continual Learning
+# Assessing Robustness to Catastrophic Forgetting in Continual Reinforcement Learning for Cyber-Physical Systems
 
 This project evaluates the behaviour of RL algorithms in continual learning settings.
+
+Parking environment adapted from [HighwayEnv](https://github.com/eleurent/highway-env) (date accessed: 12/05/2024)
+
+PPO implementation adapted from implementation by [Wenlong Wang](https://github.com/realwenlongwang/PPO-Single-File-Notebook-Implementation) (date accessed: 25/06/2024)
+
+## Abstract
+
+As the use of reinforcement learning (RL) becomes more widespread in cyber-physical systems, it becomes increasingly important to design RL agents that are able to adapt to changes in their environments in order to maintain safety and reliability. This paper addresses the question of whether different classes of RL algorithm are more robust against forgetting previously learned behaviours, a critical issue in continual learning, in non-stationary environments. We evaluate the robustness of representative examples of three important classes of RL algorithm in a non-stationary autonomous parking environment. These are Proximal Policy Optimization (PPO), which is a _model-free on-policy_ algorithm, Soft-Actor-Critic (SAC), which is a _model-free off-policy_ algorithm, and Drama, which is a _model-based_ algorithm. The agents must learn to successfully park in four different scenarios, which are presented successively, with parking spaces oriented at varying angles. We find off-policy algorithms appear to be more robust compared to on-policy algorithms due to their use of replay, while model-based algorithms do not appear to offer any direct advantage over model-free algorithms. These experiments also highlight the additional challenges of finding robust abstractions of the environment, and oversensitivity to hyperparameters.
 
 ## Dependencies
 
