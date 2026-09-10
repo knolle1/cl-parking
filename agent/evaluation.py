@@ -291,14 +291,20 @@ def plot_learning_curve(plot_path, data_paths, max_steps=2_000_000, task_interva
                 order = ["parallel", "diagonal-50", "diagonal-25", "perpendicular"]
 
             img = None
+            bw = False
             for t in order:
                 if img is None:
                     img = np.load(f"{env_np_path}/{t}_parking.npy")
+                    if len(img.shape) == 2:
+                        bw = True
                 else:
                     img = np.concatenate((img, np.load(f"{env_np_path}/{t}_parking.npy")), axis=1)
 
             # Plot images of tasks
-            ax[0].imshow(img, extent=[0,2_000_000-1,500_000,0],aspect="auto")
+            if bw:
+                ax[0].imshow(img, extent=[0,2_000_000-1,500_000,0],aspect="auto",cmap='gray', vmin=0, vmax=255)
+            else:
+                ax[0].imshow(img, extent=[0,2_000_000-1,500_000,0],aspect="auto")
 
             # Format y-axis
             ax[0].set_ylabel("current task")
