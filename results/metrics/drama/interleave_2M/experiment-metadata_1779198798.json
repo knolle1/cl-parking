@@ -1,7 +1,7 @@
 {
   "timestamp": "2026-05-19 13:53:18.051321",
   "cmd": "python experiment.py -a drama -s interleave -p results/drama/interleave_2M -n 0 --start 0",
-  "description": "",
+  "description": "Create plots",
   "agent_type": "drama",
   "scenario": "interleave",
   "output_path": "results/drama/interleave_2M",
